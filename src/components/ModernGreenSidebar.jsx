@@ -23,8 +23,6 @@ import {
   Mail,
   FileText,
   Scale,
-  Menu,
-  X,
   ChevronRight,
   ChevronDown,
   ChevronLeft,
@@ -35,7 +33,7 @@ import {
 const ModernGreenSidebar = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [expandedSections, setExpandedSections] = useState({
-    'core': true,
+    'core': true, // Daily Finance expanded by default
     'wealth': false,
     'tools': false,
     'documents': false
@@ -91,7 +89,8 @@ const ModernGreenSidebar = ({ children }) => {
         { path: '/document-vault', icon: FolderLock, label: 'Document Vault' },
         { path: '/receipt-scanner', icon: Scan, label: 'Receipt Scanner' },
         { path: '/email-receipt-processor', icon: Mail, label: 'Email Receipts' },
-        { path: '/subscriptions', icon: Repeat, label: 'Subscriptions & Accounts' },
+        { path: '/subscriptions', icon: Repeat, label: 'Subscriptions' },
+        { path: '/accounts', icon: Shield, label: 'My Accounts' },
       ]
     }
   ]
@@ -110,39 +109,34 @@ const ModernGreenSidebar = ({ children }) => {
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed)
     if (isCollapsed) {
-      // When expanding, make sure first section is expanded
+      // When expanding, make sure Daily Finance is expanded
       setExpandedSections(prev => ({ ...prev, 'core': true }))
     }
   }
 
-  // Remove the local toggleDarkMode function since we're using the context
-
   return (
     <div className="flex h-screen bg-gray-900">
       {/* Modern Sidebar */}
-      <div className={`ff-sidebar bg-gradient-to-b from-slate-900 via-gray-900 to-slate-900 border-r border-gray-700 transition-all duration-300 ease-in-out flex flex-col relative ${
-        isCollapsed ? 'w-16' : 'w-80'
+      <div className={`ff-sidebar bg-slate-900 border-r border-slate-800/50 shadow-xl flex flex-col transition-all duration-300 ease-in-out ${
+        isCollapsed ? 'w-16' : 'w-64'
       }`}>
         
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-700/50 bg-gradient-to-r from-gray-800/50 to-slate-800/50 backdrop-blur-sm">
-          <div className={`flex items-center gap-3 transition-opacity duration-200 ${isCollapsed ? 'opacity-0' : 'opacity-100'}`}>
-            {/* Logo - always visible */}
-            <div className="flex-shrink-0">
+        <div className="flex items-center justify-between p-4 border-b border-slate-800/50">
+          <div className={`flex items-center gap-3 transition-opacity duration-200 ${
+            isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}>
+            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img 
                 src="/docs/wallet_logo.png" 
                 alt="FinanceFlow Logo" 
-                className="w-8 h-8 rounded-lg"
+                className="w-10 h-10 rounded-xl shadow-lg"
               />
             </div>
-            
-            {/* App name and tagline - only when expanded */}
             {!isCollapsed && (
               <div>
-                <h1 className="text-lg font-bold text-white">
-                  FinanceFlow
-                </h1>
-                <p className="text-xs text-gray-400 font-medium">Personal Finance Suite</p>
+                <h1 className="text-white font-semibold text-lg">FinanceFlow</h1>
+                <p className="text-slate-400 text-xs">Personal Finance Suite</p>
               </div>
             )}
           </div>
@@ -150,17 +144,19 @@ const ModernGreenSidebar = ({ children }) => {
           {/* Logo in collapsed state */}
           {isCollapsed && (
             <div className="flex-1 flex justify-center">
-              <img 
-                src="/docs/wallet_logo.png" 
-                alt="FinanceFlow Logo" 
-                className="w-8 h-8 rounded-lg"
-              />
+              <div className="w-10 h-10 flex items-center justify-center">
+                <img 
+                  src="/docs/wallet_logo.png" 
+                  alt="FinanceFlow Logo" 
+                  className="w-10 h-10 rounded-xl shadow-lg"
+                />
+              </div>
             </div>
           )}
           
           <button
             onClick={toggleSidebar}
-            className="p-2 rounded-lg hover:bg-gray-700/50 text-gray-400 hover:text-white transition-all duration-200 hover:scale-105"
+            className="p-2 rounded-lg hover:bg-slate-800/50 text-slate-400 hover:text-white transition-all duration-200 hover:scale-105 flex-shrink-0"
           >
             <ChevronLeft className={`w-5 h-5 transition-transform duration-300 ${
               isCollapsed ? 'rotate-180' : ''
@@ -169,135 +165,115 @@ const ModernGreenSidebar = ({ children }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-2">
+        <nav className="flex-1 px-3 py-4 space-y-2 overflow-y-auto">
           
           {/* Dashboard */}
           <div className="mb-4">
             <Link
               to="/"
-              className={`flex items-center px-3 py-2.5 text-sm rounded-lg font-medium transition-all duration-200 group relative border ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative ${
                 isActive('/') 
-                  ? 'border-green-400 text-green-400 bg-green-400/10' 
-                  : 'border-gray-600 text-gray-300 hover:border-green-400 hover:text-green-400'
+                  ? 'text-emerald-400 bg-emerald-500/10 border-l-2 border-emerald-400' 
+                  : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
               }`}
+              title={isCollapsed ? 'Dashboard' : ''}
             >
-              <LayoutDashboard className={`w-4 h-4 mr-3 flex-shrink-0 transition-all duration-200 ${
-                isActive('/') 
-                  ? 'text-green-400' 
-                  : 'text-gray-400 group-hover:text-green-400'
-              }`} />
-              
-              {!isCollapsed && (
-                <span className="transition-all duration-300 group-hover:translate-x-1">Dashboard</span>
-              )}
+              <LayoutDashboard className="w-4 h-4 flex-shrink-0" />
+              {!isCollapsed && <span>Dashboard</span>}
             </Link>
           </div>
           
           {/* Navigation Groups */}
-          {navigationGroups.map((section, sectionIndex) => {
+          {navigationGroups.map((section) => {
             const sectionExpanded = expandedSections[section.id]
+            const hasActiveItem = section.items.some(item => isActive(item.path))
+            const ChevronIcon = sectionExpanded ? ChevronDown : ChevronRight
             
             return (
-              <div key={section.id} className="mb-4">
-                {/* Group Separator */}
-                {sectionIndex > 0 && (
-                  <div className="my-4 border-t border-gray-700/50"></div>
+              <div key={section.id} className="space-y-1">
+                {/* Group Header */}
+                <button
+                  onClick={() => toggleSection(section.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    hasActiveItem || sectionExpanded
+                      ? 'text-white bg-slate-800/60 border border-slate-700/50'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+                  }`}
+                  title={isCollapsed ? section.title : ''}
+                >
+                  <section.icon className="w-5 h-5 flex-shrink-0" />
+                  {!isCollapsed && (
+                    <>
+                      <span className="flex-1 text-left">{section.title}</span>
+                      <ChevronIcon className="w-4 h-4 flex-shrink-0" />
+                    </>
+                  )}
+                  {hasActiveItem && (
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full" />
+                  )}
+                </button>
+
+                {/* Group Items */}
+                {!isCollapsed && sectionExpanded && (
+                  <div className="ml-6 space-y-1">
+                    {section.items.map((item) => {
+                      const Icon = item.icon
+                      const itemIsActive = isActive(item.path)
+
+                      return (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
+                            itemIsActive
+                              ? 'text-emerald-400 bg-emerald-500/10 border-l-2 border-emerald-400 font-medium'
+                              : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
+                          }`}
+                        >
+                          <Icon className="w-4 h-4 flex-shrink-0" />
+                          <span>{item.label}</span>
+                        </Link>
+                      )
+                    })}
+                  </div>
                 )}
-                
-                {/* Group Header - Clickable and Collapsible */}
-                {!isCollapsed && (
-                  <button
-                    onClick={() => toggleSection(section.id)}
-                    className="w-full flex items-center justify-between px-3 py-3 mb-2 rounded-lg hover:bg-gray-700/30 transition-all duration-200 group"
-                  >
-                    <h3 className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
-                      {section.title}
-                    </h3>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                      sectionExpanded ? 'rotate-180' : ''
-                    }`} />
-                  </button>
-                )}
-                
-                {/* Section Items - Collapsible */}
-                <div className={`space-y-1 transition-all duration-300 overflow-hidden ${
-                  !isCollapsed && sectionExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                }`}>
-                  {section.items.map((item) => {
-                    const Icon = item.icon
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`flex items-center px-3 py-2.5 text-sm rounded-lg font-medium transition-all duration-200 group relative border ${
-                          isActive(item.path) 
-                            ? 'border-green-400 text-green-400 bg-green-400/10' 
-                            : 'border-gray-600 text-gray-300 hover:border-green-400 hover:text-green-400'
-                        }`}
-                      >
-                        <Icon className={`w-4 h-4 mr-3 flex-shrink-0 transition-all duration-200 ${
-                          isActive(item.path) 
-                            ? 'text-green-400' 
-                            : 'text-gray-400 group-hover:text-green-400'
-                        }`} />
-                        
-                        {!isCollapsed && (
-                          <span className="transition-all duration-300 group-hover:translate-x-1">
-                            {item.label}
-                          </span>
-                        )}
-                      </Link>
-                    )
-                  })}
-                </div>
               </div>
             )
           })}
-          
-          {/* Help Link */}
-          <div className="pt-4 mt-4 border-t border-gray-700/50">
-            <Link
-              to="/help"
-              className={`flex items-center px-3 py-2.5 text-sm rounded-lg font-medium transition-all duration-200 group relative border ${
-                isActive('/help') 
-                  ? 'border-green-400 text-green-400 bg-green-400/10' 
-                  : 'border-gray-600 text-gray-300 hover:border-green-400 hover:text-green-400'
-              }`}
-            >
-              <HelpCircle className={`w-4 h-4 mr-3 flex-shrink-0 transition-all duration-200 ${
-                isActive('/help') 
-                  ? 'text-green-400' 
-                  : 'text-gray-400 group-hover:text-green-400'
-              }`} />
-              
-              {!isCollapsed && (
-                <span className="transition-all duration-300 group-hover:translate-x-1">Help Center</span>
-              )}
-            </Link>
-          </div>
+        </nav>
 
-          {/* Dark/Light Mode Switcher */}
-          <div className="pt-4 mt-4 border-t border-gray-700/50">
+        {/* Bottom Section */}
+        <div className="p-3 border-t border-slate-800/50 space-y-3">
+          {/* Help Link */}
+          <Link
+            to="/help"
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+              isActive('/help')
+                ? 'text-emerald-400 bg-emerald-500/10'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+            }`}
+            title={isCollapsed ? 'Help Center' : ''}
+          >
+            <HelpCircle className="w-4 h-4" />
+            {!isCollapsed && <span>Help Center</span>}
+          </Link>
+          
+          {/* Theme Toggle */}
+          <div className="pt-2 border-t border-slate-800/50">
             <button
               onClick={toggleTheme}
-              className={`w-full flex items-center px-3 py-2.5 text-sm rounded-lg font-medium transition-all duration-200 group relative border ${
-                'border-gray-600 text-gray-300 hover:border-emerald-400 hover:text-emerald-400'
-              }`}
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/40"
+              title={isCollapsed ? (isDarkMode ? 'Light Mode' : 'Dark Mode') : ''}
             >
               {isDarkMode ? (
-                <Sun className="w-4 h-4 mr-3 flex-shrink-0 transition-all duration-200 text-gray-400 group-hover:text-emerald-400" />
+                <Sun className="w-4 h-4" />
               ) : (
-                <Moon className="w-4 h-4 mr-3 flex-shrink-0 transition-all duration-200 text-gray-400 group-hover:text-emerald-400" />
+                <Moon className="w-4 h-4" />
               )}
-              
-              {!isCollapsed && (
-                <span className="transition-all duration-300 group-hover:translate-x-1">
-                  {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-                </span>
-              )}
+              {!isCollapsed && <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>}
             </button>
           </div>
-        </nav>
+        </div>
       </div>
 
       {/* Main Content */}
