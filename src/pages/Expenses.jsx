@@ -319,12 +319,12 @@ const Expenses = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="p-6 space-y-4">
         {/* Header */}
-        <div className="text-left mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 via-pink-600 to-rose-600 bg-clip-text text-transparent mb-2">
+        <div className="text-left mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-red-600 bg-clip-text text-transparent mb-3">
             Expense Tracking
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-base">
-            Track and categorize your spending to better understand your financial habits
+          <p className="text-slate-600 dark:text-slate-300 text-lg">
+            Track and categorize your spending to gain deeper insights into your financial patterns
           </p>
         </div>
 
@@ -339,7 +339,7 @@ const Expenses = () => {
           </TabsList>
           
           {/* Monthly Total */}
-          <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-4">
+          <div className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 backdrop-blur-sm border border-rose-200/50 dark:border-rose-700/50 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
                 <TrendingDown className="w-5 h-5 text-red-600 dark:text-red-400" />
@@ -358,7 +358,7 @@ const Expenses = () => {
         {getFilteredExpenseData().length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
             {/* Expenses by Category Chart */}
-            <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-6">
+            <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
               <h3 className="font-semibold text-slate-900 dark:text-white mb-4 text-base">Expenses by Category</h3>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
@@ -381,7 +381,7 @@ const Expenses = () => {
 
 
           {/* Monthly Trend Chart */}
-          <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-6">
+          <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
             <h3 className="font-semibold text-slate-900 dark:text-white mb-4 text-base">Monthly Trend</h3>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={getMonthlyExpenseTrend()}>
@@ -423,7 +423,7 @@ const Expenses = () => {
         </div>
 
         {/* Expense Table */}
-        <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
+        <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden hover:shadow-2xl transition-all duration-300">
           <div className="p-6 border-b border-slate-200/50 dark:border-slate-700/50">
             <div className="flex items-center justify-between">
               <div>

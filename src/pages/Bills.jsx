@@ -363,11 +363,11 @@ const Bills = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="p-8 space-y-8">
         {/* Header */}
-        <div className="text-left mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+        <div className="text-left mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
             Bills Management ({selectedProfile})
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-base">
+          <p className="text-slate-600 dark:text-slate-300 text-lg">
             Keep track of due dates and payment status to stay on top of your financial obligations
           </p>
         </div>
@@ -385,7 +385,7 @@ const Bills = () => {
         {/* Payment Status Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           {/* Paid Bills */}
-          <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-4">
+          <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 mb-1">Paid</p>
@@ -400,7 +400,7 @@ const Bills = () => {
           </div>
 
           {/* Overdue Bills */}
-          <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-4">
+          <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium text-red-600 dark:text-red-400 mb-1">Overdue</p>
@@ -415,7 +415,7 @@ const Bills = () => {
           </div>
 
           {/* Due Soon Bills */}
-          <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-4">
+          <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium text-yellow-600 dark:text-yellow-400 mb-1">Due Soon</p>
@@ -435,7 +435,7 @@ const Bills = () => {
         {getFilteredBillData().length > 0 && (
           <div className="mb-4 max-w-2xl">
             {/* Overdue & Due Soon Bills */}
-            <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-4">
+            <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-red-500" />
                 Urgent Attention Required

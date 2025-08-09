@@ -354,12 +354,12 @@ const Budget = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="p-6 space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <div className="text-left">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent mb-3">
               Budget Planner
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 text-base">
+            <p className="text-slate-600 dark:text-slate-300 text-lg">
               Plan and track your monthly budget by category to achieve your financial goals
             </p>
           </div>

@@ -330,13 +330,13 @@ const Income = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6 space-y-6">
       {/* Header */}
-      <div className="text-left">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+      <div className="text-left mb-8">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-3">
           Income Tracking
         </h1>
-        <p className="text-slate-600 dark:text-slate-300 text-base">Manage and track your income sources</p>
+        <p className="text-slate-600 dark:text-slate-300 text-lg">Manage and track your income sources with comprehensive analytics</p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
@@ -355,7 +355,7 @@ const Income = () => {
           </TabsList>
           
           {/* Monthly Total */}
-          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-700/50 rounded-xl shadow-lg p-4">
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-700/50 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-emerald-100 dark:bg-emerald-800/50 rounded-lg">
                 <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
