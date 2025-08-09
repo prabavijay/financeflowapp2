@@ -1,0 +1,798 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* FinanceFlow - Modern Dark Theme */
+
+/* Color Palette Variables */
+:root {
+  --bg-primary: #0f172a;          /* Dark navy blue */
+  --bg-secondary: #1e293b;        /* Lighter navy */
+  --bg-tertiary: #334155;         /* Medium gray-blue */
+  --bg-card: #1e293b;             /* Card background */
+  --bg-sidebar: #0c1420;          /* Darker navy for sidebar */
+  
+  --text-primary: #f8fafc;        /* Pure white text */
+  --text-secondary: #e2e8f0;      /* Light gray text */
+  --text-muted: #94a3b8;          /* Muted text */
+  
+  --accent-emerald: #10b981;      /* Primary emerald */
+  --accent-emerald-light: #34d399; /* Light emerald */
+  --accent-emerald-dark: #059669; /* Dark emerald */
+  
+  --accent-teal: #14b8a6;         /* Teal accent */
+  --accent-teal-light: #5eead4;   /* Light teal */
+  
+  --border-subtle: rgba(148, 163, 184, 0.1); /* Subtle borders */
+  --border-medium: rgba(148, 163, 184, 0.2);  /* Medium borders */
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-sidebar) 50%, var(--bg-primary) 100%);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Modern Button Styles */
+button {
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  outline: none;
+}
+
+/* Primary Button - Now Outlined Style */
+button[class*="bg-gradient-to-r"], 
+button[class*="emerald"], 
+.btn-primary {
+  background: transparent;
+  color: var(--accent-emerald);
+  border: 1px solid var(--accent-emerald);
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+button[class*="bg-gradient-to-r"]:hover,
+button[class*="emerald"]:hover,
+.btn-primary:hover {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--accent-emerald-light);
+  color: var(--accent-emerald-light);
+  transform: translateY(-1px);
+}
+
+/* Secondary Button */
+.btn-secondary,
+button[variant="outline"] {
+  background: transparent;
+  border: 1px solid var(--border-medium);
+  color: var(--text-secondary);
+  padding: 10px 20px;
+  border-radius: 12px;
+}
+
+.btn-secondary:hover,
+button[variant="outline"]:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+/* Cards and Containers */
+.card, 
+div[class*="bg-white"],
+div[class*="bg-slate-800"] {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+}
+
+/* Sidebar Styling */
+.ff-sidebar {
+  background: linear-gradient(180deg, var(--bg-sidebar) 0%, var(--bg-primary) 100%);
+  border-right: 1px solid var(--border-subtle);
+}
+
+/* Logo Styling */
+.ff-sidebar img {
+  transition: all 0.3s ease;
+  filter: 
+    hue-rotate(180deg) 
+    saturate(1.1) 
+    brightness(1.2)
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.ff-sidebar img:hover {
+  transform: scale(1.05);
+  filter: 
+    hue-rotate(180deg) 
+    saturate(1.2) 
+    brightness(1.3)
+    drop-shadow(0 4px 8px rgba(20, 184, 166, 0.4));
+}
+
+/* Navigation Links */
+.ff-sidebar a {
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  margin: 2px 0;
+}
+
+.ff-sidebar a:hover {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent-emerald);
+}
+
+.ff-sidebar a[class*="border-green"] {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+/* Modern Sidebar Group Headers */
+.ff-sidebar button {
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.ff-sidebar button:hover {
+  background: rgba(75, 85, 99, 0.3);
+}
+
+/* Sidebar Section Animation */
+.sidebar-section-enter {
+  max-height: 0;
+  opacity: 0;
+}
+
+.sidebar-section-enter-active {
+  max-height: 400px;
+  opacity: 1;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.sidebar-section-exit {
+  max-height: 400px;
+  opacity: 1;
+}
+
+.sidebar-section-exit-active {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
+}
+
+/* Dark/Light Mode Switcher */
+.ff-sidebar button[class*="border-gray"]:hover {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+/* Mode switcher icon animation */
+.ff-sidebar button svg {
+  transition: transform 0.3s ease, color 0.2s ease;
+}
+
+.ff-sidebar button:hover svg {
+  transform: scale(1.1);
+}
+
+/* Tables */
+table {
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 16px;
+  border: none;
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+tr:hover {
+  background: rgba(16, 185, 129, 0.05);
+}
+
+/* Inputs */
+input, textarea, select {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent-emerald);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  outline: none;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Tabs */
+[role="tablist"] {
+  background: transparent;
+  border-radius: 12px;
+  padding: 4px;
+  border: none;
+}
+
+[role="tab"] {
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+}
+
+[role="tab"]:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+[role="tab"][aria-selected="true"] {
+  background: var(--accent-emerald);
+  color: white;
+}
+
+/* Labels */
+label {
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+h1 {
+  background: linear-gradient(135deg, var(--accent-emerald) 0%, var(--accent-teal) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Badges and Pills */
+.badge, span[class*="badge"] {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--accent-emerald) 0%, var(--accent-teal) 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--accent-emerald-light) 0%, var(--accent-teal-light) 100%);
+}
+
+/* Dialog/Modal specific styles */
+[data-radix-dialog-overlay] {
+  background: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+[data-radix-dialog-content],
+div[role="dialog"],
+.fixed.left-\\[50\\%\\].top-\\[50\\%\\],
+.fixed.left-1\\/2.top-1\\/2 {
+  background: #1e293b !important;
+  background-color: #1e293b !important;
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  color: var(--text-primary) !important;
+  opacity: 1 !important;
+}
+
+/* Override any bg-background or similar classes */
+.bg-background {
+  background: #1e293b !important;
+  background-color: #1e293b !important;
+}
+
+.bg-card {
+  background: #1e293b !important;
+  background-color: #1e293b !important;
+}
+
+/* Dialog header styling */
+[data-radix-dialog-content] h2,
+[data-radix-dialog-content] h3,
+[data-radix-dialog-content] [role="heading"] {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+}
+
+/* Dialog description text */
+[data-radix-dialog-content] p,
+[data-radix-dialog-content] [data-radix-dialog-description] {
+  color: var(--text-secondary) !important;
+}
+
+/* Dialog form elements - comprehensive styling for all popups */
+[data-radix-dialog-content] input,
+[data-radix-dialog-content] textarea,
+[data-radix-dialog-content] select,
+[data-radix-dialog-content] [role="combobox"],
+.dialog input,
+.dialog textarea,
+.dialog select,
+.modal input,
+.modal textarea,
+.modal select {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  color: var(--text-primary) !important;
+  transition: all 0.2s ease !important;
+  font-size: 14px !important;
+}
+
+[data-radix-dialog-content] input:focus,
+[data-radix-dialog-content] textarea:focus,
+[data-radix-dialog-content] select:focus,
+[data-radix-dialog-content] [role="combobox"]:focus,
+.dialog input:focus,
+.dialog textarea:focus,
+.dialog select:focus,
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+  border-color: var(--accent-emerald) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+  outline: none !important;
+}
+
+/* Input placeholders in dialogs */
+[data-radix-dialog-content] input::placeholder,
+[data-radix-dialog-content] textarea::placeholder,
+.dialog input::placeholder,
+.dialog textarea::placeholder,
+.modal input::placeholder,
+.modal textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Select dropdowns in dialogs */
+[data-radix-dialog-content] [data-radix-select-trigger],
+[data-radix-dialog-content] button[role="combobox"],
+.dialog [data-radix-select-trigger],
+.dialog button[role="combobox"],
+.modal [data-radix-select-trigger],
+.modal button[role="combobox"] {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  color: var(--text-primary) !important;
+  min-height: 44px !important;
+  font-size: 14px !important;
+}
+
+/* All possible dropdown selectors - comprehensive approach */
+[data-radix-select-content],
+[data-radix-select-viewport],
+div[data-radix-select-content],
+div[data-radix-select-viewport],
+.radix-select-content,
+[role="listbox"] {
+  background: #1e293b !important;
+  background-color: #1e293b !important;
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+  z-index: 50 !important;
+  opacity: 1 !important;
+}
+
+/* Dropdown items - all possible selectors */
+[data-radix-select-item],
+div[data-radix-select-item],
+.radix-select-item,
+[role="option"] {
+  background: #1e293b !important;
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  margin: 2px !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+}
+
+[data-radix-select-item]:hover,
+[data-radix-select-item][data-highlighted],
+div[data-radix-select-item]:hover,
+div[data-radix-select-item][data-highlighted],
+.radix-select-item:hover,
+[role="option"]:hover,
+[role="option"][data-highlighted] {
+  background: #334155 !important;
+  background-color: #334155 !important;
+  color: #10b981 !important;
+}
+
+/* Dialog buttons */
+[data-radix-dialog-content] button,
+.dialog button,
+.modal button {
+  border-radius: 12px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  padding: 10px 20px !important;
+}
+
+/* Dialog labels */
+[data-radix-dialog-content] label,
+.dialog label,
+.modal label {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+/* Loading States */
+.animate-spin {
+  border-color: var(--border-subtle);
+  border-top-color: var(--accent-emerald);
+}
+
+/* Utility Classes */
+.text-success { color: var(--accent-emerald); }
+.text-warning { color: #f59e0b; }
+.text-error { color: #ef4444; }
+.text-info { color: var(--accent-teal); }
+
+.bg-success { background-color: rgba(16, 185, 129, 0.1); }
+.bg-warning { background-color: rgba(245, 158, 11, 0.1); }
+.bg-error { background-color: rgba(239, 68, 68, 0.1); }
+.bg-info { background-color: rgba(20, 184, 166, 0.1); }
+
+/* Force rounded corners on ALL form elements - highest specificity */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea,
+select {
+  border-radius: 12px !important;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-medium) !important;
+  padding: 12px 16px !important;
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  transition: all 0.2s ease !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent-emerald) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+  outline: none !important;
+}
+
+/* Override any existing Tailwind classes */
+.rounded-none {
+  border-radius: 12px !important;
+}
+
+.rounded-sm {
+  border-radius: 12px !important;
+}
+
+.rounded {
+  border-radius: 12px !important;
+}
+
+.rounded-md {
+  border-radius: 12px !important;
+}
+
+.rounded-lg {
+  border-radius: 12px !important;
+}
+
+/* ===== LIGHT MODE STYLES ===== */
+.light {
+  /* Light Mode Color Palette Variables - 25% reduced brightness */
+  --bg-primary: #cbd5e0;          /* Darker light gray-blue */
+  --bg-secondary: #b3c1d1;        /* Darker lighter gray */
+  --bg-tertiary: #a0b0c0;         /* Darker medium light gray */
+  --bg-card: #d4d4d8;             /* Light gray cards instead of white */
+  --bg-sidebar: #4b5563;          /* 75% darker sidebar */
+  
+  --text-primary: #000000;        /* Pure black text */
+  --text-secondary: #1f2937;      /* Darker gray text */
+  --text-muted: #374151;          /* Darker muted text */
+  
+  --accent-emerald: #033a2f;      /* 50% darker emerald for light mode */
+  --accent-emerald-light: #047857; /* 50% darker standard emerald */
+  --accent-emerald-dark: #022f26; /* 50% darker very dark emerald */
+  
+  --accent-teal: #064e44;         /* 50% darker teal */
+  --accent-teal-light: #0d9488;   /* 50% darker standard teal */
+  
+  --border-subtle: rgba(148, 163, 184, 0.3); /* More visible borders */
+  --border-medium: rgba(148, 163, 184, 0.5);  /* Even more visible borders */
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+/* Light Mode Body */
+.light body, 
+.light html {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-sidebar) 50%, var(--bg-primary) 100%);
+  color: var(--text-primary);
+}
+
+/* Light Mode Sidebar */
+.light .ff-sidebar {
+  background: linear-gradient(180deg, var(--bg-sidebar) 0%, var(--bg-primary) 100%);
+  border-right: 1px solid var(--border-subtle);
+}
+
+/* Light Mode Logo */
+.light .ff-sidebar img {
+  filter: 
+    hue-rotate(0deg) 
+    saturate(1.0) 
+    brightness(0.9)
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.light .ff-sidebar img:hover {
+  transform: scale(1.05);
+  filter: 
+    hue-rotate(0deg) 
+    saturate(1.1) 
+    brightness(0.8)
+    drop-shadow(0 4px 8px rgba(5, 150, 105, 0.3));
+}
+
+/* Light Mode Navigation */
+.light .ff-sidebar a:hover {
+  background: rgba(5, 150, 105, 0.1);
+  color: var(--accent-emerald);
+}
+
+.light .ff-sidebar a[class*="border-green"] {
+  background: rgba(5, 150, 105, 0.15);
+  border: 1px solid var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+/* Light Mode Buttons */
+.light .ff-sidebar button:hover {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+.light .ff-sidebar button[class*="border-gray"]:hover {
+  background: rgba(5, 150, 105, 0.1);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+
+/* Light Mode Tables */
+.light th {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.light td {
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.light tr:hover {
+  background: rgba(5, 150, 105, 0.05);
+}
+
+/* Light Mode Dialog/Modal */
+.light [data-radix-dialog-overlay] {
+  background: rgba(248, 250, 252, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.light [data-radix-dialog-content],
+.light div[role="dialog"],
+.light .fixed.left-\\[50\\%\\].top-\\[50\\%\\],
+.light .fixed.left-1\\/2.top-1\\/2 {
+  background: #d4d4d8 !important;
+  background-color: #d4d4d8 !important;
+  border: 1px solid rgba(148, 163, 184, 0.4) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.light .bg-background {
+  background: #d4d4d8 !important;
+  background-color: #d4d4d8 !important;
+}
+
+.light .bg-card {
+  background: #d4d4d8 !important;
+  background-color: #d4d4d8 !important;
+}
+
+/* Light Mode Form Elements in Dialogs */
+.light [data-radix-dialog-content] input,
+.light [data-radix-dialog-content] textarea,
+.light [data-radix-dialog-content] select,
+.light [data-radix-dialog-content] [role="combobox"],
+.light .dialog input,
+.light .dialog textarea,
+.light .dialog select,
+.light .modal input,
+.light .modal textarea,
+.light .modal select {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-medium) !important;
+  color: var(--text-primary) !important;
+}
+
+.light [data-radix-dialog-content] [data-radix-select-trigger],
+.light [data-radix-dialog-content] button[role="combobox"],
+.light .dialog [data-radix-select-trigger],
+.light .dialog button[role="combobox"],
+.light .modal [data-radix-select-trigger],
+.light .modal button[role="combobox"] {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-medium) !important;
+  color: var(--text-primary) !important;
+}
+
+.light [data-radix-dialog-content] [data-radix-select-content],
+.light .dialog [data-radix-select-content],
+.light .modal [data-radix-select-content] {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-medium) !important;
+}
+
+/* Light Mode General Form Elements */
+.light input[type="text"],
+.light input[type="email"],
+.light input[type="password"],
+.light input[type="number"],
+.light input[type="date"],
+.light input[type="time"],
+.light input[type="datetime-local"],
+.light input[type="search"],
+.light input[type="tel"],
+.light input[type="url"],
+.light textarea,
+.light select {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-medium) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Light Mode Cards */
+.light .card, 
+.light div[class*="bg-white"],
+.light div[class*="bg-slate-800"] {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Light Mode Scrollbar */
+.light ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+/* Light Mode Headers */
+.light h1 {
+  background: linear-gradient(135deg, var(--accent-emerald) 0%, var(--accent-teal) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Light Mode Badges */
+.light .badge, 
+.light span[class*="badge"] {
+  background: rgba(5, 150, 105, 0.15);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(5, 150, 105, 0.3);
+}
+
+/* Light Mode Utility Classes */
+.light .bg-success { background-color: rgba(5, 150, 105, 0.1); }
+.light .bg-warning { background-color: rgba(217, 119, 6, 0.1); }
+.light .bg-error { background-color: rgba(220, 38, 38, 0.1); }
+.light .bg-info { background-color: rgba(13, 148, 136, 0.1); }
+
+/* Light Mode Loading States */
+.light .animate-spin {
+  border-color: var(--border-subtle);
+  border-top-color: var(--accent-emerald);
+}
+
+/* Light Mode App Title - High contrast for visibility */
+.light .ff-sidebar h1 {
+  color: #000000 !important; /* Pure black for maximum contrast against gray sidebar */
+}
+
+.light h1.text-lg.font-bold.text-white {
+  color: #000000 !important; /* Pure black for maximum contrast against gray sidebar */
+}

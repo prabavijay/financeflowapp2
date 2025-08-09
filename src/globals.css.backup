@@ -1,0 +1,1483 @@
+/* Universal override: All green/emerald filled buttons become outlined emerald buttons */
+button,
+.button,
+[class*="bg-emerald"],
+[class*="bg-green"],
+.add-income-btn,
+.add-income-btn *,
+.Button,
+[class*="Button"],
+[class*="btn"],
+[class*="Btn"] {
+  background: transparent !important;
+  color: var(--accent-emerald, #10b981) !important;
+  border: 2px solid var(--accent-emerald, #10b981) !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 10px 24px !important;
+  transition: all 0.2s ease !important;
+}
+button:hover,
+.button:hover,
+[class*="bg-emerald"]:hover,
+[class*="bg-green"]:hover,
+.add-income-btn:hover,
+.Button:hover,
+[class*="Button"]:hover,
+[class*="btn"]:hover,
+[class*="Btn"]:hover {
+  background: rgba(16,185,129,0.08) !important;
+  color: #059669 !important;
+  border-color: #059669 !important;
+}
+button:active,
+.button:active,
+[class*="bg-emerald"]:active,
+[class*="bg-green"]:active,
+.add-income-btn:active,
+.Button:active,
+[class*="Button"]:active,
+[class*="btn"]:active,
+[class*="Btn"]:active {
+  background: rgba(16,185,129,0.15) !important;
+  color: #059669 !important;
+  border-color: #059669 !important;
+}
+/* Specific override for Add Income and similar action buttons on Income page */
+.add-income-btn:not([disabled]),
+.add-income-btn:not([disabled]) > *,
+.add-income-btn:not([disabled]):hover,
+.add-income-btn:not([disabled]):focus,
+.add-income-btn:not([disabled]):active {
+  background: transparent !important;
+  color: var(--accent-emerald) !important;
+  border: 2px solid var(--accent-emerald) !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 10px 24px !important;
+  transition: all 0.2s ease !important;
+}
+.add-income-btn:not([disabled]):hover,
+.add-income-btn:not([disabled]):focus {
+  background: rgba(16,185,129,0.08) !important;
+  color: #059669 !important;
+  border-color: #059669 !important;
+}
+.add-income-btn:not([disabled]) svg {
+  color: var(--accent-emerald) !important;
+}
+.add-income-btn:not([disabled]):active {
+  background: rgba(16,185,129,0.15) !important;
+  color: #059669 !important;
+  border-color: #059669 !important;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Modern Dark Theme Variables */
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-accent: #475569;
+  --text-primary: #f8fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border-primary: rgba(148, 163, 184, 0.2);
+  --border-secondary: rgba(148, 163, 184, 0.1);
+  --shadow-dark: rgba(0, 0, 0, 0.25);
+  --shadow-glow: rgba(16, 185, 129, 0.15);
+  --accent-emerald: #10b981;
+  --accent-emerald-dark: #059669;
+}
+
+/* Force Dark Theme on All Elements */
+* {
+  color-scheme: dark;
+}
+
+/* Global Dark Theme Application */
+body, 
+html, 
+#__next,
+[data-theme],
+.page-container {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, #0c1420 50%, #0f172a 100%) !important;
+  color: var(--text-primary) !important;
+  min-height: 100vh;
+}
+
+/* Card Components - Modern Dark Theme with minimal shadows */
+.bg-white,
+.bg-white\/80,
+.bg-slate-50,
+.bg-gray-50,
+div[class*="bg-white"],
+div[class*="bg-slate-50"],
+[class*="Card"],
+[class*="card"] {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.7) 0%, 
+    rgba(51, 65, 85, 0.5) 50%, 
+    rgba(30, 41, 59, 0.7) 100%) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: none !important;
+  border-radius: 16px !important;
+}
+
+/* Text Colors - High Contrast */
+.text-slate-900,
+.text-gray-900,
+.text-black,
+h1, h2, h3, h4, h5, h6,
+[class*="font-bold"],
+[class*="font-semibold"] {
+  color: var(--text-primary) !important;
+}
+
+.text-slate-600,
+.text-slate-700,
+.text-gray-600,
+.text-gray-700,
+p, span, div {
+  color: var(--text-secondary) !important;
+}
+
+.text-slate-500,
+.text-gray-500 {
+  color: var(--text-muted) !important;
+}
+
+/* Action Buttons - Solid, Prominent Style (EXCLUDE all tab types) */
+button:not(.sidebar-item):not(.group-header):not(.group-item):not([role="tab"]):not(.tab):not([class*="tab"]):not([class*="Personal"]):not([class*="Spouse"]):not([class*="Family"]):not([class*="Business"]):not([class*="All"]):not([class*="Auto"]):not([class*="Home"]):not([class*="Health"]):not([class*="Life"]):not([class*="Work"]):not([class*="Travel"]):not([class*="Renters"]):not([class*="Umbrella"]):not([class*="Insurance"]):not([class*="Policy"]):not([class*="Policies"]),
+.btn:not(.tab):not([class*="tab"]):not([class*="All"]):not([class*="Auto"]):not([class*="Home"]):not([class*="Health"]):not([class*="Life"]):not([class*="Work"]):not([class*="Travel"]):not([class*="Renters"]):not([class*="Umbrella"]):not([class*="Insurance"]):not([class*="Policy"]):not([class*="Policies"]),
+[role="button"]:not([role="tab"]):not(.tab):not([class*="tab"]) {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.9) 0%, 
+    rgba(5, 150, 105, 0.9) 100%) !important;
+  color: white !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+  box-shadow: none !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+  width: auto !important;
+  min-width: auto !important;
+  max-width: fit-content !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 20px !important;
+  white-space: nowrap !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  text-transform: none !important;
+  letter-spacing: 0.025em !important;
+}
+
+/* Action Button Hover - More prominent than tabs */
+button:hover:not(.sidebar-item):not(.group-header):not(.group-item):not([role="tab"]):not(.tab):not([class*="tab"]):not([class*="Personal"]):not([class*="Spouse"]):not([class*="Family"]):not([class*="Business"]),
+.btn:hover:not(.tab):not([class*="tab"]) {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 1) 0%, 
+    rgba(5, 150, 105, 1) 100%) !important;
+  box-shadow: none !important;
+  transform: translateY(-2px) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  filter: brightness(1.05) !important;
+}
+
+/* Input Styling */
+input,
+textarea,
+select,
+.input,
+[type="text"],
+[type="email"],
+[type="password"],
+[type="number"],
+[type="date"] {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid var(--border-primary) !important;
+  color: var(--text-primary) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent-emerald) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+  outline: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Modern Clean Tab System - Elegant and Uncluttered */
+[role="tablist"],
+.tabs,
+div[class*="tab"]:not(button) {
+  background: transparent !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: inline-flex !important;
+  width: auto !important;
+  flex-wrap: nowrap !important;
+  gap: 4px !important;
+  padding: 4px !important;
+  border-bottom: 2px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+/* Tab Buttons - Minimalist Navigation Style (DISTINCT from action buttons) */
+[role="tab"],
+.tab,
+button[class*="tab"],
+button[class*="All"],
+button[class*="Auto"],
+button[class*="Home"],
+button[class*="Health"],
+button[class*="Life"],
+button[class*="Work"],
+button[class*="Travel"],
+button[class*="Renters"],
+button[class*="Umbrella"],
+button[class*="Insurance"],
+button[class*="Policy"],
+button[class*="Policies"] {
+  color: var(--text-muted) !important;
+  background: transparent !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  width: auto !important;
+  min-width: auto !important;
+  max-width: fit-content !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 14px !important;
+  white-space: nowrap !important;
+  margin: 0 4px !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  text-transform: none !important;
+  letter-spacing: 0.025em !important;
+  opacity: 0.8 !important;
+}
+
+/* Tab Hover State - Subtle navigation feedback */
+[role="tab"]:hover,
+.tab:hover,
+button[class*="tab"]:hover,
+button[class*="All"]:hover,
+button[class*="Auto"]:hover,
+button[class*="Home"]:hover,
+button[class*="Health"]:hover,
+button[class*="Life"]:hover,
+button[class*="Work"]:hover,
+button[class*="Travel"]:hover,
+button[class*="Renters"]:hover,
+button[class*="Umbrella"]:hover,
+button[class*="Insurance"]:hover,
+button[class*="Policy"]:hover,
+button[class*="Policies"]:hover {
+  color: var(--text-secondary) !important;
+  background: rgba(16, 185, 129, 0.05) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Active Tab - Clean Navigation Indicator */
+[role="tab"][aria-selected="true"],
+.tab.active,
+button[class*="tab"].active,
+button[class*="active"],
+button[class*="All"].active,
+button[class*="Auto"].active,
+button[class*="Home"].active,
+button[class*="Health"].active,
+button[class*="Life"].active,
+button[class*="Work"].active,
+button[class*="Travel"].active,
+button[class*="Renters"].active,
+button[class*="Umbrella"].active,
+button[class*="Insurance"].active,
+button[class*="Policy"].active,
+button[class*="Policies"].active {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: var(--accent-emerald) !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  width: auto !important;
+  min-width: auto !important;
+  max-width: fit-content !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+  text-transform: none !important;
+  letter-spacing: 0.025em !important;
+}
+
+/* FORCE OVERRIDE: Tab buttons with bg-emerald classes */
+button[class*="bg-emerald"]:not([class*="Add"]):not([class*="Submit"]):not([class*="Save"]):not([class*="Create"]),
+button[class*="bg-green"]:not([class*="Add"]):not([class*="Submit"]):not([class*="Save"]):not([class*="Create"]) {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: var(--accent-emerald) !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  padding: 8px 14px !important;
+  opacity: 1 !important;
+  text-transform: none !important;
+  letter-spacing: 0.025em !important;
+}
+
+/* FORCE OVERRIDE: All insurance category tabs specifically */
+button[class*="All Policies"],
+button[class*="Auto Insurance"], 
+button[class*="Home Insurance"],
+button[class*="Health Insurance"],
+button[class*="Life Insurance"],
+button[class*="Work Benefits"],
+button[class*="Travel Insurance"],
+button[class*="Renters Insurance"],
+button[class*="Umbrella Policy"] {
+  background: rgba(30, 41, 59, 0.2) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  padding: 8px 14px !important;
+  opacity: 0.8 !important;
+}
+
+/* Alert/Notification Styling - no shadows */
+.alert,
+div[class*="alert"],
+div[class*="notification"],
+div[class*="bg-blue-50"],
+div[class*="bg-green-50"],
+div[class*="bg-yellow-50"],
+div[class*="bg-red-50"] {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.6) 0%, 
+    rgba(51, 65, 85, 0.4) 100%) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+  backdrop-filter: blur(15px) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+/* Chart Containers */
+.recharts-wrapper,
+div[class*="chart"],
+svg {
+  background: transparent !important;
+}
+
+.recharts-cartesian-grid line {
+  stroke: var(--border-secondary) !important;
+}
+
+.recharts-text {
+  fill: var(--text-muted) !important;
+}
+
+/* Loading Spinners */
+div[class*="animate-spin"] {
+  border-color: var(--border-secondary) !important;
+  border-top-color: var(--accent-emerald) !important;
+}
+
+/* Progress Bars */
+div[class*="progress"],
+[role="progressbar"] {
+  background: rgba(30, 41, 59, 0.6) !important;
+}
+
+div[class*="progress"] > div,
+[role="progressbar"] > div {
+  background: linear-gradient(90deg, 
+    var(--accent-emerald) 0%, 
+    var(--accent-emerald-dark) 100%) !important;
+}
+
+/* Dropdown/Menu Styling */
+div[class*="dropdown"],
+div[class*="menu"],
+[role="menu"],
+[role="menuitem"] {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.95) 0%, 
+    rgba(51, 65, 85, 0.9) 100%) !important;
+  border: 1px solid var(--border-primary) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 
+    0 12px 48px var(--shadow-dark),
+    0 0 0 1px rgba(148, 163, 184, 0.05) !important;
+}
+
+/* Icon Colors */
+svg,
+.icon,
+[class*="icon"] {
+  color: var(--text-secondary) !important;
+}
+
+/* Hover States */
+div:hover,
+button:hover,
+a:hover {
+  border-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.6) 0%, 
+    rgba(5, 150, 105, 0.6) 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.8) 0%, 
+    rgba(5, 150, 105, 0.8) 100%);
+}
+
+/* Glass Effect for Special Elements */
+.glass-effect,
+div[class*="backdrop-blur"] {
+  background: rgba(30, 41, 59, 0.7) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Gradient Text Effects */
+h1[class*="gradient"],
+h2[class*="gradient"],
+h3[class*="gradient"],
+div[class*="bg-gradient-to-r"] {
+  background: linear-gradient(135deg, 
+    #10b981 0%, 
+    #06b6d4 50%, 
+    #8b5cf6 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Enhanced Visual Effects */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
+}
+
+.enhanced-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Radix UI and Shadcn/ui Component Overrides */
+[data-radix-portal],
+[data-radix-popper-content-wrapper],
+.radix-themes,
+.rt-Card,
+.rt-Dialog,
+.rt-DropdownMenu,
+.rt-Popover,
+.rt-Select,
+.rt-Tabs {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.95) 0%, 
+    rgba(51, 65, 85, 0.9) 100%) !important;
+  border: 1px solid var(--border-primary) !important;
+  color: var(--text-primary) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* Dialog and Modal Overlays */
+[data-state="open"][data-radix-portal] {
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Table Styling - no shadows or borders */
+table,
+thead,
+tbody,
+tr,
+th,
+td,
+.table,
+[role="table"],
+[role="row"],
+[role="columnheader"],
+[role="cell"] {
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-secondary) !important;
+  box-shadow: none !important;
+}
+
+/* Subtle hairline borders for all tables */
+table, th, td {
+  border: 0.5px solid rgba(148, 163, 184, 0.13) !important;
+  border-collapse: collapse !important;
+}
+
+th, td {
+  border-right: 0.5px solid rgba(148, 163, 184, 0.10) !important;
+  border-bottom: 0.5px solid rgba(148, 163, 184, 0.10) !important;
+}
+
+thead th {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
+}
+
+tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+th,
+[role="columnheader"] {
+  background: rgba(30, 41, 59, 0.2) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+tr:hover,
+[role="row"]:hover {
+  background: rgba(30, 41, 59, 0.1) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Form Labels */
+label,
+.label,
+[class*="label"] {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+}
+
+/* Code and Pre blocks */
+code,
+pre,
+.code {
+  background: rgba(15, 23, 42, 0.8) !important;
+  color: var(--accent-emerald) !important;
+  border: 1px solid var(--border-primary) !important;
+}
+
+/* Badge/Chip Components */
+.badge,
+.chip,
+span[class*="badge"],
+div[class*="badge"] {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.2) 0%, 
+    rgba(5, 150, 105, 0.2) 100%) !important;
+  color: var(--accent-emerald) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Skeleton Loading */
+.skeleton,
+div[class*="skeleton"],
+[class*="animate-pulse"] {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.6) 0%, 
+    rgba(51, 65, 85, 0.4) 50%, 
+    rgba(30, 41, 59, 0.6) 100%) !important;
+}
+
+/* Link Styling */
+a,
+.link,
+[role="link"] {
+  color: var(--accent-emerald) !important;
+  text-decoration: none !important;
+}
+
+a:hover,
+.link:hover,
+[role="link"]:hover {
+  color: var(--accent-emerald-dark) !important;
+  text-decoration: underline !important;
+}
+
+/* Selection Styling */
+::selection {
+  background: rgba(16, 185, 129, 0.3) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Focus Styling */
+*:focus,
+*:focus-visible {
+  outline: 2px solid var(--accent-emerald) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Slider Components */
+input[type="range"],
+.slider,
+[role="slider"] {
+  background: var(--bg-secondary) !important;
+}
+
+input[type="range"]::-webkit-slider-thumb,
+.slider-thumb {
+  background: var(--accent-emerald) !important;
+  border: 2px solid var(--accent-emerald-dark) !important;
+}
+
+/* Toggle/Switch Components */
+.toggle,
+.switch,
+[role="switch"] {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-primary) !important;
+}
+
+.toggle[data-state="checked"],
+.switch[data-state="checked"],
+[role="switch"][aria-checked="true"] {
+  background: var(--accent-emerald) !important;
+}
+
+/* Tooltip Styling */
+.tooltip,
+[role="tooltip"],
+[data-radix-tooltip-content] {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-primary) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Separator/Divider */
+hr,
+.separator,
+.divider,
+[data-orientation="horizontal"] {
+  border-color: var(--border-primary) !important;
+  background: var(--border-primary) !important;
+}
+
+/* Calendar/Date Picker */
+.calendar,
+.date-picker,
+[role="grid"] {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.95) 0%, 
+    rgba(51, 65, 85, 0.9) 100%) !important;
+  border: 1px solid var(--border-primary) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* Status Indicators */
+.status-success,
+.text-green-600,
+.text-green-500 {
+  color: #22c55e !important;
+}
+
+.status-warning,
+.text-yellow-600,
+.text-yellow-500 {
+  color: #eab308 !important;
+}
+
+.status-error,
+.text-red-600,
+.text-red-500 {
+  color: #ef4444 !important;
+}
+
+.status-info,
+.text-blue-600,
+.text-blue-500 {
+  color: #3b82f6 !important;
+}
+
+/* Override only container backgrounds, not text elements */
+div[class*="bg-"]:not([class*="bg-gradient"]):not([class*="sidebar"]):not([class*="group"]):not([class*="text-"]):not([class*="font-"]):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6):not(p):not(span) {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.95) 0%, 
+    rgba(51, 65, 85, 0.9) 50%, 
+    rgba(30, 41, 59, 0.95) 100%) !important;
+  border-color: var(--border-primary) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* Text elements should have NO background */
+h1, h2, h3, h4, h5, h6,
+p, span, div[class*="text-"], div[class*="font-"],
+strong, b, em, i,
+.font-bold, .font-semibold, .font-medium,
+[class*="text-slate"], [class*="text-gray"], [class*="text-white"] {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure text colors are readable without backgrounds */
+h1, h2, h3, h4, h5, h6,
+strong, b, .font-bold, .font-semibold {
+  color: var(--text-primary) !important;
+  background: transparent !important;
+}
+
+p, span, div[class*="text-"], 
+.text-slate-600, .text-slate-700, .text-gray-600, .text-gray-700 {
+  color: var(--text-secondary) !important;
+  background: transparent !important;
+}
+
+.text-slate-500, .text-gray-500 {
+  color: var(--text-muted) !important;
+  background: transparent !important;
+}
+
+/* Chart/Graph specific overrides */
+.recharts-surface {
+  background: transparent !important;
+}
+
+.recharts-legend-wrapper,
+.recharts-tooltip-wrapper {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* Final catch-all overrides - clean theme without shadows */
+/* Force dark theme on any remaining elements */
+[class*="Card"],
+[class*="card"],
+[data-testid*="card"],
+section,
+article,
+aside,
+main,
+header:not(.sidebar *),
+footer,
+nav:not(.sidebar *) {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.6) 0%, 
+    rgba(51, 65, 85, 0.4) 50%, 
+    rgba(30, 41, 59, 0.6) 100%) !important;
+  border: 1px solid rgba(148, 163, 184, 0.08) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: none !important;
+  border-radius: 16px !important;
+}
+
+/* Ultra-modern clean glass effect */
+.glass-card {
+  background: rgba(30, 41, 59, 0.5) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: none !important;
+  border-radius: 16px !important;
+}
+
+/* Clean hover effects - no shadows */
+.glass-card:hover,
+div:hover:not(.sidebar *):not(button):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6):not(p):not(span) {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Text readability enhancement - subtle shadow only for important text */
+h1, h2, h3, h4, h5, h6 {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Remove shadows from regular text elements */
+p, span, div, li, td, th, 
+div[class*="text-"], div[class*="font-"],
+strong, b, em, i {
+  text-shadow: none !important;
+}
+
+/* Comprehensive text element cleaning */
+h1, h2, h3, h4, h5, h6,
+p, span, a, label, 
+div[class*="text-"], div[class*="font-"],
+[class*="text-slate"], [class*="text-gray"], [class*="text-white"],
+strong, b, em, i, small, code,
+.text-xs, .text-sm, .text-base, .text-lg, .text-xl, .text-2xl, .text-3xl, .text-4xl {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Only allow backgrounds for actual card containers */
+div[class*="bg-"]:has(h1, h2, h3, h4, h5, h6, p, span) {
+  background: transparent !important;
+}
+
+/* Clean text inside metric cards */
+div[class*="bg-white"] h1, div[class*="bg-white"] h2, div[class*="bg-white"] h3,
+div[class*="bg-white"] p, div[class*="bg-white"] span,
+div[class*="bg-slate"] h1, div[class*="bg-slate"] h2, div[class*="bg-slate"] h3,
+div[class*="bg-slate"] p, div[class*="bg-slate"] span {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ULTIMATE SHADOW REMOVAL - Override EVERYTHING */
+*,
+*::before,
+*::after,
+div, span, p, h1, h2, h3, h4, h5, h6,
+section, article, main, aside, header, footer,
+button, input, textarea, select,
+table, tr, td, th, thead, tbody,
+ul, ol, li,
+[class*="card"], [class*="Card"],
+[class*="bg-"], [class*="shadow"],
+[role="button"], [role="tab"], [role="tabpanel"],
+[data-testid], [data-radix],
+.modern-card, .glass-button, .sidebar-item, .group-header, .group-item {
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+}
+
+/* SIDEBAR - Clean dark theme without shadows */
+.sidebar-gradient {
+  box-shadow: none !important;
+}
+
+/* Remove all borders from lists and items */
+li, ul, ol,
+div[class*="list"],
+div[class*="item"]:not(.sidebar-item):not(.group-item) {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Clean expense/income list items */
+div[role="listitem"],
+div[class*="expense"],
+div[class*="income"],
+div[class*="bill"] {
+  background: rgba(30, 41, 59, 0.3) !important;
+  border: 1px solid rgba(148, 163, 184, 0.05) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* Modern button effect - no glow */
+button:not(.sidebar-item):not(.group-header):not(.group-item):hover {
+  box-shadow: none !important;
+}
+
+/* Ultra-modern backdrop blur for modals */
+[data-radix-portal] {
+  backdrop-filter: blur(12px) saturate(150%) !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* Remove ALL pseudo-elements that create layering */
+*::before,
+*::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove all positioning that might create layering */
+div:not(.sidebar-gradient):not(.sidebar-item):not(.group-header):not(.group-item) {
+  position: static !important;
+}
+
+/* Clean all backgrounds and effects */
+* {
+  position: static;
+}
+
+.sidebar-gradient,
+.sidebar-item,
+.group-header,
+.group-item {
+  position: relative !important;
+}
+
+/* Compact View for Simple Browser */
+.compact-view {
+  zoom: 0.8;
+}
+
+@media (max-width: 1200px) {
+  body {
+    zoom: 0.85;
+  }
+}
+
+/* FRESH SIDEBAR - Zero Dependencies */
+
+.sidebar-item {
+  @apply flex items-center gap-4 px-4 py-3 text-emerald-100/80 hover:text-emerald-50 rounded-xl transition-all duration-300 cursor-pointer relative overflow-hidden;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  box-shadow: none !important;
+}
+
+/* Navigation Groups */
+.navigation-group {
+  @apply space-y-2;
+}
+
+.group-header {
+  @apply w-full flex items-center justify-between px-4 py-3 text-emerald-100/90 hover:text-emerald-50 rounded-xl transition-all duration-300 mb-2 relative overflow-hidden;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  box-shadow: none !important;
+}
+
+.group-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  transform: none;
+  box-shadow: none !important;
+}
+
+.group-header.active-group {
+  background: rgba(16, 185, 129, 0.15);
+  border: none;
+  color: rgb(209, 250, 229);
+}
+
+.group-content {
+  @apply space-y-1 ml-3 relative;
+  animation: slideDown 0.3s ease-out;
+}
+
+.group-line {
+  @apply absolute left-2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-emerald-500/30 to-transparent;
+}
+
+.group-item {
+  @apply flex items-center gap-3 px-4 py-2 ml-3 text-emerald-100/70 hover:text-emerald-50 rounded-lg transition-all duration-300 cursor-pointer relative;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+}
+
+.group-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border: none;
+  transform: none;
+  box-shadow: none !important;
+}
+
+.group-item.active {
+  background: rgba(16, 185, 129, 0.12);
+  border: none;
+  color: rgb(209, 250, 229);
+  transform: none;
+  box-shadow: none !important;
+}
+
+.group-item.active::before {
+  display: none !important;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+}
+
+.sidebar-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.sidebar-item:hover {
+  background: rgba(16, 185, 129, 0.08);
+  border: none;
+  box-shadow: none !important;
+  transform: none;
+}
+
+.sidebar-item:hover::before {
+  left: 100%;
+}
+
+.sidebar-item.active {
+  @apply text-emerald-50 font-semibold;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 78, 59, 0.2) 100%);
+  border: none;
+  box-shadow: none !important;
+  transform: none;
+}
+
+.sidebar-item.active::after {
+  display: none !important;
+}
+
+/* Modern Page Layout Styles */
+.page-container {
+  @apply min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50;
+  background-attachment: fixed;
+}
+
+.page-container.dark {
+  @apply bg-gradient-to-br from-slate-900 via-emerald-950/20 to-teal-900/30;
+}
+
+.modern-card {
+  @apply bg-white/80 backdrop-blur-lg border border-white/20 rounded-2xl;
+  box-shadow: none !important;
+}
+
+.modern-card.dark {
+  @apply bg-slate-800/60 border-slate-700/30;
+  box-shadow: none !important;
+}
+
+.modern-header {
+  @apply relative overflow-hidden rounded-t-2xl;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 78, 59, 0.02) 100%);
+}
+
+.modern-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.3), transparent);
+}
+
+.glass-button {
+  @apply px-6 py-3 rounded-xl font-medium transition-all duration-300 relative overflow-hidden;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.glass-button:hover {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: none !important;
+  transform: none;
+}
+
+.glass-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.glass-button:hover::before {
+  left: 100%;
+}
+
+/* Advanced Tools Section Modern Styling */
+.advanced-tools-section {
+  @apply relative;
+}
+
+.advanced-tools-button {
+  @apply w-full flex items-center justify-between px-4 py-3 text-emerald-100/90 hover:text-emerald-50 rounded-xl transition-all duration-300 mb-3 relative overflow-hidden;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  backdrop-filter: blur(15px);
+}
+
+.advanced-tools-button:hover {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.25);
+  box-shadow: none !important;
+  transform: none;
+}
+
+.advanced-tools-content {
+  @apply space-y-2 ml-3 relative;
+}
+
+.advanced-tools-content::before {
+  display: none !important;
+}
+
+/* FINAL AGGRESSIVE OVERRIDE - Remove ALL shadows from EVERYTHING */
+* {
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+  -webkit-text-shadow: none !important;
+  -moz-text-shadow: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* Remove ALL pseudo-elements completely */
+*::before,
+*::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Clean everything - absolutely no visual artifacts */
+div, span, p, h1, h2, h3, h4, h5, h6,
+section, article, main, aside, header, footer,
+button, input, textarea, select, form,
+table, tr, td, th, thead, tbody, ul, ol, li,
+[class*="card"], [class*="Card"], [class*="item"],
+[class*="bg-"], [class*="shadow"], [class*="border"],
+[role], [data-testid], [data-radix] {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  outline: none !important;
+}
+
+/* Additional button and tab anti-stretch rules */
+button {
+  flex: none !important;
+  flex-basis: auto !important;
+  width: auto !important;
+}
+
+/* Tab container specific rules */
+.flex button,
+div[class*="flex"] button,
+[class*="grid"] button {
+  flex: 0 0 auto !important;
+  width: auto !important;
+}
+
+/* Tab group containers should not force button stretching */
+div[class*="space-x"] button,
+div[class*="gap"] button,
+.flex-1 button {
+  flex: none !important;
+  flex-grow: 0 !important;
+  width: auto !important;
+}
+
+/* Prevent specific Tailwind flex classes from stretching buttons */
+.flex-1 > button,
+.w-full > button,
+[class*="w-full"] button {
+  width: auto !important;
+  flex: none !important;
+}
+
+/* Owner/Category Tab Buttons - Refined Navigation Pills */
+button[class*="Personal"],
+button[class*="Spouse"],
+button[class*="Family"],
+button[class*="Business"] {
+  width: auto !important;
+  min-width: fit-content !important;
+  padding: 6px 14px !important;
+  flex: none !important;
+  background: rgba(30, 41, 59, 0.3) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+  border-radius: 20px !important;
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  margin: 0 3px !important;
+  text-transform: capitalize !important;
+  letter-spacing: 0.025em !important;
+  opacity: 0.8 !important;
+}
+
+/* Owner tab hover states - Pill style */
+button[class*="Personal"]:hover,
+button[class*="Spouse"]:hover,
+button[class*="Family"]:hover,
+button[class*="Business"]:hover {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: var(--text-secondary) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* Active owner tab styling - Distinct pill selection */
+button[class*="Personal"].active,
+button[class*="Spouse"].active,
+button[class*="Family"].active,
+button[class*="Business"].active,
+button[class*="bg-emerald"]:not(.slide-out-item),
+button[class*="bg-green"]:not(.slide-out-item) {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.25) 0%, 
+    rgba(5, 150, 105, 0.25) 100%) !important;
+  color: var(--accent-emerald) !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ULTRA FORCE OVERRIDE: Slide-out menu items must have transparent background */
+.slide-out-panel button.slide-out-item,
+.slide-out-panel button.slide-out-item:hover,
+.slide-out-panel button.slide-out-item:active,
+.slide-out-panel button.slide-out-item:focus,
+.slide-out-panel button.slide-out-item[class*="bg-emerald"],
+.slide-out-panel button.slide-out-item[class*="bg-green"],
+.slide-out-content button.slide-out-item,
+.slide-out-content button.slide-out-item:hover,
+.slide-out-content button.slide-out-item:active,
+.slide-out-content button.slide-out-item:focus,
+button.slide-out-item,
+button.slide-out-item:hover,
+button.slide-out-item:active,
+button.slide-out-item:focus,
+button.slide-out-item[class*="bg-emerald"],
+button.slide-out-item[class*="bg-green"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+}
+
+/* Additional override for any nested selectors */
+div button.slide-out-item,
+nav button.slide-out-item,
+* button.slide-out-item {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Tab container improvements */
+div[class*="flex"][class*="gap"] {
+  gap: 6px !important;
+}
+
+div[class*="space-x"] > button + button {
+  margin-left: 6px !important;
+}
+
+/* Clean tab groups */
+.tab-group,
+div[class*="tab-group"] {
+  display: inline-flex !important;
+  background: rgba(30, 41, 59, 0.2) !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  gap: 2px !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+.tab-group button {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  transition: all 0.15s ease !important;
+}
+
+.tab-group button:hover {
+  background: rgba(16, 185, 129, 0.1) !important;
+}
+
+.tab-group button.active {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: var(--accent-emerald) !important;
+  font-weight: 600 !important;
+}
+
+/* FINAL OVERRIDE: Absolutely ensure slide-out items have no background */
+.slide-out-item {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+}
+
+.slide-out-item:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+}
+
+.slide-out-item.active {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+}
+
+/* MODERN SIDEBAR STYLES - Minimal CSS for new design */
+
+/* Pulse animation for active indicator dots */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Clean modern design - all styling is now handled by Tailwind classes */
+
+/* NUCLEAR GREEN ELIMINATION - Target ALL green elements */
+*[style*="emerald"],
+*[style*="green"],
+*[style*="rgb(16, 185, 129)"],
+*[style*="rgb(5, 150, 105)"],
+*[style*="rgb(34, 197, 94)"],
+*[style*="rgb(22, 163, 74)"],
+*[style*="#10b981"],
+*[style*="#059669"],
+*[style*="#22c55e"],
+*[style*="#16a34a"],
+.bg-emerald-100,
+.bg-emerald-200,
+.bg-emerald-300,
+.bg-emerald-400,
+.bg-emerald-500,
+.bg-emerald-600,
+.bg-emerald-700,
+.bg-emerald-800,
+.bg-emerald-900,
+.bg-green-100,
+.bg-green-200,
+.bg-green-300,
+.bg-green-400,
+.bg-green-500,
+.bg-green-600,
+.bg-green-700,
+.bg-green-800,
+.bg-green-900,
+button[class*="bg-emerald"],
+button[class*="bg-green"],
+div[class*="bg-emerald"],
+div[class*="bg-green"],
+nav button,
+nav button *,
+.slide-out-panel button,
+.slide-out-panel button *,
+.slide-out-panel div,
+.slide-out-panel div * {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #d1d5db !important;
+}
+
+/* Force clean slide-out buttons */
+.slide-out-panel button {
+  all: unset !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 12px 16px !important;
+  cursor: pointer !important;
+  background: transparent !important;
+  color: #d1d5db !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.slide-out-panel button:hover {
+  background-color: rgba(55, 65, 81, 0.5) !important;
+  color: #ffffff !important;
+}
+
+.slide-out-panel button.active {
+  background-color: #374151 !important;
+  color: #ffffff !important;
+  border-right: 2px solid #a855f7 !important;
+}
