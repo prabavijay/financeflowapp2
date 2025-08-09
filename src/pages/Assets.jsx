@@ -216,16 +216,16 @@ const Assets = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-cyan-100">Asset Portfolio</h1>
-          <p className="text-slate-600 dark:text-cyan-300 mt-1">Track and manage your valuable assets</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 bg-clip-text text-transparent mb-3">Asset Portfolio</h1>
+          <p className="text-slate-600 dark:text-slate-300 text-lg">Track and manage your valuable assets with comprehensive analytics</p>
         </div>
         <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
           <DialogTrigger asChild>
-            <Button className="flex items-center gap-2 px-4 py-2 bg-purple-600 dark:bg-purple-700 text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-800 transition-colors">
+            <Button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-semibold transform hover:scale-105">
               <Plus className="w-5 h-5" />
               Add Asset
             </Button>

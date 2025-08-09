@@ -211,16 +211,16 @@ const CreditLoans = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Credit & Loans</h1>
-          <p className="text-slate-600 mt-1">Comprehensive view of all credit products and loan accounts</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-3">Credit & Loans</h1>
+          <p className="text-slate-600 dark:text-slate-300 text-lg">Comprehensive view of all credit products and loan accounts with detailed analytics</p>
         </div>
         <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
           <DialogTrigger asChild>
-            <Button className="flex items-center gap-2">
+            <Button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-semibold transform hover:scale-105">
               <Plus className="w-5 h-5" />
               Add Credit Product
             </Button>
