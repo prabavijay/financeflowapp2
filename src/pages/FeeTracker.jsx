@@ -230,7 +230,7 @@ export default function FeeTracker() {
     return (
       <div className="p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
         </div>
       </div>
     );
@@ -241,8 +241,8 @@ export default function FeeTracker() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Fee Tracker</h1>
-          <p className="text-gray-600">Monitor and minimize banking and investment fees</p>
+          <h1 className="text-3xl font-bold text-white">Fee Tracker</h1>
+          <p className="text-slate-400">Monitor and minimize banking and investment fees</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={handleDetectFees} variant="outline">
@@ -386,7 +386,7 @@ export default function FeeTracker() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Fees</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-red-600" />
+              <AlertTriangle className="h-4 w-4 text-red-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{analytics.totalFees}</div>
@@ -397,7 +397,7 @@ export default function FeeTracker() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Cost</CardTitle>
-              <DollarSign className="h-4 w-4 text-red-600" />
+              <DollarSign className="h-4 w-4 text-red-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">${analytics.totalAmount.toFixed(2)}</div>
@@ -408,7 +408,7 @@ export default function FeeTracker() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Average Fee</CardTitle>
-              <TrendingDown className="h-4 w-4 text-orange-600" />
+              <TrendingDown className="h-4 w-4 text-orange-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">${analytics.averageFee.toFixed(2)}</div>
@@ -419,7 +419,7 @@ export default function FeeTracker() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Avoidable Fees</CardTitle>
-              <Target className="h-4 w-4 text-green-600" />
+              <Target className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{analytics.avoidableFees.length}</div>
@@ -431,11 +431,11 @@ export default function FeeTracker() {
 
       {/* Recommendations */}
       {recommendations.length > 0 && showRecommendations && (
-        <Card className="border-orange-200 bg-orange-50">
+        <Card className="border-orange-700/50 bg-orange-500/10">
           <CardHeader>
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-orange-600" />
+                <AlertTriangle className="h-5 w-5 text-orange-400" />
                 <CardTitle className="text-orange-900">Fee Optimization Recommendations</CardTitle>
               </div>
               <Button
@@ -449,17 +449,17 @@ export default function FeeTracker() {
           </CardHeader>
           <CardContent className="space-y-4">
             {recommendations.slice(0, 3).map((rec, index) => (
-              <div key={index} className="flex items-start gap-3 p-3 bg-white rounded-lg">
+              <div key={index} className="flex items-start gap-3 p-3 bg-slate-800/80 rounded-lg">
                 <div className={`w-2 h-2 rounded-full mt-2 ${
                   rec.priority === 'high' ? 'bg-red-500' : 
                   rec.priority === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'
                 }`} />
                 <div className="flex-1">
-                  <h4 className="font-medium text-gray-900">{rec.title}</h4>
-                  <p className="text-sm text-gray-600 mt-1">{rec.description}</p>
+                  <h4 className="font-medium text-white">{rec.title}</h4>
+                  <p className="text-sm text-slate-400 mt-1">{rec.description}</p>
                   <p className="text-sm text-gray-700 mt-2">{rec.action}</p>
                   {rec.potential_savings && (
-                    <p className="text-sm font-medium text-green-600 mt-1">
+                    <p className="text-sm font-medium text-green-400 mt-1">
                       Potential annual savings: ${rec.potential_savings.toFixed(2)}
                     </p>
                   )}
@@ -534,7 +534,7 @@ export default function FeeTracker() {
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-2">
-                    <CategoryIcon className="h-5 w-5 text-gray-600" />
+                    <CategoryIcon className="h-5 w-5 text-slate-400" />
                     <div>
                       <CardTitle className="text-lg">{fee.fee_category_name || fee.description}</CardTitle>
                       <CardDescription>
@@ -553,13 +553,13 @@ export default function FeeTracker() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold text-red-600">${fee.amount}</span>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-2xl font-bold text-red-400">${fee.amount}</span>
+                  <span className="text-sm text-slate-400">
                     {new Date(fee.date).toLocaleDateString()}
                   </span>
                 </div>
                 
-                <div className="space-y-2 text-sm text-gray-600">
+                <div className="space-y-2 text-sm text-slate-400">
                   <p className="line-clamp-2">{fee.description}</p>
                   
                   {fee.detected_automatically && (
@@ -581,7 +581,7 @@ export default function FeeTracker() {
 
                 {fee.notes && (
                   <div className="pt-2 border-t">
-                    <p className="text-sm text-gray-600 line-clamp-2">{fee.notes}</p>
+                    <p className="text-sm text-slate-400 line-clamp-2">{fee.notes}</p>
                   </div>
                 )}
 
@@ -617,8 +617,8 @@ export default function FeeTracker() {
         <Card>
           <CardContent className="text-center py-8">
             <AlertTriangle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No fees found</h3>
-            <p className="text-gray-600 mb-4">Start by adding fees manually or detecting them from your expenses.</p>
+            <h3 className="text-lg font-medium text-white mb-2">No fees found</h3>
+            <p className="text-slate-400 mb-4">Start by adding fees manually or detecting them from your expenses.</p>
             <Button onClick={() => setIsAddDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Add Your First Fee
@@ -638,7 +638,7 @@ export default function FeeTracker() {
           </DialogHeader>
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {detectedFees.length === 0 ? (
-              <p className="text-center text-gray-600 py-4">
+              <p className="text-center text-slate-400 py-4">
                 No fee patterns detected in your expenses.
               </p>
             ) : (
@@ -646,13 +646,13 @@ export default function FeeTracker() {
                 <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                   <div className="flex-1">
                     <h4 className="font-medium">{fee.fee_category_name}</h4>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-slate-400">
                       ${fee.amount} • {fee.institution_name || 'Unknown'} • {fee.category_type}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-slate-400">
                       Confidence: {Math.round(fee.detection_confidence * 100)}%
                     </p>
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-1">
+                    <p className="text-xs text-slate-400 mt-1 line-clamp-1">
                       {fee.description}
                     </p>
                   </div>

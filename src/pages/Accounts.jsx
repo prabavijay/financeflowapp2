@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { apiClient } from '../api/client'
-import { 
+import {
   Key,
   Globe,
   User,
@@ -73,8 +73,7 @@ const Accounts = () => {
       setLoading(true)
       setError(null)
       const params = selectedCategory !== 'all' ? { category: selectedCategory } : {}
-      
-      // Load accounts safely
+
       try {
         const accountsResponse = await apiClient.getAccounts(params)
         if (accountsResponse && accountsResponse.success) {
@@ -86,8 +85,7 @@ const Accounts = () => {
         console.error('Error loading accounts:', accountsError)
         setAccounts([])
       }
-      
-      // Load analytics safely
+
       try {
         const analyticsResponse = await apiClient.getAccountsAnalytics()
         if (analyticsResponse && analyticsResponse.success) {
@@ -96,8 +94,7 @@ const Accounts = () => {
       } catch (analyticsError) {
         console.error('Error loading analytics:', analyticsError)
       }
-      
-      // Load password health
+
       try {
         const healthResponse = await apiClient.getPasswordHealth()
         if (healthResponse && healthResponse.success) {
@@ -106,7 +103,7 @@ const Accounts = () => {
       } catch (healthError) {
         console.error('Error loading password health:', healthError)
       }
-      
+
     } catch (err) {
       console.error('Error loading accounts data:', err)
       setError('Failed to load accounts data. Please ensure the server is running.')
@@ -156,13 +153,11 @@ const Accounts = () => {
 
   const togglePasswordVisibility = async (accountId) => {
     if (visiblePasswords[accountId]) {
-      // Hide password
       setVisiblePasswords(prev => ({
         ...prev,
         [accountId]: null
       }))
     } else {
-      // Show password - fetch from API
       try {
         const response = await apiClient.getAccountPassword(accountId)
         if (response.success) {
@@ -181,7 +176,6 @@ const Accounts = () => {
   const copyToClipboard = async (text, type = 'text') => {
     try {
       await navigator.clipboard.writeText(text)
-      // Could add a toast notification here
       console.log(`${type} copied to clipboard`)
     } catch (err) {
       console.error('Failed to copy to clipboard:', err)
@@ -196,19 +190,19 @@ const Accounts = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active': return 'text-emerald-600 bg-emerald-100'
-      case 'inactive': return 'text-gray-600 bg-gray-100'
-      case 'archived': return 'text-red-600 bg-red-100'
-      default: return 'text-slate-600 bg-slate-100'
+      case 'active': return 'text-cyan-400 bg-cyan-500/10'
+      case 'inactive': return 'text-slate-400 bg-white/10'
+      case 'archived': return 'text-red-400 bg-red-500/10'
+      default: return 'text-slate-400 bg-white/10'
     }
   }
 
   const getPasswordHealthColor = (health) => {
     switch (health) {
-      case 'good': return 'text-emerald-600 bg-emerald-100'
-      case 'warning': return 'text-yellow-600 bg-yellow-100'
-      case 'urgent': return 'text-red-600 bg-red-100'
-      default: return 'text-slate-600 bg-slate-100'
+      case 'good': return 'text-cyan-400 bg-cyan-500/10'
+      case 'warning': return 'text-yellow-400 bg-yellow-500/10'
+      case 'urgent': return 'text-red-400 bg-red-500/10'
+      default: return 'text-slate-400 bg-white/10'
     }
   }
 
@@ -225,20 +219,20 @@ const Accounts = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading accounts data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading accounts data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6 space-y-6">
+    <div className="min-h-screen bg-transparent p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-3">Account Management</h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg">Secure storage and management of account credentials with advanced security features</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">Account Management</h1>
+          <p className="text-slate-400 text-lg">Secure storage and management of account credentials with advanced security features</p>
         </div>
         <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
           <DialogTrigger asChild>
@@ -254,7 +248,7 @@ const Accounts = () => {
                 Securely store account login information and credentials.
               </DialogDescription>
             </DialogHeader>
-            
+
             <form onSubmit={handleAddAccount} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -372,11 +366,11 @@ const Accounts = () => {
 
       {/* Error Display */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
-          <button 
+        <div className="glass-card border-t-2 border-t-red-400 p-4">
+          <p className="text-red-400">{error}</p>
+          <button
             onClick={loadAccountsData}
-            className="mt-2 px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200"
+            className="mt-2 px-3 py-1 bg-red-500/20 text-red-400 rounded text-sm hover:bg-red-500/30 transition-colors"
           >
             Retry
           </button>
@@ -386,64 +380,72 @@ const Accounts = () => {
       {/* Analytics Summary Cards */}
       {analytics && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-md p-6 border border-blue-200">
+          <div className="glass-card glass-card-hover p-6 border-t-2 border-t-blue-400">
             <div className="flex items-center gap-3 mb-2">
-              <Shield className="w-6 h-6 text-blue-600" />
-              <span className="text-sm font-medium text-blue-600">Total Accounts</span>
+              <div className="p-2 rounded-xl bg-blue-500/10">
+                <Shield className="w-6 h-6 text-blue-400" />
+              </div>
+              <span className="text-sm font-medium text-blue-400">Total Accounts</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{analytics.summary?.total_accounts || 0}</p>
-            <p className="text-sm text-slate-600 mt-1">Stored securely</p>
+            <p className="text-3xl font-bold text-white">{analytics.summary?.total_accounts || 0}</p>
+            <p className="text-sm text-slate-400 mt-1">Stored securely</p>
           </div>
 
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow-md p-6 border border-green-200">
+          <div className="glass-card glass-card-hover p-6 border-t-2 border-t-green-400">
             <div className="flex items-center gap-3 mb-2">
-              <CheckCircle className="w-6 h-6 text-green-600" />
-              <span className="text-sm font-medium text-green-600">Active Accounts</span>
+              <div className="p-2 rounded-xl bg-green-500/10">
+                <CheckCircle className="w-6 h-6 text-green-400" />
+              </div>
+              <span className="text-sm font-medium text-green-400">Active Accounts</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{analytics.summary?.active_accounts || 0}</p>
-            <p className="text-sm text-slate-600 mt-1">Ready to use</p>
+            <p className="text-3xl font-bold text-white">{analytics.summary?.active_accounts || 0}</p>
+            <p className="text-sm text-slate-400 mt-1">Ready to use</p>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-md p-6 border border-orange-200">
+          <div className="glass-card glass-card-hover p-6 border-t-2 border-t-amber-400">
             <div className="flex items-center gap-3 mb-2">
-              <Globe className="w-6 h-6 text-orange-600" />
-              <span className="text-sm font-medium text-orange-600">With URLs</span>
+              <div className="p-2 rounded-xl bg-amber-500/10">
+                <Globe className="w-6 h-6 text-amber-400" />
+              </div>
+              <span className="text-sm font-medium text-amber-400">With URLs</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{analytics.summary?.accounts_with_urls || 0}</p>
-            <p className="text-sm text-slate-600 mt-1">Quick access</p>
+            <p className="text-3xl font-bold text-white">{analytics.summary?.accounts_with_urls || 0}</p>
+            <p className="text-sm text-slate-400 mt-1">Quick access</p>
           </div>
 
-          <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-xl shadow-md p-6 border border-red-200">
+          <div className="glass-card glass-card-hover p-6 border-t-2 border-t-red-400">
             <div className="flex items-center gap-3 mb-2">
-              <AlertTriangle className="w-6 h-6 text-red-600" />
-              <span className="text-sm font-medium text-red-600">Need Update</span>
+              <div className="p-2 rounded-xl bg-red-500/10">
+                <AlertTriangle className="w-6 h-6 text-red-400" />
+              </div>
+              <span className="text-sm font-medium text-red-400">Need Update</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{analytics.summary?.passwords_need_update || 0}</p>
-            <p className="text-sm text-slate-600 mt-1">Password refresh</p>
+            <p className="text-3xl font-bold text-white">{analytics.summary?.passwords_need_update || 0}</p>
+            <p className="text-sm text-slate-400 mt-1">Password refresh</p>
           </div>
         </div>
       )}
 
       {/* Password Health Alert */}
       {passwordHealth.filter(account => account.password_health === 'urgent').length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+        <div className="glass-card border-t-2 border-t-red-400 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <AlertTriangle className="w-6 h-6 text-red-600" />
-            <h3 className="text-lg font-semibold text-red-800">Urgent Password Updates Required</h3>
+            <AlertTriangle className="w-6 h-6 text-red-400" />
+            <h3 className="text-lg font-semibold text-red-400">Urgent Password Updates Required</h3>
           </div>
           <div className="space-y-2">
             {passwordHealth.filter(account => account.password_health === 'urgent').slice(0, 3).map((account) => (
-              <div key={account.id} className="flex items-center justify-between bg-white rounded-lg p-3">
+              <div key={account.id} className="flex items-center justify-between bg-white/5 rounded-lg p-3">
                 <div className="flex items-center gap-3">
                   {getCategoryIcon(account.category)}
                   <div>
-                    <div className="font-medium text-slate-900">{account.account_name}</div>
-                    <div className="text-sm text-slate-600">{account.purpose}</div>
+                    <div className="font-medium text-white">{account.account_name}</div>
+                    <div className="text-sm text-slate-400">{account.purpose}</div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-semibold text-red-600">Last updated {formatDate(account.last_updated_password)}</div>
-                  <div className="text-sm text-slate-600">Update recommended</div>
+                  <div className="font-semibold text-red-400">Last updated {formatDate(account.last_updated_password)}</div>
+                  <div className="text-sm text-slate-400">Update recommended</div>
                 </div>
               </div>
             ))}
@@ -452,7 +454,7 @@ const Accounts = () => {
       )}
 
       {/* Filter Tabs */}
-      <div className="flex space-x-1 bg-slate-100 rounded-lg p-1 overflow-x-auto">
+      <div className="flex space-x-1 bg-white/5 rounded-lg p-1 overflow-x-auto">
         {categories.map((category) => {
           const Icon = category.icon
           return (
@@ -461,8 +463,8 @@ const Accounts = () => {
               onClick={() => setSelectedCategory(category.value)}
               className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
                 selectedCategory === category.value
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-cyan-500/20 text-cyan-400 shadow-sm'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -473,91 +475,91 @@ const Accounts = () => {
       </div>
 
       {/* Accounts Table */}
-      <div className="bg-white dark:bg-gray-800/80 rounded-xl shadow-md border border-slate-200 dark:border-gray-700/50 overflow-hidden backdrop-blur-sm">
-        <div className="p-6 border-b border-slate-200 dark:border-gray-700/50">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-100">
+      <div className="glass-card overflow-hidden">
+        <div className="p-6 border-b border-white/10">
+          <h2 className="text-xl font-semibold text-white">
             {selectedCategory === 'all' ? 'All Account Credentials' : categories.find(c => c.value === selectedCategory)?.label + ' Accounts'}
           </h2>
-          <p className="text-slate-600 dark:text-gray-400 text-sm mt-1">Secure credential storage with encrypted passwords</p>
+          <p className="text-slate-400 text-sm mt-1">Secure credential storage with encrypted passwords</p>
         </div>
 
         {accounts.length === 0 ? (
           <div className="text-center py-12">
-            <Key className="w-16 h-16 text-slate-300 dark:text-gray-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-gray-100 mb-2">No Account Credentials Found</h3>
-            <p className="text-slate-600 dark:text-gray-400">Add your first account to get started with secure credential management.</p>
+            <Key className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-white mb-2">No Account Credentials Found</h3>
+            <p className="text-slate-400">Add your first account to get started with secure credential management.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-slate-50 dark:bg-gray-700/50 border-b border-slate-200 dark:border-gray-600/50">
+              <thead className="bg-[rgba(35,52,78,0.5)] border-b border-white/10">
                 <tr>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-gray-100">Account</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-gray-100">URL</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-gray-100">Login</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-gray-100">Password</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-gray-100">Status</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-gray-100">Notes</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-gray-100">Actions</th>
+                  <th className="text-left p-4 font-semibold text-white">Account</th>
+                  <th className="text-left p-4 font-semibold text-white">URL</th>
+                  <th className="text-left p-4 font-semibold text-white">Login</th>
+                  <th className="text-left p-4 font-semibold text-white">Password</th>
+                  <th className="text-left p-4 font-semibold text-white">Status</th>
+                  <th className="text-left p-4 font-semibold text-white">Notes</th>
+                  <th className="text-left p-4 font-semibold text-white">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {accounts.map((account) => (
-                  <tr key={account.id} className="border-b border-slate-100 hover:bg-slate-50">
+                  <tr key={account.id} className="border-b border-white/10 hover:bg-white/5">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         {getCategoryIcon(account.category)}
                         <div>
-                          <div className="font-semibold text-slate-900">{account.account_name}</div>
-                          <div className="text-sm text-slate-600">{account.purpose}</div>
+                          <div className="font-semibold text-white">{account.account_name}</div>
+                          <div className="text-sm text-slate-400">{account.purpose}</div>
                           <div className="text-xs text-slate-500 capitalize">{account.category.replace('_', ' ')}</div>
                         </div>
                       </div>
                     </td>
-                    
+
                     <td className="p-4">
                       {account.url ? (
                         <div className="flex items-center gap-2">
-                          <a 
-                            href={account.url} 
-                            target="_blank" 
+                          <a
+                            href={account.url}
+                            target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-800 text-sm truncate max-w-[200px]"
+                            className="text-cyan-400 hover:text-cyan-300 text-sm truncate max-w-[200px]"
                           >
                             {account.url_domain || account.url}
                           </a>
                           <button
                             onClick={() => copyToClipboard(account.url, 'URL')}
-                            className="p-1 text-slate-400 hover:text-blue-600"
+                            className="p-1 text-slate-400 hover:text-cyan-400"
                           >
                             <Copy className="w-3 h-3" />
                           </button>
                         </div>
                       ) : (
-                        <span className="text-slate-400 text-sm">No URL</span>
+                        <span className="text-slate-500 text-sm">No URL</span>
                       )}
                     </td>
-                    
+
                     <td className="p-4">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-slate-900">{account.login_name}</span>
+                        <span className="font-medium text-white">{account.login_name}</span>
                         <button
                           onClick={() => copyToClipboard(account.login_name, 'Login')}
-                          className="p-1 text-slate-400 hover:text-blue-600"
+                          className="p-1 text-slate-400 hover:text-cyan-400"
                         >
                           <Copy className="w-3 h-3" />
                         </button>
                       </div>
                     </td>
-                    
+
                     <td className="p-4">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm">
+                        <span className="font-mono text-sm text-slate-300">
                           {visiblePasswords[account.id] || '••••••••'}
                         </span>
                         <button
                           onClick={() => togglePasswordVisibility(account.id)}
-                          className="p-1 text-slate-400 hover:text-blue-600"
+                          className="p-1 text-slate-400 hover:text-cyan-400"
                         >
                           {visiblePasswords[account.id] ? (
                             <EyeOff className="w-4 h-4" />
@@ -568,7 +570,7 @@ const Accounts = () => {
                         {visiblePasswords[account.id] && (
                           <button
                             onClick={() => copyToClipboard(visiblePasswords[account.id], 'Password')}
-                            className="p-1 text-slate-400 hover:text-blue-600"
+                            className="p-1 text-slate-400 hover:text-cyan-400"
                           >
                             <Copy className="w-3 h-3" />
                           </button>
@@ -580,31 +582,31 @@ const Accounts = () => {
                         </div>
                       )}
                     </td>
-                    
+
                     <td className="p-4">
                       <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(account.status)}`}>
                         {account.status}
                       </span>
                     </td>
-                    
+
                     <td className="p-4">
                       {account.notes ? (
-                        <span className="text-sm text-slate-600 truncate max-w-[150px] block">
+                        <span className="text-sm text-slate-400 truncate max-w-[150px] block">
                           {account.notes}
                         </span>
                       ) : (
-                        <span className="text-slate-400 text-sm">No notes</span>
+                        <span className="text-slate-500 text-sm">No notes</span>
                       )}
                     </td>
-                    
+
                     <td className="p-4">
                       <div className="flex gap-1">
-                        <Button variant="ghost" size="sm" className="p-1 h-auto">
+                        <Button variant="ghost" size="sm" className="p-1 h-auto text-slate-400 hover:text-cyan-400">
                           <Edit className="w-4 h-4" />
                         </Button>
-                        <button 
+                        <button
                           onClick={() => handleDeleteAccount(account.id)}
-                          className="p-1 text-slate-400 hover:text-red-600"
+                          className="p-1 text-slate-400 hover:text-red-400"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

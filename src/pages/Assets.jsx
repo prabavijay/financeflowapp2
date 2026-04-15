@@ -58,7 +58,7 @@ const Assets = () => {
   })
 
   const assetCategories = [
-    { value: 'real_estate', label: 'Real Estate', icon: Home, color: 'emerald' },
+    { value: 'real_estate', label: 'Real Estate', icon: Home, color: 'cyan' },
     { value: 'vehicle', label: 'Vehicles', icon: Car, color: 'blue' },
     { value: 'investment', label: 'Investments', icon: TrendingUp, color: 'purple' },
     { value: 'savings', label: 'Savings', icon: PiggyBank, color: 'green' },
@@ -85,6 +85,38 @@ const Assets = () => {
       setError('Failed to connect to backend. Please ensure the server is running.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDeleteAsset = async (id) => {
+    if (window.confirm('Are you sure you want to delete this asset?')) {
+      setAssetData(prev => prev.filter(item => item.id !== id))
+      try {
+        const response = await apiClient.deleteAsset(id)
+        const isSuccess = response.success !== false && response !== null && response !== undefined
+        if (!isSuccess) {
+          await loadAssetData()
+          setError('Failed to delete asset')
+        }
+      } catch (err) {
+        console.error('Error deleting asset:', err)
+        await loadAssetData()
+        setError('Failed to delete asset')
+      }
+    }
+  }
+
+  const handleClearAll = async () => {
+    if (assetData.length === 0) return
+    if (!window.confirm(`Delete all ${assetData.length} asset(s)? This cannot be undone.`)) return
+    const idsToDelete = assetData.map(a => a.id)
+    setAssetData([])
+    try {
+      await Promise.all(idsToDelete.map(id => apiClient.deleteAsset(id)))
+    } catch (err) {
+      console.error('Error clearing assets:', err)
+      await loadAssetData()
+      setError('Some records could not be deleted')
     }
   }
 
@@ -173,7 +205,7 @@ const Assets = () => {
       return {
         name: categoryInfo.label,
         value: categoryTotals[category],
-        color: categoryInfo.color === 'emerald' ? '#10b981' :
+        color: categoryInfo.color === 'cyan' ? '#00d4ff' :
                categoryInfo.color === 'blue' ? '#3b82f6' :
                categoryInfo.color === 'purple' ? '#8b5cf6' :
                categoryInfo.color === 'green' ? '#22c55e' :
@@ -209,23 +241,23 @@ const Assets = () => {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading asset data...</p>
+          <p className="mt-4 text-slate-400">Loading asset data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6 space-y-6">
+    <div className="min-h-screen bg-transparent p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 bg-clip-text text-transparent mb-3">Asset Portfolio</h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg">Track and manage your valuable assets with comprehensive analytics</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">Asset Portfolio</h1>
+          <p className="text-slate-400 text-lg">Track and manage your valuable assets with comprehensive analytics</p>
         </div>
         <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
           <DialogTrigger asChild>
-            <Button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-semibold transform hover:scale-105">
+            <Button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:bg-cyan-600 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-semibold transform hover:scale-105">
               <Plus className="w-5 h-5" />
               Add Asset
             </Button>
@@ -362,30 +394,30 @@ const Assets = () => {
         <div className="metric-card-purple">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-purple-600">Total Value</p>
-              <p className="text-2xl font-bold text-slate-900 mt-1">
+              <p className="text-sm font-medium text-purple-400">Total Value</p>
+              <p className="text-2xl font-bold text-white mt-1">
                 {formatCurrency(calculateTotalValue())}
               </p>
             </div>
             <div className="p-3 bg-purple-100 rounded-full">
-              <TrendingUp className="w-6 h-6 text-purple-600" />
+              <TrendingUp className="w-6 h-6 text-purple-400" />
             </div>
           </div>
         </div>
 
-        <div className="metric-card-emerald">
+        <div className="metric-card-cyan">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-emerald-600">Total Appreciation</p>
-              <p className="text-2xl font-bold text-slate-900 mt-1">
+              <p className="text-sm font-medium text-cyan-400">Total Appreciation</p>
+              <p className="text-2xl font-bold text-white mt-1">
                 {formatCurrency(calculateTotalAppreciation())}
               </p>
             </div>
-            <div className="p-3 bg-emerald-100 rounded-full">
+            <div className="p-3 bg-cyan-900/20 rounded-full">
               {calculateTotalAppreciation() >= 0 ? (
-                <ArrowUp className="w-6 h-6 text-emerald-600" />
+                <ArrowUp className="w-6 h-6 text-cyan-400" />
               ) : (
-                <ArrowDown className="w-6 h-6 text-red-600" />
+                <ArrowDown className="w-6 h-6 text-red-400" />
               )}
             </div>
           </div>
@@ -394,13 +426,13 @@ const Assets = () => {
         <div className="metric-card-blue">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-blue-600">Appreciation %</p>
-              <p className="text-2xl font-bold text-slate-900 mt-1">
+              <p className="text-sm font-medium text-blue-400">Appreciation %</p>
+              <p className="text-2xl font-bold text-white mt-1">
                 {calculateAppreciationPercent().toFixed(1)}%
               </p>
             </div>
-            <div className="p-3 bg-blue-100 rounded-full">
-              <Percent className="w-6 h-6 text-blue-600" />
+            <div className="p-3 bg-blue-500/10 rounded-full">
+              <Percent className="w-6 h-6 text-blue-400" />
             </div>
           </div>
         </div>
@@ -408,11 +440,11 @@ const Assets = () => {
         <div className="metric-card-slate">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600">Total Assets</p>
-              <p className="text-2xl font-bold text-slate-900 mt-1">{assetData.length}</p>
+              <p className="text-sm font-medium text-slate-400">Total Assets</p>
+              <p className="text-2xl font-bold text-white mt-1">{assetData.length}</p>
             </div>
-            <div className="p-3 bg-slate-100 rounded-full">
-              <BarChart3 className="w-6 h-6 text-slate-600" />
+            <div className="p-3 bg-white/10 rounded-full">
+              <BarChart3 className="w-6 h-6 text-slate-400" />
             </div>
           </div>
         </div>
@@ -422,8 +454,8 @@ const Assets = () => {
       {assetData.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Assets by Category Chart */}
-          <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
-            <h3 className="font-semibold text-slate-900 mb-4">Assets by Category</h3>
+          <div className="glass-card p-6">
+            <h3 className="font-semibold text-white mb-4">Assets by Category</h3>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
@@ -444,18 +476,18 @@ const Assets = () => {
           </div>
 
           {/* Appreciation Performance Chart */}
-          <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
-            <h3 className="font-semibold text-slate-900 mb-4">Appreciation Performance</h3>
+          <div className="glass-card p-6">
+            <h3 className="font-semibold text-white mb-4">Appreciation Performance</h3>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={getAppreciationData()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#64748b" />
-                <YAxis stroke="#64748b" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,150,255,0.06)" />
+                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <YAxis stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 12 }} />
                 <Tooltip 
                   formatter={(value) => [`${value}%`, 'Appreciation']}
                   contentStyle={{ 
-                    backgroundColor: '#fff', 
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                    border: '1px solid rgba(100, 150, 255, 0.15)',
                     borderRadius: '8px'
                   }}
                 />
@@ -465,22 +497,22 @@ const Assets = () => {
           </div>
 
           {/* Portfolio Value Trend Chart */}
-          <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6">
-            <h3 className="font-semibold text-slate-900 mb-4">Portfolio Value Trend</h3>
+          <div className="glass-card p-6">
+            <h3 className="font-semibold text-white mb-4">Portfolio Value Trend</h3>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={getValueTrend()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="month" stroke="#64748b" />
-                <YAxis stroke="#64748b" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,150,255,0.06)" />
+                <XAxis dataKey="month" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <YAxis stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 12 }} />
                 <Tooltip 
                   formatter={(value) => [`$${value.toLocaleString()}`, 'Portfolio Value']}
                   contentStyle={{ 
-                    backgroundColor: '#fff', 
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                    border: '1px solid rgba(100, 150, 255, 0.15)',
                     borderRadius: '8px'
                   }}
                 />
-                <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={3} />
+                <Line type="monotone" dataKey="value" stroke="#00d4ff" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -488,47 +520,61 @@ const Assets = () => {
       )}
 
       {/* Filters */}
-      <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-gray-800/50 rounded-lg border border-slate-200 dark:border-gray-700/50">
+      <div className="flex items-center gap-4 p-4 bg-[rgba(35,52,78,0.5)] rounded-lg border border-white/10">
         <div className="flex items-center gap-2 flex-1">
-          <Search className="w-5 h-5 text-slate-400 dark:text-gray-400" />
+          <Search className="w-5 h-5 text-slate-400" />
           <input
             type="text"
             placeholder="Search assets..."
-            className="flex-1 bg-transparent border-none outline-none text-slate-900 dark:text-cyan-100 placeholder-slate-500 dark:placeholder-gray-400"
+            className="flex-1 bg-transparent border-none outline-none text-cyan-100 placeholder-gray-400"
           />
         </div>
-        <button className="flex items-center gap-2 px-3 py-2 text-slate-600 dark:text-cyan-300 hover:text-slate-900 dark:hover:text-white transition-colors">
+        <button className="flex items-center gap-2 px-3 py-2 text-cyan-300 hover:text-white transition-colors">
           <Filter className="w-4 h-4" />
           Filters
         </button>
       </div>
 
       {/* Asset Table */}
-      <div className="bg-white dark:bg-gray-800/80 rounded-xl shadow-md border border-slate-200 dark:border-gray-700/50 overflow-hidden backdrop-blur-sm">
-        <div className="p-6 border-b border-slate-200 dark:border-gray-700/50">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-cyan-100">Asset Portfolio</h2>
-          <p className="text-slate-600 dark:text-cyan-300 text-sm mt-1">Comprehensive asset tracking with appreciation analysis and subtotals</p>
+      <div className="bg-[rgba(35,52,78,0.8)] rounded-xl shadow-md border border-white/10 overflow-hidden backdrop-blur-sm">
+        <div className="p-6 border-b border-white/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-cyan-100">Asset Portfolio</h2>
+              <p className="text-cyan-300 text-sm mt-1">Comprehensive asset tracking with appreciation analysis and subtotals</p>
+            </div>
+            {assetData.length > 0 && (
+              <Button
+                variant="outline"
+                onClick={handleClearAll}
+                className="inline-flex items-center gap-2 px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 hover:border-red-400 hover:text-red-300 rounded-lg transition-all duration-300 font-medium bg-transparent"
+              >
+                <Trash2 className="w-4 h-4" />
+                Clear All
+              </Button>
+            )}
+          </div>
         </div>
 
         {assetData.length === 0 ? (
           <div className="text-center py-12">
-            <TrendingUp className="w-16 h-16 text-slate-300 dark:text-gray-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-cyan-100 mb-2">No Assets Found</h3>
-            <p className="text-slate-600 dark:text-cyan-300">Add your first asset to get started with portfolio tracking.</p>
+            <TrendingUp className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-cyan-100 mb-2">No Assets Found</h3>
+            <p className="text-cyan-300">Add your first asset to get started with portfolio tracking.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-slate-50 dark:bg-gray-700/50 border-b border-slate-200 dark:border-gray-600/50">
+              <thead className="bg-[rgba(35,52,78,0.5)] border-b border-white/10 border-gray-600/50">
                 <tr>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-cyan-100">Asset Name</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-cyan-100">Category</th>
-                  <th className="text-right p-4 font-semibold text-slate-900 dark:text-cyan-100">Current Value</th>
-                  <th className="text-right p-4 font-semibold text-slate-900 dark:text-cyan-100">Purchase Price</th>
-                  <th className="text-right p-4 font-semibold text-slate-900 dark:text-cyan-100">Appreciation</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-cyan-100">Purchase Date</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-cyan-100">Location</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-cyan-100">Actions</th>
+                  <th className="text-left p-4 font-semibold text-cyan-100">Asset Name</th>
+                  <th className="text-left p-4 font-semibold text-cyan-100">Category</th>
+                  <th className="text-right p-4 font-semibold text-cyan-100">Current Value</th>
+                  <th className="text-right p-4 font-semibold text-cyan-100">Purchase Price</th>
+                  <th className="text-right p-4 font-semibold text-cyan-100">Appreciation</th>
+                  <th className="text-left p-4 font-semibold text-cyan-100">Purchase Date</th>
+                  <th className="text-left p-4 font-semibold text-cyan-100">Location</th>
+                  <th className="text-left p-4 font-semibold text-cyan-100">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -539,16 +585,16 @@ const Assets = () => {
                   const appreciationPercent = asset.appreciation_percent || (asset.purchase_price && asset.purchase_price > 0 ? ((asset.value - asset.purchase_price) / asset.purchase_price) * 100 : 0)
                   
                   return (
-                    <tr key={asset.id} className="border-b border-slate-100 dark:border-gray-700/30 hover:bg-slate-50 dark:hover:bg-gray-700/30">
+                    <tr key={asset.id} className="border-b border-white/10/30 hover:bg-white/5">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 bg-${categoryInfo.color}-100 dark:bg-${categoryInfo.color}-900/30 rounded-lg`}>
-                            <CategoryIcon className={`w-5 h-5 text-${categoryInfo.color}-600 dark:text-${categoryInfo.color}-400`} />
+                          <div className={`p-2 bg-${categoryInfo.color}-900/30 rounded-lg`}>
+                            <CategoryIcon className={`w-5 h-5 text-${categoryInfo.color}-400`} />
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900 dark:text-cyan-100">{asset.name}</div>
+                            <div className="font-semibold text-cyan-100">{asset.name}</div>
                             {asset.description && (
-                              <div className="text-sm text-slate-600 dark:text-cyan-300 truncate max-w-[200px]">
+                              <div className="text-sm text-cyan-300 truncate max-w-[200px]">
                                 {asset.description}
                               </div>
                             )}
@@ -557,17 +603,17 @@ const Assets = () => {
                       </td>
                       
                       <td className="p-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full bg-${categoryInfo.color}-100 dark:bg-${categoryInfo.color}-900/30 text-${categoryInfo.color}-700 dark:text-${categoryInfo.color}-300`}>
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full bg-${categoryInfo.color}-900/30 text-${categoryInfo.color}-300`}>
                           {categoryInfo.label}
                         </span>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-bold text-purple-600 dark:text-purple-400">
+                        <div className="font-bold text-purple-400">
                           {formatCurrency(asset.value)}
                         </div>
                         {asset.annual_appreciation !== null && asset.annual_appreciation !== 0 && (
-                          <div className={`text-sm ${asset.annual_appreciation >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
+                          <div className={`text-sm ${asset.annual_appreciation >= 0 ? 'text-cyan-400' : 'text-red-400'}`}>
                             {asset.annual_appreciation >= 0 ? '+' : ''}{asset.annual_appreciation.toFixed(1)}% annually
                           </div>
                         )}
@@ -575,11 +621,11 @@ const Assets = () => {
                       
                       <td className="p-4 text-right">
                         {asset.purchase_price ? (
-                          <div className="font-bold text-slate-600 dark:text-gray-300">
+                          <div className="font-bold text-gray-300">
                             {formatCurrency(asset.purchase_price)}
                           </div>
                         ) : (
-                          <span className="text-slate-400 dark:text-gray-500 text-sm">No data</span>
+                          <span className="text-slate-400 text-sm">No data</span>
                         )}
                       </td>
                       
@@ -587,7 +633,7 @@ const Assets = () => {
                         {asset.purchase_price && appreciationAmount !== 0 ? (
                           <div className="flex flex-col items-end">
                             <div className={`font-bold flex items-center gap-1 ${
-                              appreciationAmount >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                              appreciationAmount >= 0 ? 'text-cyan-400' : 'text-red-400'
                             }`}>
                               {appreciationAmount >= 0 ? (
                                 <ArrowUp className="w-4 h-4" />
@@ -597,48 +643,51 @@ const Assets = () => {
                               {appreciationAmount >= 0 ? '+' : ''}{formatCurrency(appreciationAmount)}
                             </div>
                             <div className={`text-sm ${
-                              appreciationPercent >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                              appreciationPercent >= 0 ? 'text-cyan-400' : 'text-red-400'
                             }`}>
                               {appreciationPercent >= 0 ? '+' : ''}{appreciationPercent.toFixed(1)}%
                             </div>
                           </div>
                         ) : (
-                          <span className="text-slate-400 dark:text-gray-500 text-sm">No data</span>
+                          <span className="text-slate-400 text-sm">No data</span>
                         )}
                       </td>
                       
                       <td className="p-4">
                         {asset.purchase_date ? (
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-slate-400 dark:text-gray-400" />
-                            <span className="text-sm text-slate-600 dark:text-cyan-300">
+                            <Calendar className="w-4 h-4 text-slate-400" />
+                            <span className="text-sm text-cyan-300">
                               {new Date(asset.purchase_date).toLocaleDateString()}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-slate-400 dark:text-gray-500 text-sm">No date</span>
+                          <span className="text-slate-400 text-sm">No date</span>
                         )}
                       </td>
                       
                       <td className="p-4">
                         {asset.location ? (
                           <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-slate-400 dark:text-gray-400" />
-                            <span className="text-sm text-slate-600 dark:text-cyan-300 truncate max-w-[120px]">
+                            <MapPin className="w-4 h-4 text-slate-400" />
+                            <span className="text-sm text-cyan-300 truncate max-w-[120px]">
                               {asset.location}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-slate-400 dark:text-gray-500 text-sm">No location</span>
+                          <span className="text-slate-400 text-sm">No location</span>
                         )}
                       </td>
                       
                       <td className="p-4">
                         <div className="flex items-center gap-1">
-                          <Button variant="ghost" size="sm" className="p-2 text-slate-400 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 h-auto">
+                          <Button variant="ghost" size="sm" className="p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-500/10 h-auto">
                             <Edit className="w-4 h-4" />
                           </Button>
-                          <button className="p-2 text-slate-400 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                          <button
+                            onClick={() => handleDeleteAsset(asset.id)}
+                            className="p-2 text-slate-400 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -648,20 +697,20 @@ const Assets = () => {
                 })}
                 
                 {/* Subtotal Row */}
-                <tr className="bg-slate-50 dark:bg-gray-700/50 border-t-2 border-slate-300 dark:border-gray-600 font-semibold">
-                  <td colSpan="2" className="p-4 text-right text-slate-900 dark:text-cyan-100">
+                <tr className="bg-[rgba(35,52,78,0.5)] border-t-2 border-gray-600 font-semibold">
+                  <td colSpan="2" className="p-4 text-right text-cyan-100">
                     Total Asset Portfolio:
                   </td>
-                  <td className="p-4 text-right text-purple-600 dark:text-purple-400 font-bold text-lg">
+                  <td className="p-4 text-right text-purple-400 font-bold text-lg">
                     {formatCurrency(calculateTotalValue())}
                   </td>
-                  <td className="p-4 text-right text-slate-600 dark:text-gray-300 font-bold">
+                  <td className="p-4 text-right text-gray-300 font-bold">
                     {formatCurrency(assetData.reduce((total, asset) => total + (asset.purchase_price || 0), 0))}
-                    <div className="text-sm font-normal text-slate-500 dark:text-gray-400">total cost</div>
+                    <div className="text-sm font-normal text-gray-400">total cost</div>
                   </td>
                   <td className="p-4 text-right">
                     <div className={`font-bold flex items-center justify-end gap-1 ${
-                      calculateTotalAppreciation() >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                      calculateTotalAppreciation() >= 0 ? 'text-cyan-400' : 'text-red-400'
                     }`}>
                       {calculateTotalAppreciation() >= 0 ? (
                         <ArrowUp className="w-4 h-4" />
@@ -671,12 +720,12 @@ const Assets = () => {
                       {formatCurrency(calculateTotalAppreciation())}
                     </div>
                     <div className={`text-sm ${
-                      calculateAppreciationPercent() >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                      calculateAppreciationPercent() >= 0 ? 'text-cyan-400' : 'text-red-400'
                     }`}>
                       {calculateAppreciationPercent() >= 0 ? '+' : ''}{calculateAppreciationPercent().toFixed(1)}%
                     </div>
                   </td>
-                  <td colSpan="3" className="p-4 text-slate-600 dark:text-cyan-300 text-sm">
+                  <td colSpan="3" className="p-4 text-cyan-300 text-sm">
                     {assetData.length} {assetData.length === 1 ? 'asset' : 'assets'} in portfolio
                   </td>
                 </tr>
@@ -688,8 +737,8 @@ const Assets = () => {
 
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/50 rounded-lg p-4">
-          <p className="text-red-800 dark:text-red-300">{error}</p>
+        <div className="bg-red-900/20 border border-red-700/50 rounded-lg p-4">
+          <p className="text-red-300">{error}</p>
         </div>
       )}
     </div>

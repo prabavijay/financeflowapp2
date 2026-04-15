@@ -172,17 +172,34 @@ const Debts = () => {
 
   const handleDeleteDebt = async (id) => {
     if (window.confirm('Are you sure you want to delete this debt?')) {
+      setDebtData(prev => prev.filter(item => item.id !== id))
       try {
         const response = await apiClient.deleteDebt(id)
-        if (response.success) {
+        const isSuccess = response.success !== false && response !== null && response !== undefined
+        if (!isSuccess) {
           await loadDebtData()
-        } else {
           setError('Failed to delete debt')
         }
       } catch (err) {
         console.error('Error deleting debt:', err)
+        await loadDebtData()
         setError('Failed to delete debt')
       }
+    }
+  }
+
+  const handleClearAll = async () => {
+    const filtered = getFilteredDebtData()
+    if (filtered.length === 0) return
+    if (!window.confirm(`Delete all ${filtered.length} debt record(s) for ${activeTab}? This cannot be undone.`)) return
+    const idsToDelete = filtered.map(d => d.id)
+    setDebtData(prev => prev.filter(item => !idsToDelete.includes(item.id)))
+    try {
+      await Promise.all(idsToDelete.map(id => apiClient.deleteDebt(id)))
+    } catch (err) {
+      console.error('Error clearing debts:', err)
+      await loadDebtData()
+      setError('Some records could not be deleted')
     }
   }
 
@@ -231,8 +248,17 @@ const Debts = () => {
   }
 
   const getFilteredDebtData = () => {
-    let filtered = debtData.filter(debt => debt.owner === activeTab)
-    
+    let filtered
+    if (activeTab === 'Family') {
+      filtered = debtData.filter(debt =>
+        debt.owner === 'Personal' ||
+        debt.owner === 'Spouse' ||
+        !debt.owner
+      )
+    } else {
+      filtered = debtData.filter(debt => debt.owner === activeTab || !debt.owner)
+    }
+
     if (sortField) {
       filtered = [...filtered].sort((a, b) => {
         const aValue = getSortValue(a, sortField)
@@ -307,9 +333,9 @@ const Debts = () => {
     return projections
   }
 
-  const SortableHeader = ({ field, children, className = "text-right p-4 font-semibold text-slate-900 dark:text-white" }) => (
+  const SortableHeader = ({ field, children, className = "text-right p-4 font-semibold text-white" }) => (
     <th 
-      className={`${className} cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600/30 transition-colors`}
+      className={`${className} cursor-pointer hover:bg-white/10 transition-colors`}
       onClick={() => handleSort(field)}
     >
       <div className="flex items-center gap-1 justify-end">
@@ -328,21 +354,21 @@ const Debts = () => {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading debt data...</p>
+          <p className="mt-4 text-slate-400">Loading debt data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-transparent">
       <div className="p-8 space-y-8">
         {/* Header */}
         <div className="text-left mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
             Debt Management
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg mb-6">
+          <p className="text-slate-400 text-lg mb-6">
             Track and manage all your debts and loans to regain financial freedom
           </p>
         </div>
@@ -350,56 +376,56 @@ const Debts = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         {/* Tabs */}
         <div className="flex justify-start mb-8">
-          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-emerald-500/40 rounded-lg">
-            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Personal</TabsTrigger>
-            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Spouse</TabsTrigger>
-            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Family</TabsTrigger>
+          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-cyan-500/30 rounded-lg">
+            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Personal</TabsTrigger>
+            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Spouse</TabsTrigger>
+            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Family</TabsTrigger>
           </TabsList>
         </div>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card glass-card-hover p-8 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Total Debt</p>
-                <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                <p className="text-sm font-medium text-red-400 mb-2">Total Debt</p>
+                <p className="text-3xl font-bold text-white">
                   {formatCurrency(calculateTotalDebt())}
                 </p>
               </div>
-              <div className="p-4 bg-red-100 dark:bg-red-900/30 rounded-2xl">
-                <TrendingDown className="w-8 h-8 text-red-600 dark:text-red-400" />
+              <div className="p-4 bg-red-900/30 rounded-2xl">
+                <TrendingDown className="w-8 h-8 text-red-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card glass-card-hover p-8 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-orange-600 dark:text-orange-400 mb-2">Monthly Payments</p>
-                <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                <p className="text-sm font-medium text-orange-400 mb-2">Monthly Payments</p>
+                <p className="text-3xl font-bold text-white">
                   {formatCurrency(calculateTotalMinimumPayments())}
                 </p>
               </div>
-              <div className="p-4 bg-orange-100 dark:bg-orange-900/30 rounded-2xl">
-                <Calendar className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              <div className="p-4 bg-orange-900/30 rounded-2xl">
+                <Calendar className="w-8 h-8 text-orange-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card glass-card-hover p-8 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Monthly Interest Cost</p>
-                <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                <p className="text-sm font-medium text-red-400 mb-2">Monthly Interest Cost</p>
+                <p className="text-3xl font-bold text-white">
                   {formatCurrency(calculateTotalInterestCost())}
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                <p className="text-xs text-slate-400 mt-1">
                   {getFilteredDebtData().length} accounts
                 </p>
               </div>
-              <div className="p-4 bg-red-100 dark:bg-red-900/30 rounded-2xl">
-                <TrendingDown className="w-8 h-8 text-red-600 dark:text-red-400" />
+              <div className="p-4 bg-red-900/30 rounded-2xl">
+                <TrendingDown className="w-8 h-8 text-red-400" />
               </div>
             </div>
           </div>
@@ -409,8 +435,8 @@ const Debts = () => {
         {getFilteredDebtData().length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
             {/* Debt by Type Chart */}
-            <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-6 text-lg">Debt by Type</h3>
+            <div className="glass-card glass-card-hover p-8 hover:shadow-2xl transition-all duration-300">
+              <h3 className="font-semibold text-white mb-6 text-lg">Debt by Type</h3>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
@@ -431,23 +457,23 @@ const Debts = () => {
             </div>
 
             {/* Interest Cost Chart */}
-            <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
+            <div className="glass-card glass-card-hover p-8 hover:shadow-2xl transition-all duration-300">
               <div className="mb-6">
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-2 text-lg">Monthly Interest Cost</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <h3 className="font-semibold text-white mb-2 text-lg">Monthly Interest Cost</h3>
+                <p className="text-sm text-slate-400">
                   How much you&apos;re paying in interest each month per debt
                 </p>
               </div>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={getInterestCosts()}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="name" stroke="#64748b" />
-                  <YAxis stroke="#64748b" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,150,255,0.06)" />
+                  <XAxis dataKey="name" stroke="#334155" />
+                  <YAxis stroke="#334155" />
                   <Tooltip 
                     formatter={(value) => [`$${value.toFixed(2)}`, 'Monthly Interest']}
                     contentStyle={{ 
-                      backgroundColor: '#fff', 
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                      border: '1px solid rgba(100, 150, 255, 0.15)',
                       borderRadius: '8px'
                     }}
                   />
@@ -457,22 +483,22 @@ const Debts = () => {
             </div>
 
             {/* Payoff Projection Chart */}
-            <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-6 text-lg">Payoff Projection</h3>
+            <div className="glass-card glass-card-hover p-8 hover:shadow-2xl transition-all duration-300">
+              <h3 className="font-semibold text-white mb-6 text-lg">Payoff Projection</h3>
               <ResponsiveContainer width="100%" height={250}>
                 <LineChart data={getPayoffProjection()}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" stroke="#64748b" />
-                  <YAxis stroke="#64748b" />
+                  <XAxis dataKey="month" stroke="#334155" />
+                  <YAxis stroke="#334155" />
                   <Tooltip 
                     formatter={(value) => [`$${value.toLocaleString()}`, 'Balance']}
                     contentStyle={{ 
-                      backgroundColor: '#fff', 
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                      border: '1px solid rgba(100, 150, 255, 0.15)',
                       borderRadius: '8px'
                     }}
                   />
-                  <Line type="monotone" dataKey="balance" stroke="#10b981" strokeWidth={3} />
+                  <Line type="monotone" dataKey="balance" stroke="#00d4ff" strokeWidth={3} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -480,13 +506,24 @@ const Debts = () => {
       )}
 
         {/* Debts Table */}
-        <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
-          <div className="p-8 border-b border-slate-200/50 dark:border-slate-700/50">
+        <div className="glass-card glass-card-hover overflow-hidden">
+          <div className="p-8 border-b border-white/10">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Debt Portfolio</h2>
-                <p className="text-slate-600 dark:text-slate-300 text-lg mt-2">Manage all your debts and track payoff progress</p>
+                <h2 className="text-2xl font-semibold text-white">Debt Portfolio</h2>
+                <p className="text-slate-400 text-lg mt-2">Manage all your debts and track payoff progress</p>
               </div>
+              <div className="flex items-center gap-2">
+                {getFilteredDebtData().length > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={handleClearAll}
+                    className="inline-flex items-center gap-2 px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 hover:border-red-400 hover:text-red-300 rounded-lg transition-all duration-300 font-medium bg-transparent"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Clear All
+                  </Button>
+                )}
               <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
                 <DialogTrigger asChild>
                   <Button className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-medium">
@@ -627,22 +664,23 @@ const Debts = () => {
                   </form>
                 </DialogContent>
               </Dialog>
+              </div>
             </div>
           </div>
 
         {getFilteredDebtData().length === 0 ? (
           <div className="text-center py-12">
             <AlertTriangle className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">No Debts Found</h3>
-            <p className="text-slate-600">Add your first debt to start tracking and managing payments.</p>
+            <h3 className="text-lg font-semibold text-white mb-2">No Debts Found</h3>
+            <p className="text-slate-400">Add your first debt to start tracking and managing payments.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-slate-50/50 dark:bg-slate-700/50 border-b border-slate-200/50 dark:border-slate-600/50">
+              <thead className="bg-[rgba(35,52,78,0.5)] border-b border-white/10">
                 <tr>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Creditor</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Type</th>
+                  <th className="text-left p-4 font-semibold text-white">Creditor</th>
+                  <th className="text-left p-4 font-semibold text-white">Type</th>
                   <SortableHeader field="limit">Limit</SortableHeader>
                   <SortableHeader field="balance">Balance</SortableHeader>
                   <SortableHeader field="available">Available</SortableHeader>
@@ -650,8 +688,8 @@ const Debts = () => {
                   <SortableHeader field="minimum_payment">Min Payment</SortableHeader>
                   <SortableHeader field="monthly_interest">Monthly Interest</SortableHeader>
                   <SortableHeader field="yearly_interest">Yearly Interest</SortableHeader>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Due Date</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Actions</th>
+                  <th className="text-left p-4 font-semibold text-white">Due Date</th>
+                  <th className="text-left p-4 font-semibold text-white">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -669,16 +707,16 @@ const Debts = () => {
                   const available = isCredit && creditLimit ? creditLimit - (debt.balance || 0) : null
                   
                   return (
-                    <tr key={debt.id} className="border-b border-slate-200/30 dark:border-slate-700/50 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                    <tr key={debt.id} className="border-b border-white/10 hover:bg-white/10 transition-colors">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 bg-${typeInfo.color}-100 dark:bg-${typeInfo.color}-900/30 rounded-lg`}>
-                            <TypeIcon className={`w-5 h-5 text-${typeInfo.color}-600 dark:text-${typeInfo.color}-400`} />
+                          <div className={`p-2 bg-${typeInfo.color}-900/30 rounded-lg`}>
+                            <TypeIcon className={`w-5 h-5 text-${typeInfo.color}-400`} />
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900 dark:text-white text-sm">{debt.name}</div>
+                            <div className="font-semibold text-white text-sm">{debt.name}</div>
                             {debt.notes && (
-                              <div className="text-xs text-slate-600 dark:text-slate-400 truncate max-w-[150px]">
+                              <div className="text-xs text-slate-400 truncate max-w-[150px]">
                                 {debt.notes}
                               </div>
                             )}
@@ -687,59 +725,59 @@ const Debts = () => {
                       </td>
                       
                       <td className="p-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full bg-${typeInfo.color}-100 dark:bg-${typeInfo.color}-900/30 text-${typeInfo.color}-700 dark:text-${typeInfo.color}-300`}>
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full bg-${typeInfo.color}-900/30 text-${typeInfo.color}-300`}>
                           {typeInfo.label}
                         </span>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-semibold text-slate-900 dark:text-white">
+                        <div className="font-semibold text-white">
                           {creditLimit ? formatCurrency(creditLimit) : 
                            isCredit ? 'N/A' : '-'}
                         </div>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-bold text-red-600 dark:text-red-400">
+                        <div className="font-bold text-red-400">
                           {formatCurrency(debt.balance)}
                         </div>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-semibold text-slate-900 dark:text-white">
+                        <div className="font-semibold text-white">
                           {available !== null ? formatCurrency(Math.max(0, available)) : 
                            isCredit ? 'N/A' : '-'}
                         </div>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-semibold text-slate-900 dark:text-white">
+                        <div className="font-semibold text-white">
                           {debt.interest_rate}%
                         </div>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-semibold text-slate-900 dark:text-white">
+                        <div className="font-semibold text-white">
                           {formatCurrency(debt.minimum_payment)}
                         </div>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-semibold text-red-600 dark:text-red-400">
+                        <div className="font-semibold text-red-400">
                           {formatCurrency(monthlyInterest)}
                         </div>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-semibold text-red-600 dark:text-red-400">
+                        <div className="font-semibold text-red-400">
                           {formatCurrency(yearlyInterest)}
                         </div>
                       </td>
                       
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-slate-400 dark:text-slate-500" />
-                          <span className="text-xs text-slate-600 dark:text-slate-400">
+                          <Calendar className="w-4 h-4 text-slate-400 text-slate-500" />
+                          <span className="text-xs text-slate-400">
                             {new Date(debt.due_date).toLocaleDateString()}
                           </span>
                         </div>
@@ -751,7 +789,7 @@ const Debts = () => {
                             <DialogTrigger asChild>
                               <button 
                                 onClick={() => handleEditDebt(debt)}
-                                className="p-2 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                className="p-2 text-slate-400 text-slate-500 hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-500/10"
                               >
                                 <Edit className="w-4 h-4" />
                               </button>
@@ -894,7 +932,7 @@ const Debts = () => {
                           </Dialog>
                           <button 
                             onClick={() => handleDeleteDebt(debt.id)}
-                            className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                            className="p-2 text-slate-400 text-slate-500 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -920,8 +958,8 @@ const Debts = () => {
 
 
       {error && (
-        <div className="bg-red-100/80 dark:bg-red-900/30 border border-red-200/50 dark:border-red-700/50 rounded-lg p-4 backdrop-blur-sm">
-          <p className="text-red-800 dark:text-red-300">{error}</p>
+        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 backdrop-blur-sm">
+          <p className="text-red-300">{error}</p>
         </div>
       )}
       </div>

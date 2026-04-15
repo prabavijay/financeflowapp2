@@ -64,7 +64,7 @@ const Expenses = () => {
   })
 
   const expenseCategories = [
-    { value: 'food', label: 'Food & Dining', icon: Utensils, color: 'emerald' },
+    { value: 'food', label: 'Food & Dining', icon: Utensils, color: 'cyan' },
     { value: 'transportation', label: 'Transportation', icon: Car, color: 'blue' },
     { value: 'housing', label: 'Housing', icon: Home, color: 'purple' },
     { value: 'utilities', label: 'Utilities', icon: Home, color: 'slate' },
@@ -135,7 +135,7 @@ const Expenses = () => {
           date: new Date().toISOString().split('T')[0],
           is_recurring: false,
           frequency: '',
-          owner: 'Personal'
+          owner: activeTab
         })
         setShowAddForm(false)
         setError(null)
@@ -160,22 +160,39 @@ const Expenses = () => {
   }
 
   const calculateMonthlyTotal = () => {
-    return expenseData.reduce((total, expense) => total + parseFloat(expense.amount), 0)
+    return getFilteredExpenseData().reduce((total, expense) => total + parseFloat(expense.amount), 0)
   }
 
   const handleDeleteExpense = async (id) => {
     if (window.confirm('Are you sure you want to delete this expense?')) {
+      setExpenseData(prev => prev.filter(item => item.id !== id))
       try {
         const response = await apiClient.deleteExpense(id)
-        if (response.success) {
+        const isSuccess = response.success !== false && response !== null && response !== undefined
+        if (!isSuccess) {
           await loadExpenseData()
-        } else {
           setError('Failed to delete expense')
         }
       } catch (err) {
         console.error('Error deleting expense:', err)
+        await loadExpenseData()
         setError('Failed to delete expense')
       }
+    }
+  }
+
+  const handleClearAll = async () => {
+    const filtered = getFilteredExpenseData()
+    if (filtered.length === 0) return
+    if (!window.confirm(`Delete all ${filtered.length} expense record(s) for ${activeTab}? This cannot be undone.`)) return
+    const idsToDelete = filtered.map(e => e.id)
+    setExpenseData(prev => prev.filter(item => !idsToDelete.includes(item.id)))
+    try {
+      await Promise.all(idsToDelete.map(id => apiClient.deleteExpense(id)))
+    } catch (err) {
+      console.error('Error clearing expenses:', err)
+      await loadExpenseData()
+      setError('Some records could not be deleted')
     }
   }
 
@@ -220,7 +237,7 @@ const Expenses = () => {
           date: new Date().toISOString().split('T')[0],
           is_recurring: false,
           frequency: '',
-          owner: 'Personal'
+          owner: activeTab
         })
         setShowEditForm(false)
         setEditingExpense(null)
@@ -237,16 +254,8 @@ const Expenses = () => {
   const getFilteredExpenseData = () => {
     let filteredData = expenseData
     
-    // Filter by owner (Personal/Spouse/Family)
-    if (activeTab === 'Family') {
-      filteredData = filteredData.filter(expense => 
-        expense.owner === 'Personal' || 
-        expense.owner === 'Spouse' || 
-        !expense.owner
-      )
-    } else {
-      filteredData = filteredData.filter(expense => expense.owner === activeTab || !expense.owner)
-    }
+    // Filter by owner — Personal and Business are strictly separate
+    filteredData = filteredData.filter(expense => expense.owner === activeTab)
     
     // Filter by search term
     if (searchTerm) {
@@ -279,7 +288,7 @@ const Expenses = () => {
       return {
         name: categoryInfo.label,
         value: categoryTotals[category],
-        color: categoryInfo.color === 'emerald' ? '#10b981' : 
+        color: categoryInfo.color === 'cyan' ? '#00d4ff' : 
                categoryInfo.color === 'blue' ? '#3b82f6' :
                categoryInfo.color === 'purple' ? '#8b5cf6' :
                categoryInfo.color === 'slate' ? '#64748b' :
@@ -308,22 +317,22 @@ const Expenses = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading expense data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white/10 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading expense data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-transparent">
       <div className="p-6 space-y-4">
         {/* Header */}
         <div className="text-left mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-red-600 bg-clip-text text-transparent mb-3">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">
             Expense Tracking
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg">
+          <p className="text-slate-400 text-lg">
             Track and categorize your spending to gain deeper insights into your financial patterns
           </p>
         </div>
@@ -333,20 +342,20 @@ const Expenses = () => {
         {/* Tabs and Summary Cards */}
         <div className="flex items-center justify-between mb-4">
           {/* Tabs */}
-          <TabsList className="ff-outline-tabs grid w-full grid-cols-2 max-w-md bg-transparent border border-emerald-500/40 rounded-lg">
-            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Personal</TabsTrigger>
-            <TabsTrigger value="Business" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Business</TabsTrigger>
+          <TabsList className="ff-outline-tabs grid w-full grid-cols-2 max-w-md bg-transparent border border-cyan-500/30 rounded-lg">
+            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Personal</TabsTrigger>
+            <TabsTrigger value="Business" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Business</TabsTrigger>
           </TabsList>
           
           {/* Monthly Total */}
-          <div className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 backdrop-blur-sm border border-rose-200/50 dark:border-rose-700/50 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="bg-rose-900/20 backdrop-blur-sm border border-rose-700/50 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                <TrendingDown className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <div className="p-2 bg-red-900/30 rounded-lg">
+                <TrendingDown className="w-5 h-5 text-red-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-slate-600 dark:text-slate-400">Monthly Total</p>
-                <p className="text-xl font-bold text-slate-900 dark:text-white">
+                <p className="text-xs font-medium text-slate-400">Monthly Total</p>
+                <p className="text-xl font-bold text-white">
                   {formatCurrency(calculateMonthlyTotal())}
                 </p>
               </div>
@@ -358,8 +367,8 @@ const Expenses = () => {
         {getFilteredExpenseData().length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
             {/* Expenses by Category Chart */}
-            <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-4 text-base">Expenses by Category</h3>
+            <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-8 hover:shadow-2xl transition-all duration-300">
+              <h3 className="font-semibold text-white mb-4 text-base">Expenses by Category</h3>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
@@ -381,18 +390,18 @@ const Expenses = () => {
 
 
           {/* Monthly Trend Chart */}
-          <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 text-base">Monthly Trend</h3>
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-8 hover:shadow-2xl transition-all duration-300">
+            <h3 className="font-semibold text-white mb-4 text-base">Monthly Trend</h3>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={getMonthlyExpenseTrend()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="month" stroke="#64748b" />
-                <YAxis stroke="#64748b" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,150,255,0.06)" />
+                <XAxis dataKey="month" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <YAxis stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 12 }} />
                 <Tooltip 
                   formatter={(value) => [`$${value.toLocaleString()}`, 'Total']}
                   contentStyle={{ 
-                    backgroundColor: '#fff', 
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                    border: '1px solid rgba(100, 150, 255, 0.15)',
                     borderRadius: '8px'
                   }}
                 />
@@ -404,32 +413,43 @@ const Expenses = () => {
       )}
 
         {/* Filters */}
-        <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 mb-4">
+        <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-white/80 to-slate-50/80 from-slate-800/80 to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-white/10 mb-4">
         <div className="flex items-center gap-2 flex-1 max-w-md">
-          <Search className="w-5 h-5 text-slate-400 dark:text-gray-400" />
+          <Search className="w-5 h-5 text-slate-400" />
           <input
             type="text"
             placeholder="Search expenses..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 bg-slate-700/90 px-3 py-2 rounded-lg border border-slate-600 outline-none text-white placeholder-slate-400 text-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
+            className="flex-1 bg-slate-700/90 px-3 py-2 rounded-lg border border-white/10 outline-none text-white placeholder-slate-400 text-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
             style={{ color: 'white !important' }}
           />
         </div>
-        <button className="flex items-center gap-2 px-4 py-3 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700/50">
+        <button className="flex items-center gap-2 px-4 py-3 text-slate-400 hover:text-white transition-colors rounded-xl hover:bg-white/10/50">
           <Filter className="w-5 h-5" />
           Filters
         </button>
         </div>
 
         {/* Expense Table */}
-        <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden hover:shadow-2xl transition-all duration-300">
-          <div className="p-6 border-b border-slate-200/50 dark:border-slate-700/50">
+        <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 overflow-hidden hover:shadow-2xl transition-all duration-300">
+          <div className="p-6 border-b border-white/10">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Expense Transactions</h2>
-                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Detailed breakdown of all spending with subtotals</p>
+                <h2 className="text-xl font-semibold text-white">Expense Transactions</h2>
+                <p className="text-slate-400 text-sm mt-1">Detailed breakdown of all spending with subtotals</p>
               </div>
+              <div className="flex items-center gap-2">
+                {getFilteredExpenseData().length > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={handleClearAll}
+                    className="inline-flex items-center gap-2 px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 hover:border-red-400 hover:text-red-300 rounded-lg transition-all duration-300 font-medium bg-transparent"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Clear All
+                  </Button>
+                )}
               <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
                 <DialogTrigger asChild>
                   <button className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-medium">
@@ -581,26 +601,27 @@ const Expenses = () => {
                   </form>
                 </DialogContent>
               </Dialog>
+              </div>
             </div>
           </div>
 
         {getFilteredExpenseData().length === 0 ? (
           <div className="text-center py-12">
-            <TrendingDown className="w-16 h-16 text-slate-300 dark:text-gray-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-cyan-100 mb-2">No Expenses Found</h3>
-            <p className="text-slate-600 dark:text-cyan-300">Add your first expense to get started with tracking.</p>
+            <TrendingDown className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-cyan-100 mb-2">No Expenses Found</h3>
+            <p className="text-cyan-300">Add your first expense to get started with tracking.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-slate-200 to-slate-300 dark:from-gray-700 dark:to-gray-800 border-b-4 border-slate-400 dark:border-gray-500">
+              <thead className="bg-gradient-to-r bg-[rgba(35,52,78,0.9)] border-b-4 border-gray-500">
                 <tr>
-                  <th className="text-left p-6 font-bold text-slate-900 dark:text-white text-lg uppercase tracking-wide">Description</th>
-                  <th className="text-left p-6 font-bold text-slate-900 dark:text-white text-lg uppercase tracking-wide">Category</th>
-                  <th className="text-left p-6 font-bold text-slate-900 dark:text-white text-lg uppercase tracking-wide">Payment Method</th>
-                  <th className="text-right p-6 font-bold text-slate-900 dark:text-white text-lg uppercase tracking-wide">Amount</th>
-                  <th className="text-left p-6 font-bold text-slate-900 dark:text-white text-lg uppercase tracking-wide">Date</th>
-                  <th className="text-left p-6 font-bold text-slate-900 dark:text-white text-lg uppercase tracking-wide">Actions</th>
+                  <th className="text-left p-6 font-bold text-white text-lg uppercase tracking-wide">Description</th>
+                  <th className="text-left p-6 font-bold text-white text-lg uppercase tracking-wide">Category</th>
+                  <th className="text-left p-6 font-bold text-white text-lg uppercase tracking-wide">Payment Method</th>
+                  <th className="text-right p-6 font-bold text-white text-lg uppercase tracking-wide">Amount</th>
+                  <th className="text-left p-6 font-bold text-white text-lg uppercase tracking-wide">Date</th>
+                  <th className="text-left p-6 font-bold text-white text-lg uppercase tracking-wide">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -609,43 +630,43 @@ const Expenses = () => {
                   const CategoryIcon = categoryInfo.icon
                   
                   return (
-                    <tr key={expense.id} className="border-b border-slate-100 dark:border-gray-700/30 hover:bg-slate-50 dark:hover:bg-gray-700/30">
+                    <tr key={expense.id} className="border-b border-white/10/30 hover:bg-white/5">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 bg-${categoryInfo.color}-100 dark:bg-${categoryInfo.color}-900/30 rounded-lg`}>
-                            <CategoryIcon className={`w-5 h-5 text-${categoryInfo.color}-600 dark:text-${categoryInfo.color}-400`} />
+                          <div className={`p-2 bg-${categoryInfo.color}-900/30 rounded-lg`}>
+                            <CategoryIcon className={`w-5 h-5 text-${categoryInfo.color}-400`} />
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900 dark:text-cyan-100">{expense.description}</div>
+                            <div className="font-semibold text-cyan-100">{expense.description}</div>
                           </div>
                         </div>
                       </td>
                       
                       <td className="p-4">
-                        <span className={`inline-flex px-2 py-1 font-semibold rounded-full bg-${categoryInfo.color}-100 dark:bg-${categoryInfo.color}-900/30 text-${categoryInfo.color}-700 dark:text-${categoryInfo.color}-300`}>
+                        <span className={`inline-flex px-2 py-1 font-semibold rounded-full bg-${categoryInfo.color}-900/30 text-${categoryInfo.color}-300`}>
                           {categoryInfo.label}
                         </span>
                       </td>
                       
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <CreditCard className="w-4 h-4 text-slate-400 dark:text-gray-400" />
-                          <span className="font-semibold text-slate-600 dark:text-cyan-300 capitalize">
+                          <CreditCard className="w-4 h-4 text-slate-400" />
+                          <span className="font-semibold text-cyan-300 capitalize">
                             {expense.payment_method.replace('_', ' ')}
                           </span>
                         </div>
                       </td>
                       
                       <td className="p-4 text-right">
-                        <div className="font-bold text-red-600 dark:text-red-400">
+                        <div className="font-bold text-red-400">
                           -{formatCurrency(expense.amount)}
                         </div>
                       </td>
                       
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-slate-400 dark:text-gray-400" />
-                          <span className="font-semibold text-slate-600 dark:text-cyan-300">
+                          <Calendar className="w-4 h-4 text-slate-400" />
+                          <span className="font-semibold text-cyan-300">
                             {new Date(expense.date).toLocaleDateString()}
                           </span>
                         </div>
@@ -662,7 +683,7 @@ const Expenses = () => {
                             <DialogTrigger asChild>
                               <button 
                                 onClick={() => handleEditExpense(expense)}
-                                className="p-2 text-slate-400 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                className="p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-500/10"
                               >
                                 <Edit className="w-4 h-4" />
                               </button>
@@ -810,7 +831,7 @@ const Expenses = () => {
                                         date: new Date().toISOString().split('T')[0],
                                         is_recurring: false,
                                         frequency: '',
-                                        owner: 'Personal'
+                                        owner: activeTab
                                       })
                                     }}
                                     className="flex-1"
@@ -826,7 +847,7 @@ const Expenses = () => {
                           </Dialog>
                           <button 
                             onClick={() => handleDeleteExpense(expense.id)}
-                            className="p-2 text-slate-400 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                            className="p-2 text-slate-400 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -837,11 +858,11 @@ const Expenses = () => {
                 })}
                 
                 {/* Subtotal Row */}
-                <tr className="bg-gradient-to-r from-slate-100 to-slate-200 dark:from-gray-600 dark:to-gray-700 border-t-4 border-slate-400 dark:border-gray-500 font-bold">
-                  <td colSpan="3" className="p-6 text-right text-slate-900 dark:text-white text-lg">
+                <tr className="bg-gradient-to-r bg-[rgba(35,52,78,0.8)] border-t-4 border-gray-500 font-bold">
+                  <td colSpan="3" className="p-6 text-right text-white text-lg">
                     Total Expenses:
                   </td>
-                  <td className="p-6 text-right text-red-600 dark:text-red-400 font-bold text-xl">
+                  <td className="p-6 text-right text-red-400 font-bold text-xl">
                     -{formatCurrency(calculateMonthlyTotal())}
                   </td>
                   <td colSpan="3" className="p-6"></td>
@@ -863,8 +884,8 @@ const Expenses = () => {
 
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/50 rounded-lg p-4">
-          <p className="text-red-800 dark:text-red-300">{error}</p>
+        <div className="bg-red-900/20 border border-red-700/50 rounded-lg p-4">
+          <p className="text-red-300">{error}</p>
         </div>
       )}
       </div>

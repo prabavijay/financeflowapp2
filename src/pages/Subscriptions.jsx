@@ -269,7 +269,7 @@ export default function Subscriptions() {
     return (
       <div className="p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
         </div>
       </div>
     );
@@ -280,8 +280,8 @@ export default function Subscriptions() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Subscriptions & Accounts</h1>
-          <p className="text-gray-600">Manage subscriptions and secure account credentials</p>
+          <h1 className="text-3xl font-bold text-white">Subscriptions & Accounts</h1>
+          <p className="text-slate-400">Manage subscriptions and secure account credentials</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={handleDetectSubscriptions} variant="outline">
@@ -547,7 +547,7 @@ export default function Subscriptions() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Active Subscriptions</CardTitle>
-                <CheckCircle className="h-4 w-4 text-green-600" />
+                <CheckCircle className="h-4 w-4 text-green-400" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{analytics.totalActive}</div>
@@ -558,7 +558,7 @@ export default function Subscriptions() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Monthly Cost</CardTitle>
-                <DollarSign className="h-4 w-4 text-blue-600" />
+                <DollarSign className="h-4 w-4 text-blue-400" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">${analytics.totalMonthly.toFixed(2)}</div>
@@ -569,7 +569,7 @@ export default function Subscriptions() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Yearly Cost</CardTitle>
-                <TrendingUp className="h-4 w-4 text-purple-600" />
+                <TrendingUp className="h-4 w-4 text-purple-400" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">${analytics.totalYearly.toFixed(2)}</div>
@@ -580,7 +580,7 @@ export default function Subscriptions() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Upcoming Renewals</CardTitle>
-                <AlertCircle className="h-4 w-4 text-orange-600" />
+                <AlertCircle className="h-4 w-4 text-orange-400" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{analytics.upcomingRenewals}</div>
@@ -655,7 +655,7 @@ export default function Subscriptions() {
                     <Badge variant="outline">{subscription.billing_frequency}</Badge>
                   </div>
                   
-                  <div className="space-y-2 text-sm text-gray-600">
+                  <div className="space-y-2 text-sm text-slate-400">
                     <div className="flex justify-between">
                       <span>Category:</span>
                       <span className="capitalize">{subscription.category}</span>
@@ -672,7 +672,7 @@ export default function Subscriptions() {
 
                   {subscription.notes && (
                     <div className="pt-2 border-t">
-                      <p className="text-sm text-gray-600">{subscription.notes}</p>
+                      <p className="text-sm text-slate-400">{subscription.notes}</p>
                     </div>
                   )}
 
@@ -700,8 +700,8 @@ export default function Subscriptions() {
           {filteredSubscriptions.length === 0 && (
             <Card>
               <CardContent className="text-center py-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No subscriptions found</h3>
-                <p className="text-gray-600 mb-4">Start by adding a subscription or detecting them from your expenses.</p>
+                <h3 className="text-lg font-medium text-white mb-2">No subscriptions found</h3>
+                <p className="text-slate-400 mb-4">Start by adding a subscription or detecting them from your expenses.</p>
                 <Button onClick={() => setIsAddDialogOpen(true)}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Your First Subscription
@@ -717,7 +717,7 @@ export default function Subscriptions() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Accounts</CardTitle>
-                <Key className="h-4 w-4 text-blue-600" />
+                <Key className="h-4 w-4 text-blue-400" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{accounts.length}</div>
@@ -728,7 +728,7 @@ export default function Subscriptions() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">By Category</CardTitle>
-                <Lock className="h-4 w-4 text-green-600" />
+                <Lock className="h-4 w-4 text-green-400" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{new Set(accounts.map(a => a.category)).size}</div>
@@ -739,7 +739,7 @@ export default function Subscriptions() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Active Status</CardTitle>
-                <CheckCircle className="h-4 w-4 text-green-600" />
+                <CheckCircle className="h-4 w-4 text-green-400" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{accounts.filter(a => a.status === 'active').length}</div>
@@ -750,7 +750,7 @@ export default function Subscriptions() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Security</CardTitle>
-                <Lock className="h-4 w-4 text-purple-600" />
+                <Lock className="h-4 w-4 text-purple-400" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">AES-256</div>
@@ -797,12 +797,12 @@ export default function Subscriptions() {
                   <div className="space-y-3">
                     {account.url && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">Website:</span>
+                        <span className="text-sm text-slate-400">Website:</span>
                         <a 
                           href={account.url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-sm text-blue-600 hover:underline truncate max-w-[200px]"
+                          className="text-sm text-blue-400 hover:underline truncate max-w-[200px]"
                         >
                           {account.url}
                         </a>
@@ -810,7 +810,7 @@ export default function Subscriptions() {
                     )}
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Username:</span>
+                      <span className="text-sm text-slate-400">Username:</span>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-mono">{account.login_name}</span>
                         <Button
@@ -825,7 +825,7 @@ export default function Subscriptions() {
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Password:</span>
+                      <span className="text-sm text-slate-400">Password:</span>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-mono">
                           {showPasswords[account.id] ? account.encrypted_password : '••••••••'}
@@ -850,7 +850,7 @@ export default function Subscriptions() {
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Category:</span>
+                      <span className="text-sm text-slate-400">Category:</span>
                       <Badge variant="outline" className="capitalize">
                         {account.category}
                       </Badge>
@@ -859,7 +859,7 @@ export default function Subscriptions() {
 
                   {account.notes && (
                     <div className="pt-2 border-t">
-                      <p className="text-sm text-gray-600">{account.notes}</p>
+                      <p className="text-sm text-slate-400">{account.notes}</p>
                     </div>
                   )}
                 </CardContent>
@@ -870,8 +870,8 @@ export default function Subscriptions() {
           {accounts.length === 0 && (
             <Card>
               <CardContent className="text-center py-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No accounts stored</h3>
-                <p className="text-gray-600 mb-4">Securely store your account credentials with encryption.</p>
+                <h3 className="text-lg font-medium text-white mb-2">No accounts stored</h3>
+                <p className="text-slate-400 mb-4">Securely store your account credentials with encryption.</p>
                 <Button onClick={() => setIsAddDialogOpen(true)}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Your First Account
@@ -893,7 +893,7 @@ export default function Subscriptions() {
           </DialogHeader>
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {detectedSubscriptions.length === 0 ? (
-              <p className="text-center text-gray-600 py-4">
+              <p className="text-center text-slate-400 py-4">
                 No subscription patterns detected in your expenses.
               </p>
             ) : (
@@ -901,10 +901,10 @@ export default function Subscriptions() {
                 <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                   <div className="flex-1">
                     <h4 className="font-medium">{sub.name}</h4>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-slate-400">
                       ${sub.amount} • {sub.billing_frequency} • {sub.category}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-slate-400">
                       Confidence: {Math.round(sub.confidence * 100)}%
                     </p>
                   </div>

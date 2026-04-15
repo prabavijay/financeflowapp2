@@ -207,7 +207,7 @@ export default function TravelBudgets() {
     return (
       <div className="p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
         </div>
       </div>
     );
@@ -218,8 +218,8 @@ export default function TravelBudgets() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Travel Budget Planner</h1>
-          <p className="text-gray-600">Plan and track your travel expenses with multi-currency support</p>
+          <h1 className="text-3xl font-bold text-white">Travel Budget Planner</h1>
+          <p className="text-slate-400">Plan and track your travel expenses with multi-currency support</p>
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
@@ -353,7 +353,7 @@ export default function TravelBudgets() {
 
               {/* Daily Budget Preview */}
               {newBudget.start_date && newBudget.end_date && newBudget.total_budget && (
-                <div className="p-4 bg-blue-50 rounded-lg">
+                <div className="p-4 bg-blue-500/10 rounded-lg">
                   <h4 className="font-medium text-blue-900 mb-2">Budget Overview</h4>
                   {(() => {
                     const dailyInfo = estimateDailyBudget(
@@ -362,7 +362,7 @@ export default function TravelBudgets() {
                       newBudget.end_date
                     );
                     return (
-                      <div className="grid grid-cols-3 gap-4 text-sm text-blue-800">
+                      <div className="grid grid-cols-3 gap-4 text-sm text-blue-400">
                         <div>
                           <span className="block font-medium">Trip Duration</span>
                           <span>{dailyInfo.totalDays} days</span>
@@ -408,7 +408,7 @@ export default function TravelBudgets() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Trips</CardTitle>
-            <Plane className="h-4 w-4 text-blue-600" />
+            <Plane className="h-4 w-4 text-blue-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.totalBudgets}</div>
@@ -419,7 +419,7 @@ export default function TravelBudgets() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Trips</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.activeBudgets}</div>
@@ -430,7 +430,7 @@ export default function TravelBudgets() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Planned</CardTitle>
-            <DollarSign className="h-4 w-4 text-purple-600" />
+            <DollarSign className="h-4 w-4 text-purple-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">${analytics.totalPlanned.toFixed(2)}</div>
@@ -441,7 +441,7 @@ export default function TravelBudgets() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Upcoming Trips</CardTitle>
-            <Calendar className="h-4 w-4 text-orange-600" />
+            <Calendar className="h-4 w-4 text-orange-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.upcomingTrips}</div>
@@ -513,7 +513,7 @@ export default function TravelBudgets() {
                   <span className="text-2xl font-bold">
                     {formatCurrency(budget.total_budget, budget.currency)}
                   </span>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-slate-400">
                     {duration} days
                   </span>
                 </div>
@@ -527,7 +527,7 @@ export default function TravelBudgets() {
                   <Progress value={progress} className="h-2" />
                 </div>
 
-                <div className="space-y-2 text-sm text-gray-600">
+                <div className="space-y-2 text-sm text-slate-400">
                   <div className="flex justify-between">
                     <span>Start Date:</span>
                     <span>{new Date(budget.start_date).toLocaleDateString()}</span>
@@ -548,7 +548,7 @@ export default function TravelBudgets() {
 
                 {budget.notes && (
                   <div className="pt-2 border-t">
-                    <p className="text-sm text-gray-600 line-clamp-2">{budget.notes}</p>
+                    <p className="text-sm text-slate-400 line-clamp-2">{budget.notes}</p>
                   </div>
                 )}
 
@@ -589,8 +589,8 @@ export default function TravelBudgets() {
         <Card>
           <CardContent className="text-center py-8">
             <Plane className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No travel budgets found</h3>
-            <p className="text-gray-600 mb-4">Start planning your next adventure with a travel budget.</p>
+            <h3 className="text-lg font-medium text-white mb-2">No travel budgets found</h3>
+            <p className="text-slate-400 mb-4">Start planning your next adventure with a travel budget.</p>
             <Button onClick={() => setIsAddDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Plan Your First Trip
@@ -631,7 +631,7 @@ export default function TravelBudgets() {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">Spent</Label>
-                  <p className="text-lg font-bold text-red-600">
+                  <p className="text-lg font-bold text-red-400">
                     {formatCurrency(selectedBudget.actual_spent || 0, selectedBudget.currency)}
                   </p>
                 </div>
@@ -651,7 +651,7 @@ export default function TravelBudgets() {
               {selectedBudget.notes && (
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">Notes</Label>
-                  <p className="text-sm text-gray-600 p-3 bg-gray-50 rounded">
+                  <p className="text-sm text-slate-400 p-3 bg-gray-50 rounded">
                     {selectedBudget.notes}
                   </p>
                 </div>

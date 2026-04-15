@@ -87,13 +87,13 @@ const Budget = () => {
 
   const getFilteredBudgetData = () => {
     if (activeTab === 'Family') {
-      return currentBudget.items.filter(item => 
-        item.owner === 'Personal' || 
-        item.owner === 'Spouse' || 
-        !item.owner
-      )
+      // Combine items from Personal and Spouse budgets (budget_items have no owner field)
+      return [
+        ...(budgets['Personal']?.items || []),
+        ...(budgets['Spouse']?.items || [])
+      ]
     }
-    return currentBudget.items.filter(item => item.owner === activeTab || !item.owner)
+    return currentBudget?.items || []
   }
 
   // Helper functions for budget analysis
@@ -291,16 +291,45 @@ const Budget = () => {
   }
 
   const handleDeleteBudgetItem = async (itemId) => {
+    setBudgets(prev => ({
+      ...prev,
+      [activeTab]: {
+        ...prev[activeTab],
+        items: (prev[activeTab]?.items || []).filter(item => item.id !== itemId)
+      }
+    }))
     try {
       const response = await apiClient.deleteBudgetItem(itemId)
-      if (response.success) {
+      const isSuccess = response.success !== false && response !== null && response !== undefined
+      if (!isSuccess) {
         await loadBudgetData()
-      } else {
         setError('Failed to delete budget item')
       }
     } catch (err) {
       console.error('Error deleting budget item:', err)
+      await loadBudgetData()
       setError('Failed to delete budget item')
+    }
+  }
+
+  const handleClearAllBudgetItems = async () => {
+    const items = getFilteredBudgetData().filter(item => item.type === 'expense')
+    if (items.length === 0) return
+    if (!window.confirm(`Delete all ${items.length} budget item(s) for ${activeTab}? This cannot be undone.`)) return
+    const idsToDelete = items.map(i => i.id)
+    setBudgets(prev => ({
+      ...prev,
+      [activeTab]: {
+        ...prev[activeTab],
+        items: (prev[activeTab]?.items || []).filter(item => !idsToDelete.includes(item.id))
+      }
+    }))
+    try {
+      await Promise.all(idsToDelete.map(id => apiClient.deleteBudgetItem(id)))
+    } catch (err) {
+      console.error('Error clearing budget items:', err)
+      await loadBudgetData()
+      setError('Some items could not be deleted')
     }
   }
 
@@ -343,34 +372,34 @@ const Budget = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading budget data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading budget data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-transparent">
       <div className="p-6 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="text-left">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent mb-3">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">
               Budget Planner
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 text-lg">
+            <p className="text-slate-400 text-lg">
               Plan and track your monthly budget by category to achieve your financial goals
             </p>
           </div>
           
           {/* Keyboard Shortcuts Indicator */}
-          <div className="bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 rounded-lg p-3 border border-slate-200 dark:border-slate-600">
-            <div className="text-xs text-slate-600 dark:text-slate-300 font-medium mb-1">Quick Actions:</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1">
-              <div><kbd className="bg-slate-300 dark:bg-slate-600 px-1 rounded text-xs">⌘+N</kbd> New item</div>
-              <div><kbd className="bg-slate-300 dark:bg-slate-600 px-1 rounded text-xs">Alt+1/2/3</kbd> Switch tabs</div>
-              <div><kbd className="bg-slate-300 dark:bg-slate-600 px-1 rounded text-xs">Esc</kbd> Cancel</div>
+          <div className="bg-[rgba(30,41,59,0.6)] backdrop-blur-sm rounded-lg p-3 border border-[rgba(100,150,255,0.15)]">
+            <div className="text-xs text-slate-400 font-medium mb-1">Quick Actions:</div>
+            <div className="text-xs text-slate-500 space-y-1">
+              <div><kbd className="bg-slate-600 px-1 rounded text-xs">⌘+N</kbd> New item</div>
+              <div><kbd className="bg-slate-600 px-1 rounded text-xs">Alt+1/2/3</kbd> Switch tabs</div>
+              <div><kbd className="bg-slate-600 px-1 rounded text-xs">Esc</kbd> Cancel</div>
             </div>
           </div>
         </div>
@@ -378,30 +407,30 @@ const Budget = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         {/* Tabs */}
         <div className="flex justify-start mb-4">
-          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-emerald-500/40 rounded-lg">
-            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Personal</TabsTrigger>
-            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Spouse</TabsTrigger>
-            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Family</TabsTrigger>
+          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-cyan-500/30 rounded-lg">
+            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Personal</TabsTrigger>
+            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Spouse</TabsTrigger>
+            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Family</TabsTrigger>
           </TabsList>
         </div>
 
       {/* Month Navigation */}
-      <div className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="flex items-center justify-between bg-[rgba(35,52,78,0.85)] rounded-lg p-4 shadow-sm border border-white/10">
         <button
           onClick={() => navigateMonth(-1)}
-          className="flex items-center gap-2 px-3 py-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 px-3 py-2 text-slate-400 hover:text-white transition-colors"
         >
           <ChevronLeft className="w-5 h-5" />
           Prev
         </button>
         
-        <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-white">
           {formatMonth(currentDate)}
         </h2>
         
         <button
           onClick={() => navigateMonth(1)}
-          className="flex items-center gap-2 px-3 py-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 px-3 py-2 text-slate-400 hover:text-white transition-colors"
         >
           Next
           <ChevronRight className="w-5 h-5" />
@@ -410,49 +439,49 @@ const Budget = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl shadow-md p-6 border border-emerald-200 dark:border-emerald-700/50">
+        <div className="bg-gradient-to-br from-cyan-900/20 to-green-900/20 rounded-xl shadow-md p-6 border border-cyan-700/50">
           <div className="flex items-center gap-3 mb-2">
-            <TrendingUp className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-            <h3 className="text-lg font-semibold text-emerald-800 dark:text-emerald-200">Projected Income</h3>
+            <TrendingUp className="w-6 h-6 text-cyan-400" />
+            <h3 className="text-lg font-semibold text-cyan-200">Projected Income</h3>
           </div>
-          <p className="text-3xl font-bold text-slate-900 dark:text-white">
+          <p className="text-3xl font-bold text-white">
             {formatCurrency(currentBudget.summary.total_income)}
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 rounded-xl shadow-md p-6 border border-red-200 dark:border-red-700/50">
+        <div className="bg-red-900/20 rounded-xl shadow-md p-6 border border-red-700/50">
           <div className="flex items-center gap-3 mb-2">
-            <TrendingDown className="w-6 h-6 text-red-600 dark:text-red-400" />
-            <h3 className="text-lg font-semibold text-red-800 dark:text-red-200">Projected Expenses</h3>
+            <TrendingDown className="w-6 h-6 text-red-400" />
+            <h3 className="text-lg font-semibold text-red-200">Projected Expenses</h3>
           </div>
-          <p className="text-3xl font-bold text-slate-900 dark:text-white">
+          <p className="text-3xl font-bold text-white">
             {formatCurrency(currentBudget.summary.total_expenses)}
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl shadow-md p-6 border border-blue-200 dark:border-blue-700/50">
+        <div className="bg-blue-900/20 rounded-xl shadow-md p-6 border border-blue-700/50">
           <div className="flex items-center gap-3 mb-2">
-            <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200">Projected Net</h3>
+            <Target className="w-6 h-6 text-blue-400" />
+            <h3 className="text-lg font-semibold text-blue-200">Projected Net</h3>
           </div>
-          <p className={`text-3xl font-bold ${currentBudget.summary.projected_net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
+          <p className={`text-3xl font-bold ${currentBudget.summary.projected_net >= 0 ? 'text-cyan-400' : 'text-red-400'}`}>
             {formatCurrency(currentBudget.summary.projected_net)}
           </p>
         </div>
 
         {/* Budget Health Indicator */}
-        <div className="bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-xl shadow-md p-6 border border-purple-200 dark:border-purple-700/50">
+        <div className="bg-gradient-to-br from-purple-50 to-violet-50 from-purple-900/20 to-violet-900/20 rounded-xl shadow-md p-6 border border-purple-700/50">
           <div className="flex items-center gap-3 mb-2">
-            <Receipt className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-            <h3 className="text-lg font-semibold text-purple-800 dark:text-purple-200">Budget Health</h3>
+            <Receipt className="w-6 h-6 text-purple-400" />
+            <h3 className="text-lg font-semibold text-purple-200">Budget Health</h3>
           </div>
           <div className="flex items-center gap-3">
-            <div className={`w-4 h-4 rounded-full ${currentBudget.summary.projected_net >= 0 ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></div>
-            <p className={`text-lg font-bold ${currentBudget.summary.projected_net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
+            <div className={`w-4 h-4 rounded-full ${currentBudget.summary.projected_net >= 0 ? 'bg-cyan-500 animate-pulse' : 'bg-red-500'}`}></div>
+            <p className={`text-lg font-bold ${currentBudget.summary.projected_net >= 0 ? 'text-cyan-400' : 'text-red-400'}`}>
               {currentBudget.summary.projected_net >= 0 ? 'Healthy' : 'Over Budget'}
             </p>
           </div>
-          <div className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+          <div className="mt-2 text-sm text-slate-400">
             {Object.keys(getCategoryTotals()).length} categories planned
           </div>
         </div>
@@ -462,8 +491,8 @@ const Budget = () => {
       {getFilteredBudgetData().length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Budget by Category Chart */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-slate-200 dark:border-slate-700 p-6">
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Budget by Category</h3>
+          <div className="bg-[rgba(35,52,78,0.85)] rounded-xl shadow-md border border-white/10 p-6">
+            <h3 className="font-semibold text-white mb-4">Budget by Category</h3>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
@@ -485,23 +514,23 @@ const Budget = () => {
 
           {/* Budget vs Actual Expenses */}
           {budgetComparison && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-[rgba(35,52,78,0.85)] rounded-xl shadow-md p-6 border border-white/10">
               <div className="mb-4">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Budget vs Actual Expenses</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                <h3 className="text-lg font-semibold text-white mb-2">Budget vs Actual Expenses</h3>
+                <p className="text-sm text-slate-400 mb-3">
                   Track how your actual spending compares to your planned budget for this month
                 </p>
               </div>
               
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <span className="text-red-600 font-medium">
+                  <span className="text-red-400 font-medium">
                     {formatCurrency(budgetComparison.comparison.actual_total)} spent
                   </span>
                   <div className="text-xs text-red-500">Actual expenses so far</div>
                 </div>
                 <div className="flex-1 mx-4">
-                  <div className="w-full bg-slate-200 rounded-full h-3 relative">
+                  <div className="w-full bg-slate-600 rounded-full h-3 relative">
                     <div 
                       className="bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full transition-all duration-300"
                       style={{ 
@@ -509,18 +538,18 @@ const Budget = () => {
                       }}
                     ></div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xs font-medium text-slate-700">
+                      <span className="text-xs font-medium text-white">
                         {Math.round((budgetComparison.comparison.actual_total / budgetComparison.comparison.budget_total) * 100)}%
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-slate-600 font-medium">
+                  <span className="text-slate-400 font-medium">
                     {formatCurrency(budgetComparison.comparison.budget_total)} budgeted
                   </span>
                   <div className="text-xs text-slate-500">Total planned budget</div>
-                  <div className={`text-sm font-medium mt-1 ${budgetComparison.comparison.remaining >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <div className={`text-sm font-medium mt-1 ${budgetComparison.comparison.remaining >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {formatCurrency(Math.abs(budgetComparison.comparison.remaining))} {budgetComparison.comparison.remaining >= 0 ? 'remaining' : 'over budget'}
                   </div>
                 </div>
@@ -533,7 +562,7 @@ const Budget = () => {
                   <span>Money already spent this month</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-slate-200 rounded-full"></div>
+                  <div className="w-3 h-3 bg-slate-600 rounded-full"></div>
                   <span>Budget remaining or overspent amount</span>
                 </div>
               </div>
@@ -541,24 +570,24 @@ const Budget = () => {
           )}
 
           {/* Monthly Trend Chart */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-slate-200 dark:border-slate-700 p-6">
+          <div className="bg-[rgba(35,52,78,0.85)] rounded-xl shadow-md border border-white/10 p-6">
             <div className="mb-4">
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Monthly Spending Trend</h3>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">
+              <h3 className="font-semibold text-white mb-2">Monthly Spending Trend</h3>
+              <p className="text-sm text-slate-400 mb-3">
                 Compare your planned budget vs actual spending over the past 6 months
               </p>
             </div>
             
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={getMonthlyTrend()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="month" stroke="#64748b" />
-                <YAxis stroke="#64748b" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,150,255,0.06)" />
+                <XAxis dataKey="month" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <YAxis stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 12 }} />
                 <Tooltip 
                   formatter={(value) => [`$${value.toLocaleString()}`, '']}
                   contentStyle={{ 
-                    backgroundColor: '#fff', 
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                    border: '1px solid rgba(100, 150, 255, 0.15)',
                     borderRadius: '8px'
                   }}
                 />
@@ -586,21 +615,21 @@ const Budget = () => {
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-0.5 bg-blue-500" style={{borderTop: '3px dashed #3b82f6'}}></div>
-                    <span className="text-sm font-medium text-blue-600">Blue Dashed Line</span>
+                    <span className="text-sm font-medium text-blue-400">Blue Dashed Line</span>
                   </div>
-                  <span className="text-sm text-slate-600">Your planned budget amounts</span>
+                  <span className="text-sm text-slate-400">Your planned budget amounts</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-0.5 bg-red-500"></div>
-                    <span className="text-sm font-medium text-red-600">Red Solid Line</span>
+                    <span className="text-sm font-medium text-red-400">Red Solid Line</span>
                   </div>
-                  <span className="text-sm text-slate-600">Your actual spending amounts</span>
+                  <span className="text-sm text-slate-400">Your actual spending amounts</span>
                 </div>
               </div>
               
-              <div className="mt-3 p-3 bg-slate-50 rounded-lg">
-                <div className="text-xs text-slate-600">
+              <div className="mt-3 p-3 bg-white/5 rounded-lg">
+                <div className="text-xs text-slate-400">
                   <strong>Tip:</strong> When the red line is below blue, you&apos;re under budget. When red is above blue, you&apos;re overspending.
                 </div>
               </div>
@@ -611,26 +640,37 @@ const Budget = () => {
 
 
       {/* Expense Planner */}
-      <div className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl shadow-md border border-emerald-200 dark:border-emerald-700/50 overflow-hidden">
-        <div className="bg-emerald-100 dark:bg-emerald-800/30 px-6 py-4 border-b border-emerald-200 dark:border-emerald-700/50">
+      <div className="bg-gradient-to-br from-cyan-900/20 to-green-900/20 rounded-xl shadow-md border border-cyan-700/50 overflow-hidden">
+        <div className="bg-cyan-800/30 px-6 py-4 border-b border-cyan-700/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Receipt className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              <h3 className="text-lg font-semibold text-emerald-800 dark:text-emerald-200">EXPENSE PLANNER</h3>
+              <Receipt className="w-5 h-5 text-cyan-400" />
+              <h3 className="text-lg font-semibold text-cyan-200">EXPENSE PLANNER</h3>
             </div>
-            <button
-              onClick={() => setShowAddItemForm(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
-            >
-              <Plus className="w-4 h-4" />
-              Add Budget Item
-            </button>
+            <div className="flex items-center gap-2">
+              {getFilteredBudgetData().filter(item => item.type === 'expense').length > 0 && (
+                <button
+                  onClick={handleClearAllBudgetItems}
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 hover:border-red-400 hover:text-red-300 rounded-lg transition-all duration-300 font-medium bg-transparent"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Clear All
+                </button>
+              )}
+              <button
+                onClick={() => setShowAddItemForm(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
+              >
+                <Plus className="w-4 h-4" />
+                Add Budget Item
+              </button>
+            </div>
           </div>
         </div>
         
         <div className="p-6">
           {/* Table Header */}
-          <div className="grid grid-cols-8 gap-4 pb-3 mb-4 text-sm font-medium text-slate-700 dark:text-slate-300 border-b border-emerald-200 dark:border-emerald-700/30">
+          <div className="grid grid-cols-8 gap-4 pb-3 mb-4 text-sm font-medium text-slate-300 border-b border-cyan-700/30">
             <div>CATEGORY</div>
             <div>DESCRIPTION</div>
             <div>PAYEE</div>
@@ -643,12 +683,12 @@ const Budget = () => {
 
           {/* New Item Row (if adding) */}
           {showAddItemForm && (
-            <div className="bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg p-4 mb-4 border-2 border-emerald-300 animate-in slide-in-from-top-2 duration-200">
+            <div className="bg-gradient-to-r from-cyan-900/20 rounded-lg p-4 mb-4 border-2 border-cyan-500/30 animate-in slide-in-from-top-2 duration-200">
               <form onSubmit={handleAddBudgetItem} className="grid grid-cols-8 gap-4">
                 <select
                   value={newItem.category}
                   onChange={(e) => setNewItem({...newItem, category: e.target.value})}
-                  className="px-3 py-2 border-2 border-emerald-200 rounded-lg text-sm focus:border-emerald-500 focus:outline-none transition-colors"
+                  className="px-3 py-2 border-2 border-cyan-800/20 rounded-lg text-sm focus:border-cyan-500 focus:outline-none transition-colors"
                 >
                   {expenseCategories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
@@ -662,7 +702,7 @@ const Budget = () => {
                   value={newItem.name}
                   onChange={(e) => setNewItem({...newItem, name: e.target.value})}
                   placeholder="New expense description"
-                  className="px-3 py-2 border-2 border-emerald-200 rounded-lg text-sm focus:border-emerald-500 focus:outline-none transition-colors"
+                  className="px-3 py-2 border-2 border-cyan-800/20 rounded-lg text-sm focus:border-cyan-500 focus:outline-none transition-colors"
                 />
                 
                 <input
@@ -670,13 +710,13 @@ const Budget = () => {
                   value={newItem.payee}
                   onChange={(e) => setNewItem({...newItem, payee: e.target.value})}
                   placeholder="Payee"
-                  className="px-3 py-2 border-2 border-emerald-200 rounded-lg text-sm focus:border-emerald-500 focus:outline-none transition-colors"
+                  className="px-3 py-2 border-2 border-cyan-800/20 rounded-lg text-sm focus:border-cyan-500 focus:outline-none transition-colors"
                 />
                 
                 <select
                   value={newItem.frequency}
                   onChange={(e) => setNewItem({...newItem, frequency: e.target.value})}
-                  className="px-3 py-2 border-2 border-emerald-200 rounded-lg text-sm focus:border-emerald-500 focus:outline-none transition-colors"
+                  className="px-3 py-2 border-2 border-cyan-800/20 rounded-lg text-sm focus:border-cyan-500 focus:outline-none transition-colors"
                 >
                   {frequencies.map(freq => (
                     <option key={freq.value} value={freq.value}>{freq.label}</option>
@@ -684,7 +724,7 @@ const Budget = () => {
                 </select>
                 
                 <div className="flex items-center">
-                  <span className="mr-2 text-emerald-600 font-medium">$</span>
+                  <span className="mr-2 text-cyan-600 font-medium">$</span>
                   <input
                     type="number"
                     required
@@ -693,12 +733,12 @@ const Budget = () => {
                     value={newItem.amount}
                     onChange={(e) => setNewItem({...newItem, amount: e.target.value})}
                     placeholder="0.00"
-                    className="w-full px-3 py-2 border-2 border-emerald-200 rounded-lg text-sm focus:border-emerald-500 focus:outline-none transition-colors"
+                    className="w-full px-3 py-2 border-2 border-cyan-800/20 rounded-lg text-sm focus:border-cyan-500 focus:outline-none transition-colors"
                   />
                 </div>
                 
                 <div className="flex items-center justify-center">
-                  <div className="font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-lg">
+                  <div className="font-bold text-cyan-700 bg-cyan-900/20 px-2 py-1 rounded-lg">
                     {newItem.amount ? formatCurrency(parseFloat(newItem.amount)) : '$0.00'}
                   </div>
                 </div>
@@ -712,7 +752,7 @@ const Budget = () => {
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white rounded-lg py-2 px-3 flex items-center justify-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
+                    className="flex-1 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white rounded-lg py-2 px-3 flex items-center justify-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
                   >
                     <Plus className="w-4 h-4" />
                     Add
@@ -720,7 +760,7 @@ const Budget = () => {
                   <button
                     type="button"
                     onClick={() => setShowAddItemForm(false)}
-                    className="px-3 py-2 bg-slate-300 hover:bg-slate-400 text-slate-700 rounded-lg transition-colors"
+                    className="px-3 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg transition-colors"
                   >
                     Cancel
                   </button>
@@ -737,23 +777,23 @@ const Budget = () => {
             const remaining = currentBudget.summary.total_income - runningTotal
             
             return (
-              <div key={item.id} className="grid grid-cols-8 gap-4 py-2 text-sm border-b border-emerald-100/50 dark:border-emerald-700/20 last:border-b-0">
-                <div className="font-medium text-slate-900 dark:text-white">{item.category}</div>
-                <div className="text-slate-700 dark:text-slate-300">{item.name}</div>
-                <div className="text-slate-500 dark:text-slate-400">-</div>
-                <div className="capitalize text-slate-700 dark:text-slate-300">{item.frequency}</div>
-                <div className="text-slate-900 dark:text-white">{formatCurrency(item.amount)}</div>
-                <div className="font-semibold text-emerald-600 dark:text-emerald-400">{formatCurrency(runningTotal)}</div>
-                <div className={`font-semibold ${remaining >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-600 dark:text-red-400'}`}>
+              <div key={item.id} className="grid grid-cols-8 gap-4 py-2 text-sm border-b border-cyan-900/20/50 border-cyan-700/20 last:border-b-0">
+                <div className="font-medium text-white">{item.category}</div>
+                <div className="text-slate-300">{item.name}</div>
+                <div className="text-slate-400">-</div>
+                <div className="capitalize text-slate-300">{item.frequency}</div>
+                <div className="text-white">{formatCurrency(item.amount)}</div>
+                <div className="font-semibold text-cyan-400">{formatCurrency(runningTotal)}</div>
+                <div className={`font-semibold ${remaining >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
                   {formatCurrency(remaining)}
                 </div>
                 <div className="flex gap-1">
-                  <button className="w-6 h-6 text-slate-400 hover:text-blue-600">
+                  <button className="w-6 h-6 text-slate-400 hover:text-blue-400">
                     <Edit className="w-4 h-4" />
                   </button>
                   <button 
                     onClick={() => handleDeleteBudgetItem(item.id)}
-                    className="w-6 h-6 text-slate-400 hover:text-red-600"
+                    className="w-6 h-6 text-slate-400 hover:text-red-400"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -763,11 +803,11 @@ const Budget = () => {
           })}
 
           {/* Total Row */}
-          <div className="grid grid-cols-8 gap-4 pt-4 mt-4 border-t border-emerald-300/50 dark:border-emerald-700/30 font-semibold text-emerald-800 dark:text-emerald-200">
+          <div className="grid grid-cols-8 gap-4 pt-4 mt-4 border-t border-cyan-700/30 font-semibold text-cyan-200">
             <div className="col-span-4">TOTAL PLANNED EXPENSES:</div>
             <div></div>
             <div className="text-lg">{formatCurrency(getFilteredBudgetData().filter(item => item.type === 'expense').reduce((total, item) => total + (item.monthly_amount || item.amount), 0))}</div>
-            <div className={`text-lg ${currentBudget.summary.projected_net >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+            <div className={`text-lg ${currentBudget.summary.projected_net >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
               {formatCurrency(currentBudget.summary.projected_net)}
             </div>
             <div></div>
@@ -776,11 +816,11 @@ const Budget = () => {
       </div>
 
       {/* Category Summary - Recreated */}
-      <div className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl shadow-md border border-emerald-200 dark:border-emerald-700/50 overflow-hidden">
-        <div className="bg-emerald-100 dark:bg-emerald-800/30 px-6 py-4 border-b border-emerald-200 dark:border-emerald-700/50">
+      <div className="bg-gradient-to-br from-cyan-900/20 to-green-900/20 rounded-xl shadow-md border border-cyan-700/50 overflow-hidden">
+        <div className="bg-cyan-800/30 px-6 py-4 border-b border-cyan-700/50">
           <div className="flex items-center gap-2">
-            <Target className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-            <h3 className="text-lg font-semibold text-emerald-800 dark:text-emerald-200">Category Summary</h3>
+            <Target className="w-5 h-5 text-cyan-400" />
+            <h3 className="text-lg font-semibold text-cyan-200">Category Summary</h3>
           </div>
         </div>
         
@@ -789,26 +829,26 @@ const Budget = () => {
             {Object.entries(getCategoryTotals()).map(([category, data]) => {
               const percentage = getTotalBudgetAmount() > 0 ? (data.planned / getTotalBudgetAmount() * 100) : 0
               return (
-                <div key={category} className="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+                <div key={category} className="bg-[rgba(35,52,78,0.85)] rounded-lg p-4 shadow-sm border border-white/10">
                   <div className="flex justify-between items-center mb-3">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-slate-900 dark:text-white text-base">{category}</span>
-                      <span className="text-xs bg-emerald-100 dark:bg-emerald-800/30 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-full font-medium">
+                      <span className="font-semibold text-white text-base">{category}</span>
+                      <span className="text-xs bg-cyan-800/30 text-cyan-300 px-2 py-1 rounded-full font-medium">
                         {data.count} items
                       </span>
                     </div>
-                    <span className="font-bold text-slate-900 dark:text-white text-base">{formatCurrency(data.planned)}</span>
+                    <span className="font-bold text-white text-base">{formatCurrency(data.planned)}</span>
                   </div>
                   
-                  <div className="w-full bg-slate-200 dark:bg-slate-600 rounded-full h-3 mb-3">
+                  <div className="w-full bg-slate-600 rounded-full h-3 mb-3">
                     <div 
-                      className="bg-gradient-to-r from-emerald-400 to-emerald-600 h-3 rounded-full transition-all duration-300"
+                      className="bg-gradient-to-r from-cyan-400 to-cyan-600 h-3 rounded-full transition-all duration-300"
                       style={{ width: `${Math.min(percentage, 100)}%` }}
                     />
                   </div>
                   
                   <div className="text-center">
-                    <span className="text-sm text-slate-600 dark:text-slate-300 font-medium">{percentage.toFixed(1)}% of budget</span>
+                    <span className="text-sm text-slate-400 font-medium">{percentage.toFixed(1)}% of budget</span>
                   </div>
                 </div>
               )
@@ -826,8 +866,8 @@ const Budget = () => {
       </Tabs>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="bg-red-500/10 border border-red-700/50 rounded-lg p-4">
+          <p className="text-red-400">{error}</p>
         </div>
       )}
       </div>

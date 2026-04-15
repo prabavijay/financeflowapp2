@@ -273,71 +273,71 @@ export default function PowerOfAttorney() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading Power of Attorney data...</p>
+          <p className="mt-4 text-slate-400">Loading Power of Attorney data...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-transparent">
       <div className="p-8 space-y-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
             Financial Power of Attorney
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg max-w-3xl mx-auto mb-8">
+          <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
             Manage authorized representatives for your financial and healthcare decisions
           </p>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Active POAs</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{getActiveAuthorizations()}</p>
+                <p className="text-sm font-medium text-slate-400">Active POAs</p>
+                <p className="text-2xl font-bold text-white">{getActiveAuthorizations()}</p>
               </div>
-              <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
-                <Shield className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <div className="p-3 bg-green-900/30 rounded-xl">
+                <Shield className="w-8 h-8 text-green-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Trusted Contacts</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{emergencyContacts.length}</p>
+                <p className="text-sm font-medium text-slate-400">Trusted Contacts</p>
+                <p className="text-2xl font-bold text-white">{emergencyContacts.length}</p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-                <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              <div className="p-3 bg-blue-900/30 rounded-xl">
+                <Users className="w-8 h-8 text-blue-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Expiring Soon</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{getExpiringAuthorizations()}</p>
+                <p className="text-sm font-medium text-slate-400">Expiring Soon</p>
+                <p className="text-2xl font-bold text-white">{getExpiringAuthorizations()}</p>
               </div>
-              <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl">
-                <AlertTriangle className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
+              <div className="p-3 bg-yellow-900/30 rounded-xl">
+                <AlertTriangle className="w-8 h-8 text-yellow-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Recent Activity</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{accessLog.length}</p>
+                <p className="text-sm font-medium text-slate-400">Recent Activity</p>
+                <p className="text-2xl font-bold text-white">{accessLog.length}</p>
               </div>
-              <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl">
-                <History className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              <div className="p-3 bg-purple-900/30 rounded-xl">
+                <History className="w-8 h-8 text-purple-400" />
               </div>
             </div>
           </div>
@@ -345,9 +345,9 @@ export default function PowerOfAttorney() {
 
         {/* Security Alert */}
         {getExpiringAuthorizations() > 0 && (
-          <Alert className="border-yellow-200 bg-yellow-50">
-            <AlertTriangle className="h-4 w-4 text-yellow-600" />
-            <AlertDescription className="text-yellow-800">
+          <Alert className="border-yellow-700/50 bg-yellow-500/10">
+            <AlertTriangle className="h-4 w-4 text-yellow-400" />
+            <AlertDescription className="text-yellow-400">
               You have {getExpiringAuthorizations()} Power of Attorney authorization(s) expiring within 30 days. 
               Please review and renew as needed.
             </AlertDescription>
@@ -377,7 +377,7 @@ export default function PowerOfAttorney() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {powerOfAttorneys.filter(poa => poa.status === 'active').slice(0, 3).map((poa, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                    <div key={index} className="flex items-center gap-3 p-3 bg-green-500/10 rounded-lg">
                       <Shield className="w-5 h-5 text-green-500" />
                       <div className="flex-1">
                         <p className="font-medium text-sm">{poa.attorney_name}</p>
@@ -407,7 +407,7 @@ export default function PowerOfAttorney() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {accessLog.slice(0, 5).map((log, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                    <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       <div className="flex-1">
                         <p className="font-medium text-sm">{log.action}</p>
@@ -440,7 +440,7 @@ export default function PowerOfAttorney() {
                       <h4 className="font-semibold mb-2">{category.category}</h4>
                       <ul className="space-y-1">
                         {category.powers.map((power, powerIndex) => (
-                          <li key={powerIndex} className="text-sm text-slate-600 flex items-center gap-2">
+                          <li key={powerIndex} className="text-sm text-slate-400 flex items-center gap-2">
                             <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
                             {power}
                           </li>
@@ -674,7 +674,7 @@ export default function PowerOfAttorney() {
                               <levelConfig.icon className="w-6 h-6 text-white" />
                             </div>
                             <div>
-                              <h3 className="font-semibold text-slate-900">{poa.attorney_name}</h3>
+                              <h3 className="font-semibold text-white">{poa.attorney_name}</h3>
                               <p className="text-sm text-slate-500">{levelConfig.label}</p>
                             </div>
                           </div>
@@ -685,7 +685,7 @@ export default function PowerOfAttorney() {
                           </div>
                         </div>
                         
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-slate-600 mb-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-slate-400 mb-4">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4" />
                             <span>Effective: {new Date(poa.effective_date).toLocaleDateString()}</span>
@@ -711,9 +711,9 @@ export default function PowerOfAttorney() {
                         </div>
                         
                         {poa.limitations && (
-                          <div className="mb-4 p-3 bg-slate-50 rounded-lg">
+                          <div className="mb-4 p-3 bg-white/5 rounded-lg">
                             <h4 className="font-medium text-sm mb-1">Powers & Limitations:</h4>
-                            <p className="text-sm text-slate-600">{poa.limitations}</p>
+                            <p className="text-sm text-slate-400">{poa.limitations}</p>
                           </div>
                         )}
                         
@@ -876,7 +876,7 @@ export default function PowerOfAttorney() {
                       <div className="flex items-center gap-3">
                         <User className="w-8 h-8 text-blue-500" />
                         <div>
-                          <h3 className="font-semibold text-slate-900">{contact.name}</h3>
+                          <h3 className="font-semibold text-white">{contact.name}</h3>
                           <p className="text-sm text-slate-500">{contact.relationship}</p>
                         </div>
                       </div>
@@ -890,7 +890,7 @@ export default function PowerOfAttorney() {
                       </div>
                     </div>
                     
-                    <div className="space-y-2 text-sm text-slate-600">
+                    <div className="space-y-2 text-sm text-slate-400">
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4" />
                         <span>{contact.phone}</span>
@@ -910,8 +910,8 @@ export default function PowerOfAttorney() {
                     </div>
                     
                     {contact.notes && (
-                      <div className="mt-4 p-3 bg-slate-50 rounded-lg">
-                        <p className="text-sm text-slate-600">{contact.notes}</p>
+                      <div className="mt-4 p-3 bg-white/5 rounded-lg">
+                        <p className="text-sm text-slate-400">{contact.notes}</p>
                       </div>
                     )}
                     
@@ -954,13 +954,13 @@ export default function PowerOfAttorney() {
                             {new Date(log.timestamp).toLocaleString()}
                           </span>
                         </div>
-                        <p className="text-sm text-slate-600">{log.details}</p>
+                        <p className="text-sm text-slate-400">{log.details}</p>
                         {log.attorney_name && (
                           <p className="text-xs text-slate-500">By: {log.attorney_name}</p>
                         )}
                       </div>
                       <Badge variant="outline" className={
-                        log.success ? 'border-green-500 text-green-700' : 'border-red-500 text-red-700'
+                        log.success ? 'border-green-500 text-green-300' : 'border-red-500 text-red-300'
                       }>
                         {log.success ? 'Success' : 'Failed'}
                       </Badge>
@@ -1063,9 +1063,9 @@ export default function PowerOfAttorney() {
               </DialogDescription>
             </DialogHeader>
             {selectedPOA && (
-              <div className="p-4 bg-slate-50 rounded-lg">
+              <div className="p-4 bg-white/5 rounded-lg">
                 <h4 className="font-medium">{selectedPOA.attorney_name}</h4>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-400">
                   {getAuthorizationLevel(selectedPOA.authorization_level).label}
                 </p>
               </div>
