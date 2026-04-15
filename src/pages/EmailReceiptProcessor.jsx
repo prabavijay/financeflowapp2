@@ -180,93 +180,21 @@ export default function EmailReceiptProcessor() {
     try {
       setLoading(true);
       
-      // Mock data for development
-      const mockEmailAccounts = [
-        {
-          id: '1',
-          provider: 'gmail',
-          email_address: 'user@gmail.com',
-          display_name: 'Personal Gmail',
-          status: 'connected',
-          last_sync: '2024-01-15T10:30:00Z',
-          total_processed: 45,
-          auto_process: true
-        }
-      ];
-
-      const mockEmailReceipts = [
-        {
-          id: '1',
-          email_account_id: '1',
-          sender_email: 'receipts@amazon.com',
-          subject: 'Your Amazon.com order receipt',
-          received_date: '2024-01-15T14:30:00Z',
-          processing_status: 'completed',
-          confidence_score: 0.92,
-          extracted_data: {
-            merchant_name: 'Amazon',
-            total_amount: 29.99,
-            order_number: 'AMZ-123456',
-            transaction_date: '2024-01-15'
-          },
-          receipt_id: 'rec_1',
-          attachment_count: 1,
-          is_spam: false
-        },
-        {
-          id: '2',
-          email_account_id: '1',
-          sender_email: 'store@target.com',
-          subject: 'Your Target receipt is ready',
-          received_date: '2024-01-14T16:45:00Z',
-          processing_status: 'pending',
-          confidence_score: null,
-          extracted_data: null,
-          receipt_id: null,
-          attachment_count: 0,
-          is_spam: false
-        }
-      ];
-
-      const mockEmailRules = [
-        {
-          id: '1',
-          rule_name: 'Amazon Receipts',
-          sender_patterns: '*@amazon.com,*@amazon.co.uk',
-          subject_patterns: '*receipt*,*order*',
-          auto_category: 'shopping',
-          confidence_threshold: 0.8,
-          is_active: true,
-          matched_count: 12
-        },
-        {
-          id: '2',
-          rule_name: 'Restaurant Receipts', 
-          sender_patterns: '*@doordash.com,*@ubereats.com,*@grubhub.com',
-          subject_patterns: '*receipt*,*order*',
-          auto_category: 'food',
-          confidence_threshold: 0.7,
-          is_active: true,
-          matched_count: 8
-        }
-      ];
-
       try {
-        // Try to load from backend
         const [accountsResult, receiptsResult, rulesResult] = await Promise.all([
           apiClient.get('/api/email-accounts'),
           apiClient.get('/api/email-receipts'),
           apiClient.get('/api/email-rules')
         ]);
-        
-        setEmailAccounts(accountsResult.data || mockEmailAccounts);
-        setEmailReceipts(receiptsResult.data || mockEmailReceipts);
-        setEmailRules(rulesResult.data || mockEmailRules);
+
+        setEmailAccounts(accountsResult.data || []);
+        setEmailReceipts(receiptsResult.data || []);
+        setEmailRules(rulesResult.data || []);
       } catch (error) {
-        console.warn('Email processing APIs not available, using mock data');
-        setEmailAccounts(mockEmailAccounts);
-        setEmailReceipts(mockEmailReceipts);
-        setEmailRules(mockEmailRules);
+        console.warn('Email processing APIs not available');
+        setEmailAccounts([]);
+        setEmailReceipts([]);
+        setEmailRules([]);
       }
     } catch (error) {
       console.error('Error loading email data:', error);
@@ -639,7 +567,7 @@ export default function EmailReceiptProcessor() {
     return (
       <div className="p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
         </div>
       </div>
     );
@@ -650,8 +578,8 @@ export default function EmailReceiptProcessor() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Email Receipt Processing</h1>
-          <p className="text-gray-600">Automatically process emailed receipts from your inbox</p>
+          <h1 className="text-3xl font-bold text-white">Email Receipt Processing</h1>
+          <p className="text-slate-400">Automatically process emailed receipts from your inbox</p>
         </div>
         <div className="flex gap-2">
           <Dialog open={isConfigDialogOpen} onOpenChange={setIsConfigDialogOpen}>
@@ -739,7 +667,7 @@ export default function EmailReceiptProcessor() {
                     onChange={(e) => setEmailConfig({...emailConfig, app_password: e.target.value})}
                     placeholder="App-specific password"
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-slate-400">
                     Use an app-specific password for Gmail/Outlook, not your regular password
                   </p>
                 </div>
@@ -799,7 +727,7 @@ export default function EmailReceiptProcessor() {
                     onChange={(e) => setRuleConfig({...ruleConfig, sender_patterns: e.target.value})}
                     placeholder="*@amazon.com,*@amazon.co.uk"
                   />
-                  <p className="text-xs text-gray-500">Comma-separated patterns. Use * for wildcards</p>
+                  <p className="text-xs text-slate-400">Comma-separated patterns. Use * for wildcards</p>
                 </div>
 
                 <div className="space-y-2">
@@ -865,7 +793,7 @@ export default function EmailReceiptProcessor() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Email Accounts</CardTitle>
-            <Mail className="h-4 w-4 text-blue-600" />
+            <Mail className="h-4 w-4 text-blue-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.connectedAccounts}/{analytics.totalAccounts}</div>
@@ -876,7 +804,7 @@ export default function EmailReceiptProcessor() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Email Receipts</CardTitle>
-            <Inbox className="h-4 w-4 text-green-600" />
+            <Inbox className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.totalEmailReceipts}</div>
@@ -887,7 +815,7 @@ export default function EmailReceiptProcessor() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Rules</CardTitle>
-            <Settings className="h-4 w-4 text-purple-600" />
+            <Settings className="h-4 w-4 text-purple-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.activeRules}</div>
@@ -898,7 +826,7 @@ export default function EmailReceiptProcessor() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Avg Confidence</CardTitle>
-            <TrendingUp className="h-4 w-4 text-orange-600" />
+            <TrendingUp className="h-4 w-4 text-orange-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{Math.round(analytics.averageConfidence * 100)}%</div>
@@ -984,13 +912,13 @@ export default function EmailReceiptProcessor() {
                             </Badge>
                           )}
                         </div>
-                        <h3 className="font-semibold text-gray-900 mb-2">{emailReceipt.subject}</h3>
-                        <p className="text-sm text-gray-600 mb-3">
+                        <h3 className="font-semibold text-white mb-2">{emailReceipt.subject}</h3>
+                        <p className="text-sm text-slate-400 mb-3">
                           Received: {new Date(emailReceipt.received_date).toLocaleString()}
                         </p>
                         
                         {emailReceipt.extracted_data && (
-                          <div className="bg-green-50 p-3 rounded-lg mb-3">
+                          <div className="bg-green-500/10 p-3 rounded-lg mb-3">
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                               <div>
                                 <span className="font-medium">Merchant:</span>
@@ -1050,8 +978,8 @@ export default function EmailReceiptProcessor() {
             <Card>
               <CardContent className="text-center py-8">
                 <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No email receipts found</h3>
-                <p className="text-gray-600 mb-4">Configure an email account to start processing receipt emails.</p>
+                <h3 className="text-lg font-medium text-white mb-2">No email receipts found</h3>
+                <p className="text-slate-400 mb-4">Configure an email account to start processing receipt emails.</p>
                 <Button onClick={() => setIsConfigDialogOpen(true)}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Email Account
@@ -1069,13 +997,13 @@ export default function EmailReceiptProcessor() {
               const isConnected = connection?.connected;
               
               return (
-                <Card key={providerId} className={`cursor-pointer transition-all hover:shadow-lg ${isConnected ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}>
+                <Card key={providerId} className={`cursor-pointer transition-all hover:shadow-lg ${isConnected ? 'border-white/10 bg-green-500/10' : 'border-white/10'}`}>
                   <CardContent className="p-4">
                     <div className="flex items-center space-x-3">
                       <div className="text-3xl">{provider.icon}</div>
                       <div className="flex-1">
                         <h3 className="font-semibold">{provider.displayName}</h3>
-                        <p className="text-sm text-gray-600">{provider.description}</p>
+                        <p className="text-sm text-slate-400">{provider.description}</p>
                       </div>
                       <div className="text-right">
                         {isConnected ? (
@@ -1084,7 +1012,7 @@ export default function EmailReceiptProcessor() {
                               <CheckCircle className="h-3 w-3 mr-1" />
                               Connected
                             </Badge>
-                            <p className="text-xs text-gray-600">{connection.user?.email}</p>
+                            <p className="text-xs text-slate-400">{connection.user?.email}</p>
                           </div>
                         ) : (
                           <Button 
@@ -1100,9 +1028,9 @@ export default function EmailReceiptProcessor() {
                     </div>
                     
                     {isConnected && (
-                      <div className="mt-3 pt-3 border-t border-gray-200">
+                      <div className="mt-3 pt-3 border-t border-white/10">
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-600">Connected as {connection.user?.name}</span>
+                          <span className="text-slate-400">Connected as {connection.user?.name}</span>
                           <Button
                             size="sm"
                             variant="outline"
@@ -1188,7 +1116,7 @@ export default function EmailReceiptProcessor() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-gray-900">{rule.rule_name}</h3>
+                        <h3 className="font-semibold text-white">{rule.rule_name}</h3>
                         <Badge variant={rule.is_active ? 'default' : 'secondary'}>
                           {rule.is_active ? 'Active' : 'Inactive'}
                         </Badge>
@@ -1291,7 +1219,7 @@ export default function EmailReceiptProcessor() {
               </div>
               
               {selectedEmail.extracted_data && (
-                <div className="bg-green-50 p-4 rounded-lg">
+                <div className="bg-green-500/10 p-4 rounded-lg">
                   <h4 className="font-medium mb-3">Extracted Data</h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>

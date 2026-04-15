@@ -33,11 +33,11 @@ const LOAN_TYPES = [
 ];
 
 const CREDIT_SCORE_RANGES = [
-  { value: 750, label: 'Excellent (750+)', color: 'text-green-600' },
-  { value: 700, label: 'Good (700-749)', color: 'text-blue-600' },
-  { value: 650, label: 'Fair (650-699)', color: 'text-yellow-600' },
-  { value: 600, label: 'Poor (600-649)', color: 'text-orange-600' },
-  { value: 550, label: 'Bad (550-599)', color: 'text-red-600' }
+  { value: 750, label: 'Excellent (750+)', color: 'text-green-400' },
+  { value: 700, label: 'Good (700-749)', color: 'text-blue-400' },
+  { value: 650, label: 'Fair (650-699)', color: 'text-yellow-400' },
+  { value: 600, label: 'Poor (600-649)', color: 'text-orange-400' },
+  { value: 550, label: 'Bad (550-599)', color: 'text-red-400' }
 ];
 
 export default function LoanComparison() {
@@ -96,8 +96,8 @@ export default function LoanComparison() {
         const productsResult = await apiClient.getLoanProducts();
         productsData = productsResult.data || productsResult || [];
       } catch (error) {
-        console.warn('Loan products API not available, using sample data');
-        productsData = getSampleLoanProducts();
+        console.warn('Loan products API not available');
+        productsData = [];
       }
       
       // Load saved comparisons
@@ -117,103 +117,12 @@ export default function LoanComparison() {
       console.error('Error loading data:', error);
       toast.error('Failed to load loan data');
       
-      // Set sample data as fallback
-      setLoanProducts(getSampleLoanProducts());
+      setLoanProducts([]);
       setComparisons([]);
     } finally {
       setLoading(false);
     }
   };
-
-  const getSampleLoanProducts = () => [
-    {
-      id: '1',
-      institution_name: 'Chase Bank',
-      loan_type: 'mortgage',
-      product_name: '30-Year Fixed Mortgage',
-      interest_rate: 7.125,
-      apr: 7.25,
-      term_months: 360,
-      minimum_amount: 100000,
-      maximum_amount: 2000000,
-      credit_score_min: 620,
-      down_payment_min: 0.03,
-      origination_fee: 0.5,
-      closing_costs: 3000,
-      points: 0,
-      status: 'active'
-    },
-    {
-      id: '2',
-      institution_name: 'Wells Fargo',
-      loan_type: 'mortgage',
-      product_name: '30-Year Fixed Rate',
-      interest_rate: 7.0,
-      apr: 7.15,
-      term_months: 360,
-      minimum_amount: 100000,
-      maximum_amount: 1500000,
-      credit_score_min: 640,
-      down_payment_min: 0.05,
-      origination_fee: 0.0,
-      closing_costs: 2500,
-      points: 0,
-      status: 'active'
-    },
-    {
-      id: '3',
-      institution_name: 'Bank of America',
-      loan_type: 'mortgage',
-      product_name: 'Preferred Rate Mortgage',
-      interest_rate: 6.875,
-      apr: 7.0,
-      term_months: 360,
-      minimum_amount: 150000,
-      maximum_amount: 3000000,
-      credit_score_min: 700,
-      down_payment_min: 0.10,
-      origination_fee: 0.0,
-      closing_costs: 2800,
-      points: 0.5,
-      status: 'active'
-    },
-    // Auto loans
-    {
-      id: '4',
-      institution_name: 'Capital One Auto',
-      loan_type: 'auto',
-      product_name: 'Auto Loan - New Vehicle',
-      interest_rate: 5.99,
-      apr: 6.15,
-      term_months: 60,
-      minimum_amount: 5000,
-      maximum_amount: 100000,
-      credit_score_min: 600,
-      down_payment_min: 0.0,
-      origination_fee: 0.0,
-      closing_costs: 0,
-      points: 0,
-      status: 'active'
-    },
-    // Personal loans
-    {
-      id: '5',
-      institution_name: 'Marcus by Goldman Sachs',
-      loan_type: 'personal',
-      product_name: 'Personal Loan',
-      interest_rate: 8.99,
-      apr: 8.99,
-      term_months: 60,
-      minimum_amount: 3500,
-      maximum_amount: 40000,
-      credit_score_min: 660,
-      down_payment_min: 0.0,
-      origination_fee: 0.0,
-      closing_costs: 0,
-      points: 0,
-      status: 'active'
-    }
-  ];
 
   const handleCalculateComparison = async () => {
     try {
@@ -312,7 +221,7 @@ export default function LoanComparison() {
     return (
       <div className="p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
         </div>
       </div>
     );
@@ -323,8 +232,8 @@ export default function LoanComparison() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Loan Comparison Tool</h1>
-          <p className="text-gray-600">Compare mortgage, auto, and personal loan options</p>
+          <h1 className="text-3xl font-bold text-white">Loan Comparison Tool</h1>
+          <p className="text-slate-400">Compare mortgage, auto, and personal loan options</p>
         </div>
         <Dialog open={isComparisonDialogOpen} onOpenChange={setIsComparisonDialogOpen}>
           <DialogTrigger asChild>
@@ -512,28 +421,28 @@ export default function LoanComparison() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">
+                    <div className="text-2xl font-bold text-green-400">
                       {formatCurrency(affordabilityResults.maxAffordablePayment)}
                     </div>
-                    <p className="text-sm text-gray-600">Max Affordable Payment</p>
+                    <p className="text-sm text-slate-400">Max Affordable Payment</p>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold">
                       {affordabilityResults.currentDTI.toFixed(1)}%
                     </div>
-                    <p className="text-sm text-gray-600">Current Debt-to-Income</p>
+                    <p className="text-sm text-slate-400">Current Debt-to-Income</p>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold">
                       {affordabilityResults.maxDTI}%
                     </div>
-                    <p className="text-sm text-gray-600">Maximum DTI Recommended</p>
+                    <p className="text-sm text-slate-400">Maximum DTI Recommended</p>
                   </div>
                   <div className="text-center">
-                    <div className={`text-2xl font-bold ${affordabilityResults.canAffordNewLoan ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className={`text-2xl font-bold ${affordabilityResults.canAffordNewLoan ? 'text-green-400' : 'text-red-400'}`}>
                       {affordabilityResults.canAffordNewLoan ? 'Yes' : 'No'}
                     </div>
-                    <p className="text-sm text-gray-600">Can Afford New Loan</p>
+                    <p className="text-sm text-slate-400">Can Afford New Loan</p>
                   </div>
                 </div>
               </CardContent>
@@ -565,44 +474,44 @@ export default function LoanComparison() {
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-600">Monthly Payment:</span>
+                        <span className="text-slate-400">Monthly Payment:</span>
                         <div className="font-semibold text-lg">{formatCurrency(loan.calculations.monthlyPayment)}</div>
                       </div>
                       <div>
-                        <span className="text-gray-600">Interest Rate:</span>
+                        <span className="text-slate-400">Interest Rate:</span>
                         <div className="font-semibold">{formatPercentage(loan.interest_rate / 100)}</div>
                       </div>
                       <div>
-                        <span className="text-gray-600">Total Interest:</span>
+                        <span className="text-slate-400">Total Interest:</span>
                         <div className="font-semibold">{formatCurrency(loan.calculations.totalInterest)}</div>
                       </div>
                       <div>
-                        <span className="text-gray-600">APR:</span>
+                        <span className="text-slate-400">APR:</span>
                         <div className="font-semibold">{formatPercentage(loan.apr / 100)}</div>
                       </div>
                       <div>
-                        <span className="text-gray-600">Total Cost:</span>
+                        <span className="text-slate-400">Total Cost:</span>
                         <div className="font-semibold">{formatCurrency(loan.calculations.totalPayments)}</div>
                       </div>
                       <div>
-                        <span className="text-gray-600">Upfront Costs:</span>
+                        <span className="text-slate-400">Upfront Costs:</span>
                         <div className="font-semibold">{formatCurrency(loan.calculations.fees.totalUpfrontCosts)}</div>
                       </div>
                     </div>
 
                     {loan.calculations.savings > 0 && (
-                      <div className="p-3 bg-green-50 rounded-lg">
-                        <div className="text-sm text-green-800">
+                      <div className="p-3 bg-green-500/10 rounded-lg">
+                        <div className="text-sm text-green-400">
                           <strong>Savings vs. most expensive:</strong>
                         </div>
-                        <div className="text-lg font-bold text-green-600">
+                        <div className="text-lg font-bold text-green-400">
                           {formatCurrency(loan.calculations.savings)}
                         </div>
                       </div>
                     )}
 
                     <div className="space-y-2">
-                      <div className="flex justify-between text-xs text-gray-600">
+                      <div className="flex justify-between text-xs text-slate-400">
                         <span>Requirements:</span>
                       </div>
                       <div className="text-xs space-y-1">
@@ -633,16 +542,16 @@ export default function LoanComparison() {
                 <CardContent className="space-y-6">
                   <div className="text-center">
                     <div className={`text-4xl font-bold ${
-                      qualificationResults.qualificationLevel === 'excellent' ? 'text-green-600' :
-                      qualificationResults.qualificationLevel === 'good' ? 'text-blue-600' :
-                      qualificationResults.qualificationLevel === 'fair' ? 'text-yellow-600' : 'text-red-600'
+                      qualificationResults.qualificationLevel === 'excellent' ? 'text-green-400' :
+                      qualificationResults.qualificationLevel === 'good' ? 'text-blue-400' :
+                      qualificationResults.qualificationLevel === 'fair' ? 'text-yellow-400' : 'text-red-400'
                     }`}>
                       {qualificationResults.qualificationScore}
                     </div>
                     <div className="text-lg font-medium capitalize">
                       {qualificationResults.qualificationLevel} Qualification
                     </div>
-                    <div className="text-sm text-gray-600 mt-2">
+                    <div className="text-sm text-slate-400 mt-2">
                       Estimated Rate: {formatPercentage(qualificationResults.estimatedRate)}
                     </div>
                   </div>
@@ -658,7 +567,7 @@ export default function LoanComparison() {
                             <Badge variant={factor.impact > 0 ? 'default' : 'destructive'}>
                               {factor.status}
                             </Badge>
-                            <span className={`text-sm font-medium ${factor.impact > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            <span className={`text-sm font-medium ${factor.impact > 0 ? 'text-green-400' : 'text-red-400'}`}>
                               {factor.impact > 0 ? '+' : ''}{factor.impact}
                             </span>
                           </div>
@@ -671,7 +580,7 @@ export default function LoanComparison() {
                       <h4 className="font-medium">Improvement Recommendations</h4>
                       {qualificationResults.recommendations.length > 0 ? (
                         qualificationResults.recommendations.map((rec, index) => (
-                          <div key={index} className="p-3 bg-blue-50 rounded-lg">
+                          <div key={index} className="p-3 bg-blue-500/10 rounded-lg">
                             <div className="flex items-center gap-2 mb-2">
                               <Badge variant="outline">{rec.category}</Badge>
                               <Badge className={rec.priority === 'high' ? 'bg-red-500' : rec.priority === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'}>
@@ -679,12 +588,12 @@ export default function LoanComparison() {
                               </Badge>
                             </div>
                             <p className="text-sm text-gray-700">{rec.recommendation}</p>
-                            <p className="text-xs text-gray-500 mt-1">Timeline: {rec.timeframe}</p>
+                            <p className="text-xs text-slate-400 mt-1">Timeline: {rec.timeframe}</p>
                           </div>
                         ))
                       ) : (
-                        <div className="p-3 bg-green-50 rounded-lg">
-                          <p className="text-sm text-green-700">
+                        <div className="p-3 bg-green-500/10 rounded-lg">
+                          <p className="text-sm text-green-300">
                             <CheckCircle className="h-4 w-4 inline mr-1" />
                             You meet all qualification criteria for this loan type!
                           </p>
@@ -728,8 +637,8 @@ export default function LoanComparison() {
                         <tr key={payment.paymentNumber} className="border-b border-gray-100">
                           <td className="py-2">{payment.paymentNumber}</td>
                           <td className="py-2 font-medium">{formatCurrency(payment.paymentAmount)}</td>
-                          <td className="py-2 text-green-600">{formatCurrency(payment.principalPayment)}</td>
-                          <td className="py-2 text-red-600">{formatCurrency(payment.interestPayment)}</td>
+                          <td className="py-2 text-green-400">{formatCurrency(payment.principalPayment)}</td>
+                          <td className="py-2 text-red-400">{formatCurrency(payment.interestPayment)}</td>
                           <td className="py-2">{formatCurrency(payment.remainingBalance)}</td>
                         </tr>
                       ))}
@@ -772,7 +681,7 @@ export default function LoanComparison() {
                     </div>
                     {comparison.notes && (
                       <div className="mt-3 pt-3 border-t">
-                        <p className="text-sm text-gray-600">{comparison.notes}</p>
+                        <p className="text-sm text-slate-400">{comparison.notes}</p>
                       </div>
                     )}
                   </CardContent>
@@ -783,8 +692,8 @@ export default function LoanComparison() {
             <Card>
               <CardContent className="text-center py-8">
                 <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No saved comparisons</h3>
-                <p className="text-gray-600 mb-4">Create and save loan comparisons to reference later.</p>
+                <h3 className="text-lg font-medium text-white mb-2">No saved comparisons</h3>
+                <p className="text-slate-400 mb-4">Create and save loan comparisons to reference later.</p>
                 <Button onClick={() => setActiveTab('compare')}>
                   Start Comparing Loans
                 </Button>

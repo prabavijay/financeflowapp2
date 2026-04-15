@@ -93,43 +93,12 @@ export default function ReceiptScanner() {
     try {
       setLoading(true);
       
-      // For now, use mock data since backend may not be ready
-      const mockReceipts = [
-        {
-          id: '1',
-          merchant_name: 'Starbucks',
-          total_amount: 15.47,
-          tax_amount: 1.24,
-          tip_amount: 2.00,
-          transaction_date: '2024-01-15',
-          category: 'food',
-          processing_status: 'completed',
-          ocr_confidence: 0.92,
-          receipt_number: 'ST123456',
-          manual_verified: true,
-          created_at: '2024-01-15T10:30:00Z'
-        },
-        {
-          id: '2',
-          merchant_name: 'Shell Gas Station',
-          total_amount: 45.80,
-          tax_amount: 0.00,
-          transaction_date: '2024-01-14',
-          category: 'transportation',
-          processing_status: 'manual_review',
-          ocr_confidence: 0.65,
-          receipt_number: null,
-          manual_verified: false,
-          created_at: '2024-01-14T16:45:00Z'
-        }
-      ];
-
       try {
         const receiptsResult = await apiClient.get('/api/receipts');
-        setReceipts(receiptsResult.data || receiptsResult || mockReceipts);
+        setReceipts(receiptsResult.data || receiptsResult || []);
       } catch (error) {
-        console.warn('Receipts API not available, using mock data');
-        setReceipts(mockReceipts);
+        console.warn('Receipts API not available');
+        setReceipts([]);
       }
     } catch (error) {
       console.error('Error loading receipts:', error);
@@ -458,7 +427,7 @@ export default function ReceiptScanner() {
     return (
       <div className="p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
         </div>
       </div>
     );
@@ -469,8 +438,8 @@ export default function ReceiptScanner() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Receipt Scanner</h1>
-          <p className="text-gray-600">Scan and digitize receipts with OCR technology</p>
+          <h1 className="text-3xl font-bold text-white">Receipt Scanner</h1>
+          <p className="text-slate-400">Scan and digitize receipts with OCR technology</p>
         </div>
         <div className="flex gap-2">
           <Dialog open={isScanDialogOpen} onOpenChange={setIsScanDialogOpen}>
@@ -557,7 +526,7 @@ export default function ReceiptScanner() {
                 </div>
                 
                 {/* Tips */}
-                <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                <div className="text-sm text-slate-400 bg-gray-50 p-3 rounded-lg">
                   <strong>Tips for best results:</strong>
                   <ul className="mt-1 space-y-1 text-xs">
                     <li>• Ensure good lighting</li>
@@ -605,7 +574,7 @@ export default function ReceiptScanner() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Receipts</CardTitle>
-            <Receipt className="h-4 w-4 text-blue-600" />
+            <Receipt className="h-4 w-4 text-blue-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.totalReceipts}</div>
@@ -615,7 +584,7 @@ export default function ReceiptScanner() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Processed</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.processedReceipts}</div>
@@ -625,7 +594,7 @@ export default function ReceiptScanner() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Needs Review</CardTitle>
-            <AlertCircle className="h-4 w-4 text-yellow-600" />
+            <AlertCircle className="h-4 w-4 text-yellow-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{analytics.needsReview}</div>
@@ -635,7 +604,7 @@ export default function ReceiptScanner() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Amount</CardTitle>
-            <DollarSign className="h-4 w-4 text-purple-600" />
+            <DollarSign className="h-4 w-4 text-purple-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">${analytics.totalAmount.toFixed(2)}</div>
@@ -645,7 +614,7 @@ export default function ReceiptScanner() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Avg Confidence</CardTitle>
-            <Scan className="h-4 w-4 text-orange-600" />
+            <Scan className="h-4 w-4 text-orange-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{Math.round(analytics.averageConfidence * 100)}%</div>
@@ -720,19 +689,19 @@ export default function ReceiptScanner() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-2xl font-bold">${receipt.total_amount.toFixed(2)}</span>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-slate-400">
                     Confidence: {Math.round((receipt.ocr_confidence || 0) * 100)}%
                   </div>
                 </div>
                 
                 {receipt.tax_amount > 0 && (
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-slate-400">
                     Tax: ${receipt.tax_amount.toFixed(2)}
                   </div>
                 )}
                 
                 {receipt.receipt_number && (
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-slate-400">
                     Receipt #: {receipt.receipt_number}
                   </div>
                 )}
@@ -778,8 +747,8 @@ export default function ReceiptScanner() {
         <Card>
           <CardContent className="text-center py-8">
             <Receipt className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No receipts found</h3>
-            <p className="text-gray-600 mb-4">Start by scanning or uploading your first receipt.</p>
+            <h3 className="text-lg font-medium text-white mb-2">No receipts found</h3>
+            <p className="text-slate-400 mb-4">Start by scanning or uploading your first receipt.</p>
             <Button onClick={() => fileInputRef.current?.click()}>
               <Upload className="h-4 w-4 mr-2" />
               Upload Receipt

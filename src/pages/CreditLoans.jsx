@@ -181,42 +181,42 @@ const CreditLoans = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active': return 'text-emerald-600 bg-emerald-100'
-      case 'closed': return 'text-slate-600 bg-slate-100'
-      case 'frozen': return 'text-blue-600 bg-blue-100'
-      case 'delinquent': return 'text-red-600 bg-red-100'
-      default: return 'text-slate-600 bg-slate-100'
+      case 'active': return 'text-cyan-600 bg-cyan-900/20'
+      case 'closed': return 'text-slate-400 bg-white/10'
+      case 'frozen': return 'text-blue-400 bg-blue-500/10'
+      case 'delinquent': return 'text-red-400 bg-red-500/10'
+      default: return 'text-slate-400 bg-white/10'
     }
   }
 
   const getRiskLevel = (product) => {
     if (product.type === 'credit_card' && product.credit_utilization) {
       const utilization = parseFloat(product.credit_utilization)
-      if (utilization > 80) return { level: 'high', color: 'text-red-600', icon: AlertTriangle }
-      if (utilization > 50) return { level: 'medium', color: 'text-yellow-600', icon: AlertTriangle }
-      return { level: 'low', color: 'text-emerald-600', icon: CheckCircle }
+      if (utilization > 80) return { level: 'high', color: 'text-red-400', icon: AlertTriangle }
+      if (utilization > 50) return { level: 'medium', color: 'text-yellow-400', icon: AlertTriangle }
+      return { level: 'low', color: 'text-cyan-600', icon: CheckCircle }
     }
-    return { level: 'low', color: 'text-slate-600', icon: CheckCircle }
+    return { level: 'low', color: 'text-slate-400', icon: CheckCircle }
   }
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading credit data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading credit data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6 space-y-6">
+    <div className="min-h-screen bg-transparent p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-3">Credit & Loans</h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg">Comprehensive view of all credit products and loan accounts with detailed analytics</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">Credit & Loans</h1>
+          <p className="text-slate-400 text-lg">Comprehensive view of all credit products and loan accounts with detailed analytics</p>
         </div>
         <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
           <DialogTrigger asChild>
@@ -393,56 +393,56 @@ const CreditLoans = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="credit-loans-tabs space-y-4">
         {/* Tabs */}
         <div className="flex justify-center mb-6">
-          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-emerald-500/40 rounded-lg">
-            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Personal</TabsTrigger>
-            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Spouse</TabsTrigger>
-            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Family</TabsTrigger>
+          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-cyan-500/30 rounded-lg">
+            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Personal</TabsTrigger>
+            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Spouse</TabsTrigger>
+            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Family</TabsTrigger>
           </TabsList>
         </div>
 
       {/* Analytics Summary Cards */}
       {analytics && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-md p-6 border border-blue-200">
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-md p-6 border border-blue-700/50">
             <div className="flex items-center gap-3 mb-2">
-              <Calculator className="w-6 h-6 text-blue-600" />
-              <span className="text-sm font-medium text-blue-600">Total Accounts</span>
+              <Calculator className="w-6 h-6 text-blue-400" />
+              <span className="text-sm font-medium text-blue-400">Total Accounts</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{analytics?.summary?.total_accounts || 0}</p>
-            <p className="text-sm text-slate-600 mt-1">Active credit products</p>
+            <p className="text-3xl font-bold text-white">{analytics?.summary?.total_accounts || 0}</p>
+            <p className="text-sm text-slate-400 mt-1">Active credit products</p>
           </div>
 
-          <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-xl shadow-md p-6 border border-red-200">
+          <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-xl shadow-md p-6 border border-red-700/50">
             <div className="flex items-center gap-3 mb-2">
-              <TrendingDown className="w-6 h-6 text-red-600" />
-              <span className="text-sm font-medium text-red-600">Total Debt</span>
+              <TrendingDown className="w-6 h-6 text-red-400" />
+              <span className="text-sm font-medium text-red-400">Total Debt</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{formatCurrency(analytics?.summary?.total_debt || 0)}</p>
-            <p className="text-sm text-slate-600 mt-1">Across all accounts</p>
+            <p className="text-3xl font-bold text-white">{formatCurrency(analytics?.summary?.total_debt || 0)}</p>
+            <p className="text-sm text-slate-400 mt-1">Across all accounts</p>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-md p-6 border border-orange-200">
+          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-md p-6 border border-orange-700/50">
             <div className="flex items-center gap-3 mb-2">
-              <DollarSign className="w-6 h-6 text-orange-600" />
-              <span className="text-sm font-medium text-orange-600">Monthly Payments</span>
+              <DollarSign className="w-6 h-6 text-orange-400" />
+              <span className="text-sm font-medium text-orange-400">Monthly Payments</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{formatCurrency(analytics?.summary?.total_monthly_payments || 0)}</p>
-            <p className="text-sm text-slate-600 mt-1">Total obligations</p>
+            <p className="text-3xl font-bold text-white">{formatCurrency(analytics?.summary?.total_monthly_payments || 0)}</p>
+            <p className="text-sm text-slate-400 mt-1">Total obligations</p>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-md p-6 border border-purple-200">
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-md p-6 border border-purple-700/50">
             <div className="flex items-center gap-3 mb-2">
-              <Percent className="w-6 h-6 text-purple-600" />
-              <span className="text-sm font-medium text-purple-600">Credit Utilization</span>
+              <Percent className="w-6 h-6 text-purple-400" />
+              <span className="text-sm font-medium text-purple-400">Credit Utilization</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{analytics?.summary?.avg_credit_utilization || '0.0'}%</p>
-            <p className="text-sm text-slate-600 mt-1">Average across cards</p>
+            <p className="text-3xl font-bold text-white">{analytics?.summary?.avg_credit_utilization || '0.0'}%</p>
+            <p className="text-sm text-slate-400 mt-1">Average across cards</p>
           </div>
         </div>
       )}
 
       {/* Filter Tabs */}
-      <div className="flex space-x-1 bg-slate-100 rounded-lg p-1 overflow-x-auto">
+      <div className="flex space-x-1 bg-white/10 rounded-lg p-1 overflow-x-auto">
         {creditTypes.map((type) => {
           const Icon = type.icon
           return (
@@ -451,8 +451,8 @@ const CreditLoans = () => {
               onClick={() => setSelectedType(type.value)}
               className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
                 selectedType === type.value
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-cyan-500/20 text-cyan-400 shadow-sm'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -463,34 +463,34 @@ const CreditLoans = () => {
       </div>
 
       {/* Credit Products Table */}
-      <div className="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-        <div className="p-6 border-b border-slate-200">
-          <h2 className="text-xl font-semibold text-slate-900">
+      <div className="glass-card overflow-hidden">
+        <div className="p-6 border-b border-white/10">
+          <h2 className="text-xl font-semibold text-white">
             {selectedType === 'all' ? 'All Credit Products' : creditTypes.find(t => t.value === selectedType)?.label}
           </h2>
-          <p className="text-slate-600 text-sm mt-1">Detailed information for debt reduction planning</p>
+          <p className="text-slate-400 text-sm mt-1">Detailed information for debt reduction planning</p>
         </div>
 
         {getFilteredCreditData().length === 0 ? (
           <div className="text-center py-12">
             <Calculator className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">No Credit Products Found</h3>
-            <p className="text-slate-600">Add your first credit card, loan, or mortgage to get started.</p>
+            <h3 className="text-lg font-semibold text-white mb-2">No Credit Products Found</h3>
+            <p className="text-slate-400">Add your first credit card, loan, or mortgage to get started.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-slate-50 border-b border-slate-200">
+              <thead className="bg-slate-50 border-b border-white/10">
                 <tr>
-                  <th className="text-left p-4 font-semibold text-slate-900">Product</th>
-                  <th className="text-left p-4 font-semibold text-slate-900">Provider</th>
-                  <th className="text-left p-4 font-semibold text-slate-900">Current Balance</th>
-                  <th className="text-left p-4 font-semibold text-slate-900">Interest Rate</th>
-                  <th className="text-left p-4 font-semibold text-slate-900">Monthly Payment</th>
-                  <th className="text-left p-4 font-semibold text-slate-900">Credit Details</th>
-                  <th className="text-left p-4 font-semibold text-slate-900">Due Date</th>
-                  <th className="text-left p-4 font-semibold text-slate-900">Risk/Status</th>
-                  <th className="text-left p-4 font-semibold text-slate-900">Actions</th>
+                  <th className="text-left p-4 font-semibold text-white">Product</th>
+                  <th className="text-left p-4 font-semibold text-white">Provider</th>
+                  <th className="text-left p-4 font-semibold text-white">Current Balance</th>
+                  <th className="text-left p-4 font-semibold text-white">Interest Rate</th>
+                  <th className="text-left p-4 font-semibold text-white">Monthly Payment</th>
+                  <th className="text-left p-4 font-semibold text-white">Credit Details</th>
+                  <th className="text-left p-4 font-semibold text-white">Due Date</th>
+                  <th className="text-left p-4 font-semibold text-white">Risk/Status</th>
+                  <th className="text-left p-4 font-semibold text-white">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -499,52 +499,52 @@ const CreditLoans = () => {
                   const RiskIcon = risk.icon
                   
                   return (
-                    <tr key={product.id} className="border-b border-slate-100 hover:bg-slate-50">
+                    <tr key={product.id} className="border-b border-slate-100 hover:bg-white/5">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           {getTypeIcon(product.type)}
                           <div>
-                            <div className="font-semibold text-slate-900">{product.name}</div>
-                            <div className="text-sm text-slate-600 capitalize">{product.type.replace('_', ' ')}</div>
+                            <div className="font-semibold text-white">{product.name}</div>
+                            <div className="text-sm text-slate-400 capitalize">{product.type.replace('_', ' ')}</div>
                           </div>
                         </div>
                       </td>
                       
                       <td className="p-4">
-                        <div className="font-medium text-slate-900">{product.provider}</div>
+                        <div className="font-medium text-white">{product.provider}</div>
                         {product.account_number && (
-                          <div className="text-sm text-slate-600">**** {product.account_number?.toString().slice(-4)}</div>
+                          <div className="text-sm text-slate-400">**** {product.account_number?.toString().slice(-4)}</div>
                         )}
                       </td>
                       
                       <td className="p-4">
-                        <div className="font-bold text-red-600">{formatCurrency(product.current_balance)}</div>
+                        <div className="font-bold text-red-400">{formatCurrency(product.current_balance)}</div>
                         {product.original_loan_amount && (
-                          <div className="text-sm text-slate-600">
+                          <div className="text-sm text-slate-400">
                             of {formatCurrency(product.original_loan_amount)}
                           </div>
                         )}
                       </td>
                       
                       <td className="p-4">
-                        <div className="font-semibold text-slate-900">{formatPercentage(product.interest_rate)}</div>
-                        <div className="text-sm text-slate-600">APR</div>
+                        <div className="font-semibold text-white">{formatPercentage(product.interest_rate)}</div>
+                        <div className="text-sm text-slate-400">APR</div>
                       </td>
                       
                       <td className="p-4">
-                        <div className="font-semibold text-slate-900">{formatCurrency(product.monthly_payment)}</div>
+                        <div className="font-semibold text-white">{formatCurrency(product.monthly_payment)}</div>
                         {product.auto_pay_enabled && (
-                          <div className="text-xs text-emerald-600 font-medium">Auto-pay</div>
+                          <div className="text-xs text-cyan-600 font-medium">Auto-pay</div>
                         )}
                       </td>
                       
                       <td className="p-4">
                         {product.type === 'credit_card' ? (
                           <div>
-                            <div className="font-semibold text-slate-900">
+                            <div className="font-semibold text-white">
                               {formatCurrency(product.credit_limit)} limit
                             </div>
-                            <div className="text-sm text-slate-600">
+                            <div className="text-sm text-slate-400">
                               {formatCurrency(product.available_credit)} available
                             </div>
                             <div className="text-xs text-slate-500">
@@ -554,12 +554,12 @@ const CreditLoans = () => {
                         ) : (
                           <div>
                             {product.remaining_payments && (
-                              <div className="text-sm text-slate-600">
+                              <div className="text-sm text-slate-400">
                                 {product.remaining_payments} payments left
                               </div>
                             )}
                             {product.months_to_payoff && (
-                              <div className="text-sm text-slate-600">
+                              <div className="text-sm text-slate-400">
                                 {product.months_to_payoff} months to payoff
                               </div>
                             )}
@@ -573,8 +573,8 @@ const CreditLoans = () => {
                       </td>
                       
                       <td className="p-4">
-                        <div className="font-semibold text-slate-900">{product.payment_due_date}</div>
-                        <div className="text-sm text-slate-600">of each month</div>
+                        <div className="font-semibold text-white">{product.payment_due_date}</div>
+                        <div className="text-sm text-slate-400">of each month</div>
                       </td>
                       
                       <td className="p-4">
@@ -596,7 +596,7 @@ const CreditLoans = () => {
                           </Button>
                           <button 
                             onClick={() => handleDeleteProduct(product.id)}
-                            className="p-1 text-slate-400 hover:text-red-600"
+                            className="p-1 text-slate-400 hover:text-red-400"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -621,8 +621,8 @@ const CreditLoans = () => {
       </Tabs>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="bg-red-500/10 border border-red-700/50 rounded-lg p-4">
+          <p className="text-red-400">{error}</p>
         </div>
       )}
     </div>

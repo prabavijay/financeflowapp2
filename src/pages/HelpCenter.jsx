@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { 
-  BookOpen, 
-  Star, 
-  HelpCircle, 
-  User, 
-  Settings, 
+import {
+  BookOpen,
+  Star,
+  HelpCircle,
+  User,
+  Settings,
   TestTube2,
   Lightbulb,
   ChevronRight,
@@ -348,7 +348,7 @@ const HelpCenter = () => {
   const getColorClasses = (color) => {
     const colors = {
       blue: 'from-blue-500 to-blue-600 text-blue-100',
-      green: 'from-emerald-500 to-emerald-600 text-emerald-100',
+      green: 'from-cyan-500 to-cyan-600 text-cyan-100',
       purple: 'from-purple-500 to-purple-600 text-purple-100',
       indigo: 'from-indigo-500 to-indigo-600 text-indigo-100',
       orange: 'from-orange-500 to-orange-600 text-orange-100',
@@ -369,7 +369,7 @@ const HelpCenter = () => {
                 </div>
                 <h2 className="text-3xl font-bold text-white">Complete Beginner&apos;s Workflow Guide</h2>
               </div>
-              <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              <p className="text-slate-400 text-lg max-w-2xl mx-auto">
                 Step-by-step walkthrough for new users - from setup to your first successful financial tracking
               </p>
             </div>
@@ -379,7 +379,7 @@ const HelpCenter = () => {
                 const Icon = step.icon
                 return (
                   <div key={step.id} className="group relative">
-                    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:transform hover:scale-105">
+                    <div className="glass-card glass-card-hover p-6">
                       <div className="flex items-start gap-4">
                         <div className={`p-3 bg-gradient-to-r ${getColorClasses(step.color)} rounded-xl flex-shrink-0`}>
                           <Icon className="w-6 h-6" />
@@ -387,20 +387,20 @@ const HelpCenter = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
                             <h3 className="text-xl font-semibold text-white">Step {step.id}</h3>
-                            <span className="text-sm text-gray-400">{step.duration}</span>
+                            <span className="text-sm text-slate-400">{step.duration}</span>
                           </div>
-                          <h4 className="text-lg font-medium text-gray-200 mb-3">{step.title}</h4>
-                          <p className="text-gray-400 mb-4">{step.description}</p>
+                          <h4 className="text-lg font-medium text-slate-200 mb-3">{step.title}</h4>
+                          <p className="text-slate-400 mb-4">{step.description}</p>
                           <ul className="space-y-2">
                             {step.details.map((detail, i) => (
-                              <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
-                                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full"></div>
+                              <li key={i} className="flex items-center gap-2 text-sm text-slate-300">
+                                <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full"></div>
                                 {detail}
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
+                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
                       </div>
                     </div>
                   </div>
@@ -420,7 +420,7 @@ const HelpCenter = () => {
                 </div>
                 <h2 className="text-3xl font-bold text-white">FinanceFlow Features</h2>
               </div>
-              <p className="text-gray-300 text-lg">
+              <p className="text-slate-400 text-lg">
                 Comprehensive financial management with 11 modules and 69+ features
               </p>
             </div>
@@ -432,14 +432,14 @@ const HelpCenter = () => {
                   {category.items.map((feature, i) => {
                     const Icon = feature.icon
                     return (
-                      <div key={i} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300">
+                      <div key={i} className="glass-card glass-card-hover p-6">
                         <div className="flex items-start gap-4">
-                          <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg">
+                          <div className="p-2 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg">
                             <Icon className="w-5 h-5 text-white" />
                           </div>
                           <div>
                             <h4 className="font-semibold text-white mb-2">{feature.name}</h4>
-                            <p className="text-sm text-gray-400">{feature.description}</p>
+                            <p className="text-sm text-slate-400">{feature.description}</p>
                           </div>
                         </div>
                       </div>
@@ -456,21 +456,21 @@ const HelpCenter = () => {
           <div className="space-y-8">
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-3 mb-4">
-                <div className="p-3 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl">
+                <div className="p-3 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-xl">
                   <HelpCircle className="w-8 h-8 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold text-white">Frequently Asked Questions</h2>
               </div>
-              <p className="text-gray-300 text-lg">
+              <p className="text-slate-400 text-lg">
                 Common questions and answers about FinanceFlow
               </p>
             </div>
 
             <div className="space-y-6">
               {faqs.map((faq, index) => (
-                <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700">
+                <div key={index} className="glass-card p-6">
                   <h3 className="text-lg font-semibold text-white mb-3">{faq.question}</h3>
-                  <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+                  <p className="text-slate-300 leading-relaxed">{faq.answer}</p>
                 </div>
               ))}
             </div>
@@ -487,21 +487,21 @@ const HelpCenter = () => {
                 </div>
                 <h2 className="text-3xl font-bold text-white">User Guide</h2>
               </div>
-              <p className="text-gray-300 text-lg">
+              <p className="text-slate-400 text-lg">
                 Detailed documentation for all FinanceFlow features
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {userGuideTopics.map((section, index) => (
-                <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700">
+                <div key={index} className="glass-card p-6">
                   <h3 className="text-xl font-semibold text-white mb-4">{section.section}</h3>
                   <div className="space-y-3">
                     {section.topics.map((topic, i) => (
-                      <div key={i} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span className="text-gray-300">{topic}</span>
-                        <ChevronRight className="w-4 h-4 text-gray-500 ml-auto" />
+                      <div key={i} className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                        <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
+                        <span className="text-slate-300">{topic}</span>
+                        <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
                       </div>
                     ))}
                   </div>
@@ -521,7 +521,7 @@ const HelpCenter = () => {
                 </div>
                 <h2 className="text-3xl font-bold text-white">Comprehensive Test Guide</h2>
               </div>
-              <p className="text-gray-300 text-lg">
+              <p className="text-slate-400 text-lg">
                 Complete testing procedures for FinanceFlow application
               </p>
             </div>
@@ -531,18 +531,18 @@ const HelpCenter = () => {
                 <h3 className="text-2xl font-bold text-white">{category.category}</h3>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {category.tests.map((test, i) => (
-                    <div key={i} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700">
+                    <div key={i} className="glass-card p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <h4 className="text-lg font-semibold text-white">{test.name}</h4>
-                        <span className="text-sm text-gray-400 bg-gray-700 px-2 py-1 rounded">{test.duration}</span>
+                        <span className="text-sm text-slate-400 bg-white/10 px-2 py-1 rounded">{test.duration}</span>
                       </div>
                       <div className="space-y-3">
                         {test.steps.map((step, stepIndex) => (
                           <div key={stepIndex} className="flex items-start gap-3">
-                            <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white text-xs font-bold mt-0.5">
+                            <div className="w-6 h-6 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-full flex items-center justify-center text-white text-xs font-bold mt-0.5">
                               {stepIndex + 1}
                             </div>
-                            <span className="text-gray-300">{step}</span>
+                            <span className="text-slate-300">{step}</span>
                           </div>
                         ))}
                       </div>
@@ -564,20 +564,20 @@ const HelpCenter = () => {
                 </div>
                 <h2 className="text-3xl font-bold text-white">Pro Tips</h2>
               </div>
-              <p className="text-gray-300 text-lg">
+              <p className="text-slate-400 text-lg">
                 Advanced tips and tricks to get the most out of FinanceFlow
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-8">
               {proTips.map((section, index) => (
-                <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700">
+                <div key={index} className="glass-card p-6">
                   <h3 className="text-xl font-semibold text-white mb-6">{section.title}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {section.tips.map((tip, i) => (
-                      <div key={i} className="flex items-start gap-3 p-4 rounded-lg bg-gray-700/50">
+                      <div key={i} className="flex items-start gap-3 p-4 rounded-lg bg-white/5">
                         <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
-                        <span className="text-gray-300">{tip}</span>
+                        <span className="text-slate-300">{tip}</span>
                       </div>
                     ))}
                   </div>
@@ -593,39 +593,39 @@ const HelpCenter = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+    <div className="min-h-screen bg-transparent">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 px-8 py-12">
+      <div className="glass-card rounded-none border-x-0 border-t-0 px-8 py-12 border-b border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-6">
-            <div className="p-4 bg-white/20 backdrop-blur-sm rounded-2xl">
+            <div className="p-4 bg-gradient-to-r from-teal-500 to-blue-500 rounded-2xl">
               <BookOpen className="w-12 h-12 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-white">FinanceFlow Help Center</h1>
-              <p className="text-blue-100 text-lg mt-2">Complete guide to personal finance management and optimization</p>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">FinanceFlow Help Center</h1>
+              <p className="text-slate-400 text-lg mt-2">Complete guide to personal finance management and optimization</p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-8 text-white">
             <div className="text-center">
               <div className="text-2xl font-bold">11</div>
-              <div className="text-sm text-blue-100">Core Modules</div>
+              <div className="text-sm text-slate-400">Core Modules</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold">69+</div>
-              <div className="text-sm text-blue-100">Features</div>
+              <div className="text-sm text-slate-400">Features</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold">AI</div>
-              <div className="text-sm text-blue-100">Powered</div>
+              <div className="text-sm text-slate-400">Powered</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-gray-800/80 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-10">
+      <div className="bg-[rgba(35,52,78,0.6)] backdrop-blur-sm border-b border-white/10 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-8 py-4">
           <div className="flex items-center gap-1 overflow-x-auto">
             {navigationTabs.map((tab) => {
@@ -636,8 +636,8 @@ const HelpCenter = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                      ? 'bg-cyan-500/20 text-cyan-400 shadow-lg border border-cyan-500/30'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -655,9 +655,9 @@ const HelpCenter = () => {
       </div>
 
       {/* Footer */}
-      <div className="bg-gray-800 border-t border-gray-700 px-8 py-8">
+      <div className="glass-card rounded-none border-x-0 border-b-0 px-8 py-8 border-t border-white/10">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-gray-400">
+          <p className="text-slate-400">
             Need additional help? Contact support or check our GitHub repository for updates.
           </p>
         </div>

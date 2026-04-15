@@ -242,28 +242,28 @@ export default function EstatePlanning() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading estate planning data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading estate planning data...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-transparent">
       <div className="p-8 space-y-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
             Estate Planning
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg max-w-3xl mx-auto mb-8">
+          <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
             Secure your family's future with comprehensive estate planning and document management
           </p>
           
           {/* Progress Overview */}
           <div className="max-w-md mx-auto">
-            <div className="flex justify-between text-sm text-slate-600 mb-2">
+            <div className="flex justify-between text-sm text-slate-400 mb-2">
               <span>Estate Planning Progress</span>
               <span>{getCompletionPercentage()}%</span>
             </div>
@@ -273,52 +273,52 @@ export default function EstatePlanning() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Estate Value</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                <p className="text-sm font-medium text-slate-400">Estate Value</p>
+                <p className="text-2xl font-bold text-white">
                   ${calculateEstateValue().toLocaleString()}
                 </p>
               </div>
-              <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
-                <DollarSign className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <div className="p-3 bg-green-900/30 rounded-xl">
+                <DollarSign className="w-8 h-8 text-green-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Documents</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{estateDocuments.length}</p>
+                <p className="text-sm font-medium text-slate-400">Documents</p>
+                <p className="text-2xl font-bold text-white">{estateDocuments.length}</p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-                <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              <div className="p-3 bg-blue-900/30 rounded-xl">
+                <FileText className="w-8 h-8 text-blue-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Beneficiaries</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{beneficiaries.length}</p>
+                <p className="text-sm font-medium text-slate-400">Beneficiaries</p>
+                <p className="text-2xl font-bold text-white">{beneficiaries.length}</p>
               </div>
-              <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl">
-                <Users className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              <div className="p-3 bg-purple-900/30 rounded-xl">
+                <Users className="w-8 h-8 text-purple-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Completion</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{getCompletionPercentage()}%</p>
+                <p className="text-sm font-medium text-slate-400">Completion</p>
+                <p className="text-2xl font-bold text-white">{getCompletionPercentage()}%</p>
               </div>
-              <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
-                <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <div className="p-3 bg-green-900/30 rounded-xl">
+                <CheckCircle className="w-8 h-8 text-green-400" />
               </div>
             </div>
           </div>
@@ -381,7 +381,7 @@ export default function EstatePlanning() {
                 <CardContent>
                   <div className="space-y-3">
                     {estateDocuments.slice(0, 5).map((doc, index) => (
-                      <div key={index} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                      <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                         {React.createElement(getDocumentIcon(doc.document_type), { className: "w-4 h-4 text-blue-500" })}
                         <div className="flex-1">
                           <p className="font-medium text-sm">{doc.title}</p>
@@ -568,7 +568,7 @@ export default function EstatePlanning() {
                           className: "w-8 h-8 text-blue-500" 
                         })}
                         <div>
-                          <h3 className="font-semibold text-slate-900">{doc.title}</h3>
+                          <h3 className="font-semibold text-white">{doc.title}</h3>
                           <p className="text-sm text-slate-500">
                             {DOCUMENT_TYPES.find(d => d.value === doc.document_type)?.label}
                           </p>
@@ -579,7 +579,7 @@ export default function EstatePlanning() {
                       </Badge>
                     </div>
                     
-                    <div className="space-y-2 text-sm text-slate-600">
+                    <div className="space-y-2 text-sm text-slate-400">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
                         <span>Updated: {new Date(doc.last_updated).toLocaleDateString()}</span>
@@ -599,8 +599,8 @@ export default function EstatePlanning() {
                     </div>
                     
                     {doc.notes && (
-                      <div className="mt-4 p-3 bg-slate-50 rounded-lg">
-                        <p className="text-sm text-slate-600">{doc.notes}</p>
+                      <div className="mt-4 p-3 bg-white/5 rounded-lg">
+                        <p className="text-sm text-slate-400">{doc.notes}</p>
                       </div>
                     )}
                     
@@ -745,7 +745,7 @@ export default function EstatePlanning() {
                       <div className="flex items-center gap-3">
                         <User className="w-8 h-8 text-purple-500" />
                         <div>
-                          <h3 className="font-semibold text-slate-900">{beneficiary.name}</h3>
+                          <h3 className="font-semibold text-white">{beneficiary.name}</h3>
                           <p className="text-sm text-slate-500">{beneficiary.relationship}</p>
                         </div>
                       </div>
@@ -754,7 +754,7 @@ export default function EstatePlanning() {
                       )}
                     </div>
                     
-                    <div className="space-y-2 text-sm text-slate-600">
+                    <div className="space-y-2 text-sm text-slate-400">
                       {beneficiary.contact_info?.email && (
                         <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
@@ -776,8 +776,8 @@ export default function EstatePlanning() {
                     </div>
                     
                     {beneficiary.notes && (
-                      <div className="mt-4 p-3 bg-slate-50 rounded-lg">
-                        <p className="text-sm text-slate-600">{beneficiary.notes}</p>
+                      <div className="mt-4 p-3 bg-white/5 rounded-lg">
+                        <p className="text-sm text-slate-400">{beneficiary.notes}</p>
                       </div>
                     )}
                     
@@ -900,7 +900,7 @@ export default function EstatePlanning() {
                       <div className="flex items-center gap-3">
                         <Phone className="w-8 h-8 text-green-500" />
                         <div>
-                          <h3 className="font-semibold text-slate-900">{contact.name}</h3>
+                          <h3 className="font-semibold text-white">{contact.name}</h3>
                           <p className="text-sm text-slate-500">{contact.relationship}</p>
                         </div>
                       </div>
@@ -909,7 +909,7 @@ export default function EstatePlanning() {
                       )}
                     </div>
                     
-                    <div className="space-y-2 text-sm text-slate-600">
+                    <div className="space-y-2 text-sm text-slate-400">
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4" />
                         <span>{contact.phone}</span>
@@ -929,8 +929,8 @@ export default function EstatePlanning() {
                     </div>
                     
                     {contact.notes && (
-                      <div className="mt-4 p-3 bg-slate-50 rounded-lg">
-                        <p className="text-sm text-slate-600">{contact.notes}</p>
+                      <div className="mt-4 p-3 bg-white/5 rounded-lg">
+                        <p className="text-sm text-slate-400">{contact.notes}</p>
                       </div>
                     )}
                     
@@ -962,17 +962,17 @@ export default function EstatePlanning() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
-                    <div className="p-3 bg-blue-50 rounded-lg">
+                    <div className="p-3 bg-blue-500/10 rounded-lg">
                       <h4 className="font-semibold text-blue-900">Will Templates</h4>
-                      <p className="text-sm text-blue-700">Basic will templates for different situations</p>
+                      <p className="text-sm text-blue-300">Basic will templates for different situations</p>
                     </div>
-                    <div className="p-3 bg-green-50 rounded-lg">
+                    <div className="p-3 bg-green-500/10 rounded-lg">
                       <h4 className="font-semibold text-green-900">Healthcare Directives</h4>
-                      <p className="text-sm text-green-700">Living will and healthcare proxy forms</p>
+                      <p className="text-sm text-green-300">Living will and healthcare proxy forms</p>
                     </div>
-                    <div className="p-3 bg-purple-50 rounded-lg">
+                    <div className="p-3 bg-purple-500/10 rounded-lg">
                       <h4 className="font-semibold text-purple-900">Power of Attorney</h4>
-                      <p className="text-sm text-purple-700">Financial and healthcare POA documents</p>
+                      <p className="text-sm text-purple-300">Financial and healthcare POA documents</p>
                     </div>
                   </div>
                 </CardContent>
@@ -989,38 +989,38 @@ export default function EstatePlanning() {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-bold">1</div>
+                      <div className="w-6 h-6 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 text-sm font-bold">1</div>
                       <div>
                         <h4 className="font-semibold">Inventory Your Assets</h4>
-                        <p className="text-sm text-slate-600">List all your assets, debts, and accounts</p>
+                        <p className="text-sm text-slate-400">List all your assets, debts, and accounts</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-bold">2</div>
+                      <div className="w-6 h-6 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 text-sm font-bold">2</div>
                       <div>
                         <h4 className="font-semibold">Choose Your Beneficiaries</h4>
-                        <p className="text-sm text-slate-600">Decide who inherits what and in what proportions</p>
+                        <p className="text-sm text-slate-400">Decide who inherits what and in what proportions</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-bold">3</div>
+                      <div className="w-6 h-6 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 text-sm font-bold">3</div>
                       <div>
                         <h4 className="font-semibold">Draft Your Documents</h4>
-                        <p className="text-sm text-slate-600">Create your will, directives, and POA documents</p>
+                        <p className="text-sm text-slate-400">Create your will, directives, and POA documents</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-bold">4</div>
+                      <div className="w-6 h-6 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 text-sm font-bold">4</div>
                       <div>
                         <h4 className="font-semibold">Legal Review</h4>
-                        <p className="text-sm text-slate-600">Have an attorney review and execute documents</p>
+                        <p className="text-sm text-slate-400">Have an attorney review and execute documents</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-bold">5</div>
+                      <div className="w-6 h-6 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 text-sm font-bold">5</div>
                       <div>
                         <h4 className="font-semibold">Annual Review</h4>
-                        <p className="text-sm text-slate-600">Update documents yearly or after major life events</p>
+                        <p className="text-sm text-slate-400">Update documents yearly or after major life events</p>
                       </div>
                     </div>
                   </div>
@@ -1038,25 +1038,25 @@ export default function EstatePlanning() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-start gap-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                  <div className="flex items-start gap-3 p-3 bg-yellow-500/10 border border-yellow-700/50 rounded-lg">
+                    <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5" />
                     <div>
                       <h4 className="font-semibold text-yellow-900">Legal Requirements Vary</h4>
-                      <p className="text-sm text-yellow-800">Estate planning laws differ by state. Consult with a local attorney for compliance.</p>
+                      <p className="text-sm text-yellow-400">Estate planning laws differ by state. Consult with a local attorney for compliance.</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <Clock className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <div className="flex items-start gap-3 p-3 bg-blue-500/10 border border-blue-700/50 rounded-lg">
+                    <Clock className="w-5 h-5 text-blue-400 mt-0.5" />
                     <div>
                       <h4 className="font-semibold text-blue-900">Regular Updates</h4>
-                      <p className="text-sm text-blue-800">Review and update your estate plan annually or after major life events like marriage, divorce, or births.</p>
+                      <p className="text-sm text-blue-400">Review and update your estate plan annually or after major life events like marriage, divorce, or births.</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <Shield className="w-5 h-5 text-green-600 mt-0.5" />
+                  <div className="flex items-start gap-3 p-3 bg-green-500/10 border border-white/10 rounded-lg">
+                    <Shield className="w-5 h-5 text-green-400 mt-0.5" />
                     <div>
                       <h4 className="font-semibold text-green-900">Document Storage</h4>
-                      <p className="text-sm text-green-800">Keep original documents in a safe place and provide copies to your attorney and executor.</p>
+                      <p className="text-sm text-green-400">Keep original documents in a safe place and provide copies to your attorney and executor.</p>
                     </div>
                   </div>
                 </div>

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { apiClient } from '../api/client'
-import { 
-  Plus, 
-  TrendingUp, 
-  Wallet, 
-  Building, 
-  Briefcase, 
+import {
+  Plus,
+  TrendingUp,
+  Wallet,
+  Building,
+  Briefcase,
   Home,
   DollarSign,
   Calendar,
@@ -52,8 +52,8 @@ const Income = () => {
   })
 
   const incomeCategories = [
-    { value: 'salary', label: 'Salary', icon: Briefcase, color: 'emerald' },
-    { value: 'freelance', label: 'Freelance', icon: Wallet, color: 'teal' },
+    { value: 'salary', label: 'Salary', icon: Briefcase, color: 'cyan' },
+    { value: 'freelance', label: 'Freelance', icon: Wallet, color: 'cyan' },
     { value: 'investment', label: 'Investment', icon: TrendingUp, color: 'blue' },
     { value: 'rental', label: 'Rental', icon: Home, color: 'slate' },
     { value: 'business', label: 'Business', icon: Building, color: 'purple' },
@@ -98,7 +98,7 @@ const Income = () => {
         amount: parseFloat(formData.amount),
         date_received: formData.date
       }
-      
+
       const response = await apiClient.createIncome(incomeData)
       if (response.success) {
         // Reload income data to get updated list
@@ -129,9 +129,9 @@ const Income = () => {
 
   const getFilteredIncomeData = () => {
     if (activeTab === 'Family') {
-      return incomeData.filter(income => 
-        income.owner === 'Personal' || 
-        income.owner === 'Spouse' || 
+      return incomeData.filter(income =>
+        income.owner === 'Personal' ||
+        income.owner === 'Spouse' ||
         !income.owner
       )
     }
@@ -155,6 +155,7 @@ const Income = () => {
         case 'weekly': monthlyAmount = monthlyAmount * 4.33; break
         case 'bi-weekly': monthlyAmount = monthlyAmount * 2.17; break
         case 'semi-monthly': monthlyAmount = monthlyAmount * 2; break
+        case 'quarterly': monthlyAmount = monthlyAmount / 3; break
         case 'yearly': monthlyAmount = monthlyAmount / 12; break
         default: break
       }
@@ -169,6 +170,7 @@ const Income = () => {
       case 'weekly': return numAmount * 4.33
       case 'bi-weekly': return numAmount * 2.17
       case 'semi-monthly': return numAmount * 2
+      case 'quarterly': return numAmount / 3
       case 'yearly': return numAmount / 12
       default: return numAmount
     }
@@ -182,6 +184,7 @@ const Income = () => {
       case 'bi-weekly': return numAmount
       case 'semi-monthly': return numAmount * 1.08 // 26/24
       case 'monthly': return numAmount / 2.17 // 12/26*2
+      case 'quarterly': return numAmount / 6.5 // 26/4 bi-weekly periods per quarter
       case 'yearly': return numAmount / 26
       default: return numAmount
     }
@@ -195,6 +198,7 @@ const Income = () => {
       case 'bi-weekly': return numAmount * 26
       case 'semi-monthly': return numAmount * 24
       case 'monthly': return numAmount * 12
+      case 'quarterly': return numAmount * 4
       default: return numAmount
     }
   }
@@ -203,7 +207,7 @@ const Income = () => {
   const getIncomeByCategory = () => {
     const filteredData = getFilteredIncomeData()
     const categoryTotals = {}
-    
+
     filteredData.forEach(income => {
       const category = income.category
       const monthlyAmount = calculateMonthlyAmount(income.amount, income.frequency)
@@ -219,8 +223,7 @@ const Income = () => {
       return {
         name: categoryInfo.label,
         value: categoryTotals[category],
-        color: categoryInfo.color === 'emerald' ? '#10b981' : 
-               categoryInfo.color === 'teal' ? '#06b6d4' :
+        color: categoryInfo.color === 'cyan' ? '#00d4ff' :
                categoryInfo.color === 'blue' ? '#3b82f6' :
                categoryInfo.color === 'slate' ? '#64748b' :
                categoryInfo.color === 'purple' ? '#8b5cf6' : '#6366f1'
@@ -231,7 +234,7 @@ const Income = () => {
   const getIncomeByFrequency = () => {
     const filteredData = getFilteredIncomeData()
     const frequencyTotals = {}
-    
+
     filteredData.forEach(income => {
       const frequency = income.frequency
       const monthlyAmount = calculateMonthlyAmount(income.amount, income.frequency)
@@ -273,12 +276,12 @@ const Income = () => {
         amount: parseFloat(formData.amount),
         date_received: formData.date
       }
-      
+
       const response = await apiClient.updateIncome(editingId, incomeData)
-      
+
       // Handle different response formats - some APIs return success field, others just return the data
       const isSuccess = response.success !== false && response !== null && response !== undefined
-      
+
       if (isSuccess) {
         await loadIncomeData()
         setFormData({
@@ -304,17 +307,37 @@ const Income = () => {
 
   const handleDeleteIncome = async (id) => {
     if (window.confirm('Are you sure you want to delete this income source?')) {
+      // Optimistically remove from UI immediately
+      setIncomeData(prev => prev.filter(item => item.id !== id))
       try {
         const response = await apiClient.deleteIncome(id)
-        if (response.success) {
+        const isSuccess = response.success !== false && response !== null && response !== undefined
+        if (!isSuccess) {
+          // Revert if truly failed
           await loadIncomeData()
-        } else {
           setError('Failed to delete income')
         }
       } catch (err) {
         console.error('Error deleting income:', err)
+        await loadIncomeData()
         setError('Failed to delete income')
       }
+    }
+  }
+
+  const handleClearAll = async () => {
+    const filtered = getFilteredIncomeData()
+    if (filtered.length === 0) return
+    if (!window.confirm(`Delete all ${filtered.length} income record(s) for ${activeTab}? This cannot be undone.`)) return
+
+    const idsToDelete = filtered.map(i => i.id)
+    setIncomeData(prev => prev.filter(item => !idsToDelete.includes(item.id)))
+    try {
+      await Promise.all(idsToDelete.map(id => apiClient.deleteIncome(id)))
+    } catch (err) {
+      console.error('Error clearing income records:', err)
+      await loadIncomeData()
+      setError('Some records could not be deleted')
     }
   }
 
@@ -322,47 +345,47 @@ const Income = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading income data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading income data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6 space-y-6">
+    <div className="min-h-screen bg-transparent p-6 space-y-6">
       {/* Header */}
       <div className="text-left mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-3">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">
           Income Tracking
         </h1>
-        <p className="text-slate-600 dark:text-slate-300 text-lg">Manage and track your income sources with comprehensive analytics</p>
+        <p className="text-slate-400 text-lg">Manage and track your income sources with comprehensive analytics</p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <div className="flex items-center justify-between mb-4">
           {/* Tabs */}
-          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-emerald-500/40 rounded-lg">
-            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">
+          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-cyan-500/30 rounded-lg">
+            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">
               Personal
             </TabsTrigger>
-            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">
+            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">
               Spouse
             </TabsTrigger>
-            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">
+            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">
               Family
             </TabsTrigger>
           </TabsList>
-          
+
           {/* Monthly Total */}
-          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-700/50 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card glass-card-hover p-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-100 dark:bg-emerald-800/50 rounded-lg">
-                <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <div className="p-2 bg-cyan-900/20 rounded-lg">
+                <TrendingUp className="w-5 h-5 text-cyan-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300">Monthly Total</p>
-                <p className="text-xl font-bold text-slate-900 dark:text-white">
+                <p className="text-xs font-medium text-cyan-300">Monthly Total</p>
+                <p className="text-xl font-bold text-white">
                   {formatCurrency(calculateMonthlyTotal())}
                 </p>
               </div>
@@ -374,18 +397,29 @@ const Income = () => {
         {['Personal', 'Spouse', 'Family'].map((tab) => (
           <TabsContent key={tab} value={tab} className="space-y-4">
             {/* Income Table */}
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
-        <div className="p-6 border-b border-slate-200/50 dark:border-slate-700/50">
+      <div className="glass-card overflow-hidden">
+        <div className="p-6 border-b border-white/10">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-white">
                 Income Sources{activeTab !== 'Personal' && ` (${activeTab})`}
               </h2>
-              <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Complete overview of all income streams with subtotals</p>
+              <p className="text-slate-400 text-sm mt-1">Complete overview of all income streams with subtotals</p>
             </div>
+            <div className="flex items-center gap-2">
+              {getFilteredIncomeData().length > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={handleClearAll}
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 hover:border-red-400 hover:text-red-300 rounded-lg transition-all duration-300 font-medium bg-transparent"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Clear All
+                </Button>
+              )}
             <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
               <DialogTrigger asChild>
-                <Button className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-medium">
+                <Button className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 shadow-[0_0_15px_rgba(0,212,255,0.15)] text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-medium">
                   <Plus className="w-4 h-4" />
                   Add Income
                 </Button>
@@ -397,7 +431,7 @@ const Income = () => {
                     Add a new income source to track your earnings.
                   </DialogDescription>
                 </DialogHeader>
-                
+
                 <form onSubmit={handleAddIncome} className="space-y-6">
                   <div>
                     <Label htmlFor="source">Income Source</Label>
@@ -503,7 +537,7 @@ const Income = () => {
                     </Button>
                     <Button
                       type="submit"
-                      className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
+                      className="flex-1 bg-cyan-500 hover:bg-cyan-600 shadow-[0_0_15px_rgba(0,212,255,0.15)]"
                     >
                       Add Income
                     </Button>
@@ -511,29 +545,30 @@ const Income = () => {
                 </form>
               </DialogContent>
             </Dialog>
+            </div>
           </div>
         </div>
 
         {getFilteredIncomeData().length === 0 ? (
           <div className="text-center py-16">
-            <TrendingUp className="w-20 h-20 text-slate-300 dark:text-slate-500 mx-auto mb-6" />
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">No Income Sources Found</h3>
-            <p className="text-slate-600 dark:text-slate-300">Add your first income source to get started with tracking.</p>
+            <TrendingUp className="w-20 h-20 text-slate-500 mx-auto mb-6" />
+            <h3 className="text-lg font-semibold text-white mb-3">No Income Sources Found</h3>
+            <p className="text-slate-400">Add your first income source to get started with tracking.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-xl">
-              <thead className="bg-gradient-to-r from-slate-100 to-emerald-100/50 dark:from-slate-700 dark:to-emerald-900/30 border-b-2 border-emerald-200 dark:border-emerald-700">
+              <thead className="bg-[rgba(35,52,78,0.9)] backdrop-blur-sm border-b-2 border-cyan-800/20 border-cyan-700">
                 <tr>
-                  <th className="text-left p-6 font-bold !text-slate-900 dark:!text-white !text-lg">Source</th>
-                  <th className="text-left p-6 font-bold !text-slate-900 dark:!text-white !text-lg">Category</th>
-                  <th className="text-left p-6 font-bold !text-slate-900 dark:!text-white !text-lg">Frequency</th>
-                  <th className="text-right p-6 font-bold !text-slate-900 dark:!text-white !text-lg">Amount</th>
-                  <th className="text-right p-6 font-bold !text-purple-800 dark:!text-purple-200 !text-lg">Bi-weekly</th>
-                  <th className="text-right p-6 font-bold !text-emerald-800 dark:!text-emerald-200 !text-lg">Monthly</th>
-                  <th className="text-right p-6 font-bold !text-blue-800 dark:!text-blue-200 !text-lg">Annual</th>
-                  <th className="text-left p-6 font-bold !text-slate-900 dark:!text-white !text-lg">Date</th>
-                  <th className="text-left p-6 font-bold !text-slate-900 dark:!text-white !text-lg">Actions</th>
+                  <th className="text-left p-6 font-bold !text-white !text-lg">Source</th>
+                  <th className="text-left p-6 font-bold !text-white !text-lg">Category</th>
+                  <th className="text-left p-6 font-bold !text-white !text-lg">Frequency</th>
+                  <th className="text-right p-6 font-bold !text-white !text-lg">Amount</th>
+                  <th className="text-right p-6 font-bold !text-purple-200 !text-lg">Bi-weekly</th>
+                  <th className="text-right p-6 font-bold !text-cyan-200 !text-lg">Monthly</th>
+                  <th className="text-right p-6 font-bold !text-blue-200 !text-lg">Annual</th>
+                  <th className="text-left p-6 font-bold !text-white !text-lg">Date</th>
+                  <th className="text-left p-6 font-bold !text-white !text-lg">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -543,84 +578,84 @@ const Income = () => {
                   const biWeeklyAmount = calculateBiWeeklyAmount(income.amount, income.frequency)
                   const monthlyAmount = calculateMonthlyAmount(income.amount, income.frequency)
                   const yearlyAmount = calculateYearlyAmount(income.amount, income.frequency)
-                  
+
                   return (
-                    <tr key={income.id} className="border-b border-slate-100/50 dark:border-slate-700/30 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors duration-200">
+                    <tr key={income.id} className="border-b border-white/10 hover:bg-white/10 transition-colors duration-200">
                       <td className="p-6">
                         <div className="flex items-center gap-4">
-                          <div className={`p-3 bg-${categoryInfo.color}-100 dark:bg-${categoryInfo.color}-900/30 rounded-xl`}>
-                            <CategoryIcon className={`w-6 h-6 text-${categoryInfo.color}-700 dark:text-${categoryInfo.color}-300`} />
+                          <div className={`p-3 bg-${categoryInfo.color}-900/30 rounded-xl`}>
+                            <CategoryIcon className={`w-6 h-6 text-${categoryInfo.color}-300`} />
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900 dark:text-white text-xl">{income.source}</div>
+                            <div className="font-semibold text-white text-xl">{income.source}</div>
                             {income.description && (
-                              <div className="text-base text-slate-600 dark:text-slate-300 truncate max-w-[200px] mt-1">
+                              <div className="text-base text-slate-400 truncate max-w-[200px] mt-1">
                                 {income.description}
                               </div>
                             )}
                           </div>
                         </div>
                       </td>
-                      
+
                       <td className="p-6">
-                        <span className={`inline-flex px-3 py-1.5 text-xl font-medium rounded-full bg-${categoryInfo.color}-100 dark:bg-${categoryInfo.color}-900/30 text-${categoryInfo.color}-800 dark:text-${categoryInfo.color}-200`}>
+                        <span className={`inline-flex px-3 py-1.5 text-xl font-medium rounded-full bg-${categoryInfo.color}-900/30 text-${categoryInfo.color}-200`}>
                           {categoryInfo.label}
                         </span>
                       </td>
-                      
+
                       <td className="p-6">
-                        <span className="inline-flex px-3 py-1.5 text-xl font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
+                        <span className="inline-flex px-3 py-1.5 text-xl font-medium rounded-full bg-slate-700 text-slate-300">
                           {(() => {
                             const freq = frequencies.find(f => f.value === income.frequency)
                             return freq ? freq.label : income.frequency
                           })()}
                         </span>
                       </td>
-                      
+
                       <td className="p-6 text-right">
-                        <div className="font-bold text-slate-900 dark:text-white text-xl">
+                        <div className="font-bold text-white text-xl">
                           {formatCurrency(income.amount)}
                         </div>
                       </td>
-                      
+
                       <td className="p-6 text-right">
-                        <div className="font-bold text-purple-600 dark:text-purple-400 text-xl">
+                        <div className="font-bold text-purple-400 text-xl">
                           {formatCurrency(biWeeklyAmount)}
                         </div>
                       </td>
-                      
+
                       <td className="p-6 text-right">
-                        <div className="font-bold text-emerald-600 dark:text-emerald-400 text-xl">
+                        <div className="font-bold text-cyan-400 text-xl">
                           {formatCurrency(monthlyAmount)}
                         </div>
                       </td>
-                      
+
                       <td className="p-6 text-right">
-                        <div className="font-bold text-blue-600 dark:text-blue-400 text-xl">
+                        <div className="font-bold text-blue-400 text-xl">
                           {formatCurrency(yearlyAmount)}
                         </div>
                       </td>
-                      
+
                       <td className="p-6">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-slate-400 dark:text-slate-400" />
-                          <span className="text-xl text-slate-600 dark:text-slate-300">
+                          <Calendar className="w-4 h-4 text-slate-400" />
+                          <span className="text-xl text-slate-400">
                             {new Date(income.date_received).toLocaleDateString()}
                           </span>
                         </div>
                       </td>
-                      
+
                       <td className="p-6">
                         <div className="flex items-center gap-2">
-                          <button 
+                          <button
                             onClick={() => handleEditIncome(income)}
-                            className="p-2.5 text-slate-400 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                            className="p-2.5 text-slate-400 hover:text-blue-400 transition-colors rounded-xl hover:bg-blue-500/10"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleDeleteIncome(income.id)}
-                            className="p-2.5 text-slate-400 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20"
+                            className="p-2.5 text-slate-400 hover:text-red-400 transition-colors rounded-xl hover:bg-red-500/10"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -629,16 +664,16 @@ const Income = () => {
                     </tr>
                   )
                 })}
-                
+
                 {/* Subtotal Row */}
-                <tr className="bg-gradient-to-r from-emerald-100 to-teal-100/70 dark:from-emerald-900/40 dark:to-teal-900/30 border-t-4 border-emerald-300 dark:border-emerald-600 shadow-lg">
-                  <td colSpan="4" className="p-8 text-right text-slate-900 dark:text-white font-bold text-xl">
+                <tr className="bg-gradient-to-r from-cyan-900/20 to-cyan-900/20   border-t-4 border-cyan-500/30 border-cyan-600 shadow-lg">
+                  <td colSpan="4" className="p-8 text-right text-white font-bold text-xl">
                     Total Income:
                   </td>
-                  <td className="p-8 text-right text-emerald-800 dark:text-emerald-200 font-bold text-2xl shadow-sm">
+                  <td className="p-8 text-right text-cyan-200 font-bold text-2xl shadow-sm">
                     {formatCurrency(calculateMonthlyTotal())}
                   </td>
-                  <td className="p-8 text-right text-blue-800 dark:text-blue-200 font-bold text-2xl shadow-sm">
+                  <td className="p-8 text-right text-blue-200 font-bold text-2xl shadow-sm">
                     {formatCurrency(calculateMonthlyTotal() * 12)}
                   </td>
                   <td colSpan="2" className="p-8">
@@ -662,7 +697,7 @@ const Income = () => {
               Update your income source information.
             </DialogDescription>
           </DialogHeader>
-          
+
           <form onSubmit={handleUpdateIncome} className="space-y-6">
             <div>
               <Label htmlFor="edit-source">Income Source</Label>
@@ -771,7 +806,7 @@ const Income = () => {
               </Button>
               <Button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
+                className="flex-1 bg-cyan-500 hover:bg-cyan-600 shadow-[0_0_15px_rgba(0,212,255,0.15)]"
               >
                 Update Income
               </Button>

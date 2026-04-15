@@ -235,7 +235,7 @@ const RetirementPlanner = () => {
     const income = calculateRetirementIncome()
     const coverage = (income.netMonthlyIncome / income.requiredMonthlyIncome) * 100
     
-    if (coverage >= 100) return { status: 'excellent', color: 'emerald', message: 'On track for retirement!' }
+    if (coverage >= 100) return { status: 'excellent', color: 'cyan', message: 'On track for retirement!' }
     if (coverage >= 80) return { status: 'good', color: 'blue', message: 'Good progress, minor adjustments needed' }
     if (coverage >= 60) return { status: 'fair', color: 'yellow', message: 'Moderate adjustments required' }
     return { status: 'needs-work', color: 'red', message: 'Significant planning required' }
@@ -276,8 +276,8 @@ const RetirementPlanner = () => {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Input Panel */}
       <div className="lg:col-span-1 space-y-6">
-        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
             Personal Information
           </h3>
           <div className="space-y-4">
@@ -289,7 +289,7 @@ const RetirementPlanner = () => {
                 type="number"
                 value={retirementData.currentAge}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, currentAge: parseInt(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
             <div>
@@ -300,7 +300,7 @@ const RetirementPlanner = () => {
                 type="number"
                 value={retirementData.retirementAge}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, retirementAge: parseInt(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
             <div>
@@ -311,14 +311,14 @@ const RetirementPlanner = () => {
                 type="number"
                 value={retirementData.currentAnnualIncome}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, currentAnnualIncome: parseInt(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
           </div>
         </div>
 
-        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
             Savings & Contributions
           </h3>
           <div className="space-y-4">
@@ -330,7 +330,7 @@ const RetirementPlanner = () => {
                 type="number"
                 value={retirementData.currentSavings}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, currentSavings: parseInt(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
             <div>
@@ -341,7 +341,7 @@ const RetirementPlanner = () => {
                 type="number"
                 value={retirementData.monthlyContribution}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, monthlyContribution: parseInt(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
             <div>
@@ -353,14 +353,14 @@ const RetirementPlanner = () => {
                 step="0.1"
                 value={retirementData.expectedReturn}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, expectedReturn: parseFloat(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
           </div>
         </div>
 
-        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
             Retirement Planning
           </h3>
           <div className="space-y-4">
@@ -372,7 +372,7 @@ const RetirementPlanner = () => {
                 type="number"
                 value={retirementData.retirementIncome}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, retirementIncome: parseInt(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
             <div>
@@ -383,7 +383,7 @@ const RetirementPlanner = () => {
                 type="number"
                 value={retirementData.socialSecurityBenefit}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, socialSecurityBenefit: parseInt(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
             <div>
@@ -395,7 +395,7 @@ const RetirementPlanner = () => {
                 step="0.1"
                 value={retirementData.inflationRate}
                 onChange={(e) => setRetirementData(prev => ({ ...prev, inflationRate: parseFloat(e.target.value) || 0 }))}
-                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-white border-slate-300 text-slate-900'}`}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-cyan-100' : 'bg-slate-700 border-slate-600 text-cyan-100'}`}
               />
             </div>
           </div>
@@ -405,13 +405,13 @@ const RetirementPlanner = () => {
       {/* Results Panel */}
       <div className="lg:col-span-2 space-y-6">
         {/* Retirement Readiness */}
-        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
+        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
           <div className="flex items-center gap-4 mb-6">
             <div className={`p-3 bg-gradient-to-r from-${readiness.color}-500 to-${readiness.color}-600 rounded-xl`}>
               <Target className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+              <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                 Retirement Readiness
               </h3>
               <p className={`text-${readiness.color}-600 font-medium`}>{readiness.message}</p>
@@ -420,86 +420,86 @@ const RetirementPlanner = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className={`text-center p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-slate-50'}`}>
-              <div className={`text-2xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+              <div className={`text-2xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                 {projection.yearsToRetirement}
               </div>
-              <div className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Years to Retirement</div>
+              <div className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Years to Retirement</div>
             </div>
             <div className={`text-center p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-slate-50'}`}>
-              <div className={`text-2xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+              <div className={`text-2xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                 {formatLargeCurrency(projection.totalSavings)}
               </div>
-              <div className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Projected Savings</div>
+              <div className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Projected Savings</div>
             </div>
             <div className={`text-center p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-slate-50'}`}>
-              <div className={`text-2xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+              <div className={`text-2xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                 {formatCurrency(income.netMonthlyIncome)}
               </div>
-              <div className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Monthly Income</div>
+              <div className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Monthly Income</div>
             </div>
             <div className={`text-center p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-slate-50'}`}>
-              <div className={`text-2xl font-bold ${income.shortfall > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+              <div className={`text-2xl font-bold ${income.shortfall > 0 ? 'text-red-400' : 'text-cyan-600'}`}>
                 {income.shortfall > 0 ? `-${formatCurrency(income.shortfall)}` : `+${formatCurrency(income.surplus)}`}
               </div>
-              <div className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Monthly Gap</div>
+              <div className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Monthly Gap</div>
             </div>
           </div>
         </div>
 
         {/* Income Breakdown */}
-        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+        <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
             Retirement Income Sources
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-600'}>Portfolio Withdrawal (4%)</span>
-                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-400'}>Portfolio Withdrawal (4%)</span>
+                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                   {formatCurrency(income.monthlyWithdrawal)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-600'}>Social Security</span>
-                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-400'}>Social Security</span>
+                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                   {formatCurrency(retirementData.socialSecurityBenefit * Math.pow(1 + retirementData.inflationRate / 100, projection.yearsToRetirement))}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-600'}>Pension</span>
-                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-400'}>Pension</span>
+                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                   {formatCurrency(retirementData.pensionBenefit)}
                 </span>
               </div>
-              <hr className={isDarkMode ? 'border-gray-600' : 'border-slate-200'} />
+              <hr className={isDarkMode ? 'border-gray-600' : 'border-white/10'} />
               <div className="flex justify-between font-semibold">
-                <span className={isDarkMode ? 'text-cyan-100' : 'text-slate-900'}>Total Monthly Income</span>
-                <span className={isDarkMode ? 'text-cyan-100' : 'text-slate-900'}>
+                <span className={isDarkMode ? 'text-cyan-100' : 'text-white'}>Total Monthly Income</span>
+                <span className={isDarkMode ? 'text-cyan-100' : 'text-white'}>
                   {formatCurrency(income.totalMonthlyIncome)}
                 </span>
               </div>
             </div>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-600'}>Healthcare Costs</span>
-                <span className={`font-medium text-red-600`}>
+                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-400'}>Healthcare Costs</span>
+                <span className={`font-medium text-red-400`}>
                   -{formatCurrency(retirementData.healthcareCosts * Math.pow(1 + retirementData.inflationRate / 100, projection.yearsToRetirement))}
                 </span>
               </div>
-              <hr className={isDarkMode ? 'border-gray-600' : 'border-slate-200'} />
+              <hr className={isDarkMode ? 'border-gray-600' : 'border-white/10'} />
               <div className="flex justify-between font-semibold">
-                <span className={isDarkMode ? 'text-cyan-100' : 'text-slate-900'}>Net Monthly Income</span>
-                <span className={isDarkMode ? 'text-cyan-100' : 'text-slate-900'}>
+                <span className={isDarkMode ? 'text-cyan-100' : 'text-white'}>Net Monthly Income</span>
+                <span className={isDarkMode ? 'text-cyan-100' : 'text-white'}>
                   {formatCurrency(income.netMonthlyIncome)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-600'}>Required Income</span>
-                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+                <span className={isDarkMode ? 'text-cyan-300' : 'text-slate-400'}>Required Income</span>
+                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                   {formatCurrency(income.requiredMonthlyIncome)}
                 </span>
               </div>
-              <div className={`flex justify-between font-semibold ${income.shortfall > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+              <div className={`flex justify-between font-semibold ${income.shortfall > 0 ? 'text-red-400' : 'text-cyan-600'}`}>
                 <span>{income.shortfall > 0 ? 'Shortfall' : 'Surplus'}</span>
                 <span>
                   {income.shortfall > 0 ? formatCurrency(income.shortfall) : formatCurrency(income.surplus)}
@@ -511,7 +511,7 @@ const RetirementPlanner = () => {
 
         {/* Recommendations */}
         {income.shortfall > 0 && (
-          <div className={`rounded-xl shadow-lg border border-amber-200 p-6 bg-gradient-to-r from-amber-50 to-orange-50 ${isDarkMode ? 'dark:from-amber-900/20 dark:to-orange-900/20 dark:border-amber-700/50' : ''}`}>
+          <div className="glass-card p-6 border-t-2 border-t-amber-400">
             <div className="flex items-start gap-4">
               <AlertCircle className="w-6 h-6 text-amber-600 mt-1" />
               <div>
@@ -540,8 +540,8 @@ const RetirementPlanner = () => {
   const renderProjections = () => (
     <div className="space-y-8">
       {/* Portfolio Growth Chart */}
-      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-        <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+        <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
           Portfolio Growth Projection
         </h3>
         <ResponsiveContainer width="100%" height={400}>
@@ -590,8 +590,8 @@ const RetirementPlanner = () => {
       </div>
 
       {/* Key Milestones */}
-      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-        <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+        <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
           Retirement Milestones
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -615,17 +615,17 @@ const RetirementPlanner = () => {
               icon: Award
             }
           ].map((milestone, index) => (
-            <div key={index} className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-slate-50 border-slate-200'}`}>
+            <div key={index} className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-slate-50 border-white/10'}`}>
               <div className="flex items-center gap-3 mb-2">
-                <milestone.icon className={`w-5 h-5 ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`} />
+                <milestone.icon className={`w-5 h-5 ${isDarkMode ? 'text-cyan-400' : 'text-blue-400'}`} />
                 <span className={`text-sm font-medium ${isDarkMode ? 'text-cyan-300' : 'text-slate-700'}`}>
                   {milestone.label}
                 </span>
               </div>
-              <div className={`text-xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+              <div className={`text-xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                 Age {milestone.age}
               </div>
-              <div className={`text-lg font-semibold ${isDarkMode ? 'text-green-400' : 'text-emerald-600'}`}>
+              <div className={`text-lg font-semibold ${isDarkMode ? 'text-green-400' : 'text-cyan-600'}`}>
                 {formatLargeCurrency(milestone.value)}
               </div>
             </div>
@@ -638,8 +638,8 @@ const RetirementPlanner = () => {
   const renderScenarios = () => (
     <div className="space-y-8">
       {/* Scenario Comparison */}
-      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-        <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+        <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
           Investment Strategy Comparison
         </h3>
         <ResponsiveContainer width="100%" height={300}>
@@ -680,39 +680,39 @@ const RetirementPlanner = () => {
       {/* Scenario Details */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {scenarioData.map((scenario, index) => (
-          <div key={index} className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
+          <div key={index} className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
             <div className="flex items-center gap-3 mb-4">
               <div className={`p-2 rounded-lg ${
-                scenario.name === 'Conservative' ? 'bg-blue-100 text-blue-600' :
-                scenario.name === 'Moderate' ? 'bg-green-100 text-green-600' :
-                'bg-purple-100 text-purple-600'
+                scenario.name === 'Conservative' ? 'bg-blue-500/10 text-blue-400' :
+                scenario.name === 'Moderate' ? 'bg-green-500/10 text-green-400' :
+                'bg-purple-100 text-purple-400'
               }`}>
                 <TrendingUp className="w-5 h-5" />
               </div>
-              <h4 className={`font-semibold ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+              <h4 className={`font-semibold ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                 {scenario.name}
               </h4>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Expected Return</span>
-                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>{scenario.return}%</span>
+                <span className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Expected Return</span>
+                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>{scenario.return}%</span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Monthly Contribution</span>
-                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+                <span className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Monthly Contribution</span>
+                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                   {formatCurrency(scenario.contribution)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Total at Retirement</span>
-                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+                <span className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Total at Retirement</span>
+                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                   {formatLargeCurrency(scenario.totalSavings)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Monthly Income</span>
-                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+                <span className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Monthly Income</span>
+                <span className={`font-medium ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                   {formatCurrency(scenario.monthlyIncome)}
                 </span>
               </div>
@@ -743,8 +743,8 @@ const RetirementPlanner = () => {
   const renderOptimization = () => (
     <div className="space-y-8">
       {/* Optimization Strategies */}
-      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-        <h3 className={`text-lg font-semibold mb-6 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+        <h3 className={`text-lg font-semibold mb-6 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
           Retirement Optimization Strategies
         </h3>
         
@@ -799,30 +799,30 @@ const RetirementPlanner = () => {
               ]
             }
           ].map((strategy, index) => (
-            <div key={index} className={`p-6 rounded-lg border ${isDarkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-slate-50 border-slate-200'}`}>
+            <div key={index} className={`p-6 rounded-lg border ${isDarkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-slate-50 border-white/10'}`}>
               <div className="flex items-start gap-4">
                 <div className={`p-3 bg-${strategy.color}-100 rounded-lg`}>
                   <strategy.icon className={`w-6 h-6 text-${strategy.color}-600`} />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <h4 className={`font-semibold ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+                    <h4 className={`font-semibold ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
                       {strategy.title}
                     </h4>
                     <span className={`px-2 py-1 text-xs rounded-full ${
-                      strategy.impact === 'High' ? 'bg-green-100 text-green-700' :
-                      strategy.impact === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-gray-100 text-gray-700'
+                      strategy.impact === 'High' ? 'bg-green-500/10 text-green-300' :
+                      strategy.impact === 'Medium' ? 'bg-yellow-500/10 text-yellow-300' :
+                      'bg-white/10 text-gray-700'
                     }`}>
                       {strategy.impact} Impact
                     </span>
                   </div>
-                  <p className={`text-sm mb-4 ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>
+                  <p className={`text-sm mb-4 ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>
                     {strategy.description}
                   </p>
                   <ul className="space-y-1">
                     {strategy.tips.map((tip, tipIndex) => (
-                      <li key={tipIndex} className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>
+                      <li key={tipIndex} className={`text-sm ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>
                         • {tip}
                       </li>
                     ))}
@@ -835,8 +835,8 @@ const RetirementPlanner = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white border-slate-200'}`}>
-        <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+      <div className={`rounded-xl shadow-lg border p-6 ${isDarkMode ? 'bg-gray-800/80 border-white/10' : 'bg-slate-800/80 border-white/10'}`}>
+        <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
           Quick Optimization Actions
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -857,11 +857,11 @@ const RetirementPlanner = () => {
               action: () => setRetirementData(prev => ({ ...prev, expectedReturn: prev.expectedReturn + 1 }))
             }
           ].map((action, index) => (
-            <div key={index} className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-slate-50 border-slate-200'}`}>
-              <div className={`text-sm mb-2 ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>
+            <div key={index} className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-slate-50 border-white/10'}`}>
+              <div className={`text-sm mb-2 ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>
                 {action.label}
               </div>
-              <div className={`text-lg font-semibold mb-3 text-green-600`}>
+              <div className={`text-lg font-semibold mb-3 text-green-400`}>
                 {action.impact}
               </div>
               <button
@@ -884,8 +884,8 @@ const RetirementPlanner = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className={`animate-spin rounded-full h-12 w-12 border-b-2 mx-auto ${isDarkMode ? 'border-cyan-600' : 'border-blue-600'}`}></div>
-          <p className={`mt-4 ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>Loading retirement data...</p>
+          <div className={`animate-spin rounded-full h-12 w-12 border-b-2 mx-auto ${isDarkMode ? 'border-cyan-600' : 'border-cyan-500'}`}></div>
+          <p className={`mt-4 ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>Loading retirement data...</p>
         </div>
       </div>
     )
@@ -896,10 +896,10 @@ const RetirementPlanner = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-slate-900'}`}>
+          <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-cyan-100' : 'text-white'}`}>
             Retirement Planner
           </h1>
-          <p className={`mt-1 ${isDarkMode ? 'text-cyan-300' : 'text-slate-600'}`}>
+          <p className={`mt-1 ${isDarkMode ? 'text-cyan-300' : 'text-slate-400'}`}>
             Plan and optimize your retirement strategy with sophisticated calculations
           </p>
         </div>

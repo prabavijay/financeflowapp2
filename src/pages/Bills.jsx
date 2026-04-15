@@ -213,7 +213,7 @@ const Bills = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'paid': return 'emerald'
+      case 'paid': return 'cyan'
       case 'overdue': return 'red'
       case 'due_soon': return 'yellow'
       default: return 'blue'
@@ -231,17 +231,17 @@ const Bills = () => {
 
   const SortableHeader = ({ field, children, className = "text-left" }) => (
     <th 
-      className={`${className} p-4 font-semibold text-slate-900 dark:text-white cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors select-none`}
+      className={`${className} p-4 font-semibold text-white cursor-pointer hover:bg-white/10 transition-colors select-none`}
       onClick={() => handleSort(field)}
     >
       <div className="flex items-center gap-2">
         {children}
         <div className="flex flex-col">
           <ChevronUp 
-            className={`w-3 h-3 ${sortField === field && sortDirection === 'asc' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-300 dark:text-slate-500'}`} 
+            className={`w-3 h-3 ${sortField === field && sortDirection === 'asc' ? 'text-blue-400' : 'text-slate-500'}`} 
           />
           <ChevronDown 
-            className={`w-3 h-3 -mt-1 ${sortField === field && sortDirection === 'desc' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-300 dark:text-slate-500'}`} 
+            className={`w-3 h-3 -mt-1 ${sortField === field && sortDirection === 'desc' ? 'text-blue-400' : 'text-slate-500'}`} 
           />
         </div>
       </div>
@@ -334,17 +334,34 @@ const Bills = () => {
 
   const handleDeleteBill = async (id) => {
     if (window.confirm('Are you sure you want to delete this bill?')) {
+      setBillData(prev => prev.filter(item => item.id !== id))
       try {
         const response = await apiClient.deleteBill(id)
-        if (response.success) {
+        const isSuccess = response.success !== false && response !== null && response !== undefined
+        if (!isSuccess) {
           await loadBillData()
-        } else {
           setError('Failed to delete bill')
         }
       } catch (err) {
         console.error('Error deleting bill:', err)
+        await loadBillData()
         setError('Failed to delete bill')
       }
+    }
+  }
+
+  const handleClearAll = async () => {
+    const filtered = getFilteredBillData()
+    if (filtered.length === 0) return
+    if (!window.confirm(`Delete all ${filtered.length} bill(s) for ${selectedProfile}? This cannot be undone.`)) return
+    const idsToDelete = filtered.map(b => b.id)
+    setBillData(prev => prev.filter(item => !idsToDelete.includes(item.id)))
+    try {
+      await Promise.all(idsToDelete.map(id => apiClient.deleteBill(id)))
+    } catch (err) {
+      console.error('Error clearing bills:', err)
+      await loadBillData()
+      setError('Some records could not be deleted')
     }
   }
 
@@ -352,22 +369,22 @@ const Bills = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading bill data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading bill data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-transparent">
       <div className="p-8 space-y-8">
         {/* Header */}
         <div className="text-left mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">
             Bills Management ({selectedProfile})
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg">
+          <p className="text-slate-400 text-lg">
             Keep track of due dates and payment status to stay on top of your financial obligations
           </p>
         </div>
@@ -375,56 +392,56 @@ const Bills = () => {
       <Tabs value={selectedProfile} onValueChange={setSelectedProfile} className="space-y-4">
         {/* Tabs */}
         <div className="flex justify-start mb-4">
-          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-emerald-500/40 rounded-lg">
-            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Personal</TabsTrigger>
-            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Spouse</TabsTrigger>
-            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-600 dark:text-slate-300 rounded-md hover:text-emerald-500 hover:border-emerald-500/50 data-[state=active]:text-emerald-500 data-[state=active]:border-emerald-500 data-[state=active]:bg-transparent">Family</TabsTrigger>
+          <TabsList className="ff-outline-tabs grid w-full grid-cols-3 max-w-md bg-transparent border border-cyan-500/30 rounded-lg">
+            <TabsTrigger value="Personal" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Personal</TabsTrigger>
+            <TabsTrigger value="Spouse" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Spouse</TabsTrigger>
+            <TabsTrigger value="Family" className="bg-transparent border border-transparent text-slate-400 rounded-md hover:text-cyan-400 hover:border-cyan-400/50 data-[state=active]:text-cyan-400 data-[state=active]:border-cyan-400 data-[state=active]:bg-transparent">Family</TabsTrigger>
           </TabsList>
         </div>
         
         {/* Payment Status Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           {/* Paid Bills */}
-          <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 mb-1">Paid</p>
-                <p className="text-xl font-bold text-slate-900 dark:text-white">
+                <p className="text-xs font-medium text-cyan-400 mb-1">Paid</p>
+                <p className="text-xl font-bold text-white">
                   {getFilteredBillData().filter(bill => getBillStatus(bill) === 'paid').length}
                 </p>
               </div>
-              <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
-                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <div className="p-2 bg-cyan-900/30 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-cyan-400" />
               </div>
             </div>
           </div>
 
           {/* Overdue Bills */}
-          <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-red-600 dark:text-red-400 mb-1">Overdue</p>
-                <p className="text-xl font-bold text-slate-900 dark:text-white">
+                <p className="text-xs font-medium text-red-400 mb-1">Overdue</p>
+                <p className="text-xl font-bold text-white">
                   {getFilteredBillData().filter(bill => getBillStatus(bill) === 'overdue').length}
                 </p>
               </div>
-              <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <div className="p-2 bg-red-900/30 rounded-lg">
+                <AlertTriangle className="w-5 h-5 text-red-400" />
               </div>
             </div>
           </div>
 
           {/* Due Soon Bills */}
-          <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-yellow-600 dark:text-yellow-400 mb-1">Due Soon</p>
-                <p className="text-xl font-bold text-slate-900 dark:text-white">
+                <p className="text-xs font-medium text-yellow-400 mb-1">Due Soon</p>
+                <p className="text-xl font-bold text-white">
                   {getFilteredBillData().filter(bill => getBillStatus(bill) === 'due_soon').length}
                 </p>
               </div>
-              <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
-                <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+              <div className="p-2 bg-yellow-900/30 rounded-lg">
+                <Clock className="w-5 h-5 text-yellow-400" />
               </div>
             </div>
           </div>
@@ -435,8 +452,8 @@ const Bills = () => {
         {getFilteredBillData().length > 0 && (
           <div className="mb-4 max-w-2xl">
             {/* Overdue & Due Soon Bills */}
-            <div className="bg-gradient-to-br from-white/90 to-slate-50/80 dark:from-slate-800/90 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+            <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-red-500" />
                 Urgent Attention Required
               </h3>
@@ -450,28 +467,28 @@ const Bills = () => {
                     const statusColor = getStatusColor(status)
                     
                     return (
-                      <div key={bill.id} className="flex items-center justify-between p-3 bg-white/50 dark:bg-slate-700/50 rounded-lg">
+                      <div key={bill.id} className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg">
                         <div className="flex items-center gap-3">
                           <div className={`w-2 h-2 rounded-full bg-${statusColor}-500`}></div>
                           <div>
-                            <p className="font-medium text-slate-900 dark:text-white">{bill.name}</p>
-                            <p className="text-sm text-slate-600 dark:text-slate-400">
+                            <p className="font-medium text-white">{bill.name}</p>
+                            <p className="text-sm text-slate-400">
                               {daysUntil < 0 ? `${Math.abs(daysUntil)} days overdue` : 
                                daysUntil === 0 ? 'Due today' : `Due in ${daysUntil} days`}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-slate-900 dark:text-white">{formatCurrency(bill.amount)}</p>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 capitalize">{bill.frequency}</p>
+                          <p className="font-semibold text-white">{formatCurrency(bill.amount)}</p>
+                          <p className="text-xs text-slate-400 capitalize">{bill.frequency}</p>
                         </div>
                       </div>
                     )
                   })}
                 {getFilteredBillData().filter(bill => ['overdue', 'due_soon'].includes(getBillStatus(bill))).length === 0 && (
                   <div className="text-center py-6">
-                    <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-2" />
-                    <p className="text-slate-600 dark:text-slate-400">All bills are up to date!</p>
+                    <CheckCircle className="w-12 h-12 text-cyan-500 mx-auto mb-2" />
+                    <p className="text-slate-400">All bills are up to date!</p>
                   </div>
                 )}
               </div>
@@ -480,13 +497,24 @@ const Bills = () => {
         )}
 
       {/* Bills Table */}
-      <div className="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-        <div className="p-6 border-b border-slate-200">
+      <div className="glass-card overflow-hidden">
+        <div className="p-6 border-b border-white/10">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Bill Payments</h2>
-              <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Track payment status and due dates</p>
+              <h2 className="text-xl font-semibold text-white">Bill Payments</h2>
+              <p className="text-slate-400 text-sm mt-1">Track payment status and due dates</p>
             </div>
+            <div className="flex items-center gap-2">
+              {getFilteredBillData().length > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={handleClearAll}
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 hover:border-red-400 hover:text-red-300 rounded-lg transition-all duration-300 font-medium bg-transparent"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Clear All
+                </Button>
+              )}
             <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
               <DialogTrigger asChild>
                 <Button className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-medium">
@@ -629,26 +657,27 @@ const Bills = () => {
                 </form>
               </DialogContent>
             </Dialog>
+            </div>
           </div>
         </div>
 
         {getFilteredBillData().length === 0 ? (
           <div className="text-center py-12">
             <Receipt className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">No Bills Found</h3>
-            <p className="text-slate-600">Add your first bill to get started with payment tracking.</p>
+            <h3 className="text-lg font-semibold text-white mb-2">No Bills Found</h3>
+            <p className="text-slate-400">Add your first bill to get started with payment tracking.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full table-auto">
-              <thead className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+              <thead className="bg-slate-800 border-b border-white/10">
                 <tr>
                   <SortableHeader field="name">Bill Name</SortableHeader>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white border-l border-slate-200 dark:border-slate-600">Category</th>
-                  <SortableHeader field="amount" className="text-right w-28 border-l border-slate-200 dark:border-slate-600">Amount</SortableHeader>
-                  <SortableHeader field="due_date" className="text-left border-l border-slate-200 dark:border-slate-600">Due Date</SortableHeader>
-                  <SortableHeader field="status" className="text-left border-l border-slate-200 dark:border-slate-600">Status</SortableHeader>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white w-20 border-l border-slate-200 dark:border-slate-600">Actions</th>
+                  <th className="text-left p-4 font-semibold text-white border-l border-white/10">Category</th>
+                  <SortableHeader field="amount" className="text-right w-28 border-l border-white/10">Amount</SortableHeader>
+                  <SortableHeader field="due_date" className="text-left border-l border-white/10">Due Date</SortableHeader>
+                  <SortableHeader field="status" className="text-left border-l border-white/10">Status</SortableHeader>
+                  <th className="text-left p-4 font-semibold text-white w-20 border-l border-white/10">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -661,16 +690,16 @@ const Bills = () => {
                   const daysUntil = getDaysUntilDue(bill.due_date)
                   
                   return (
-                    <tr key={bill.id} className="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">
+                    <tr key={bill.id} className="border-b border-white/10 hover:bg-white/5">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 bg-${categoryInfo.color}-100 dark:bg-${categoryInfo.color}-900/30 rounded-lg`}>
-                            <CategoryIcon className={`w-5 h-5 text-${categoryInfo.color}-600 dark:text-${categoryInfo.color}-400`} />
+                          <div className={`p-2 bg-${categoryInfo.color}-900/30 rounded-lg`}>
+                            <CategoryIcon className={`w-5 h-5 text-${categoryInfo.color}-400`} />
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900 dark:text-white">{bill.name}</div>
+                            <div className="font-semibold text-white">{bill.name}</div>
                             {bill.notes && (
-                              <div className="text-sm text-slate-600 dark:text-slate-300 truncate max-w-[200px]">
+                              <div className="text-sm text-slate-400 truncate max-w-[200px]">
                                 {bill.notes}
                               </div>
                             )}
@@ -678,30 +707,30 @@ const Bills = () => {
                         </div>
                       </td>
                       
-                      <td className="p-4 border-l border-slate-200 dark:border-slate-600">
-                        <span className={`inline-flex px-2 py-1 font-semibold rounded-full bg-${categoryInfo.color}-50 dark:bg-${categoryInfo.color}-900/30 text-${categoryInfo.color}-700 dark:text-${categoryInfo.color}-300`}>
+                      <td className="p-4 border-l border-white/10">
+                        <span className={`inline-flex px-2 py-1 font-semibold rounded-full bg-${categoryInfo.color}-900/30 text-${categoryInfo.color}-300`}>
                           {categoryInfo.label}
                         </span>
                       </td>
                       
-                      <td className="p-4 text-right border-l border-slate-200 dark:border-slate-600">
-                        <div className="font-semibold text-slate-900 dark:text-white">
+                      <td className="p-4 text-right border-l border-white/10">
+                        <div className="font-semibold text-white">
                           {formatCurrency(bill.amount)}
                         </div>
-                        <div className="font-semibold text-slate-500 dark:text-slate-300 capitalize">
+                        <div className="font-semibold text-slate-300 capitalize">
                           {bill.frequency}
                         </div>
                       </td>
                       
-                      <td className="p-4 border-l border-slate-200 dark:border-slate-600">
+                      <td className="p-4 border-l border-white/10">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-slate-400 dark:text-slate-300" />
+                          <Calendar className="w-4 h-4 text-slate-400 text-slate-300" />
                           <div>
-                            <span className="font-semibold text-slate-900 dark:text-white">
+                            <span className="font-semibold text-white">
                               {new Date(bill.due_date).toLocaleDateString()}
                             </span>
                             {bill.status !== 'paid' && (
-                              <div className={`font-semibold ${daysUntil < 0 ? 'text-red-600 dark:text-red-400' : daysUntil <= 3 ? 'text-yellow-600 dark:text-yellow-400' : 'text-slate-600 dark:text-slate-400'}`}>
+                              <div className={`font-semibold ${daysUntil < 0 ? 'text-red-400' : daysUntil <= 3 ? 'text-yellow-400' : 'text-slate-400'}`}>
                                 {daysUntil < 0 ? `${Math.abs(daysUntil)} days overdue` : 
                                  daysUntil === 0 ? 'Due today' :
                                  `${daysUntil} days left`}
@@ -711,27 +740,27 @@ const Bills = () => {
                         </div>
                       </td>
                       
-                      <td className="p-4 border-l border-slate-200 dark:border-slate-600">
+                      <td className="p-4 border-l border-white/10">
                         <div className="flex flex-col gap-1">
-                          <span className={`inline-flex items-center gap-1 px-2 py-1 font-semibold rounded-full bg-${statusColor}-50 dark:bg-${statusColor}-900/30 text-${statusColor}-700 dark:text-${statusColor}-300`}>
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 font-semibold rounded-full bg-${statusColor}-900/30 text-${statusColor}-300`}>
                             <StatusIcon className="w-3 h-3" />
                             {status.replace('_', ' ').charAt(0).toUpperCase() + status.replace('_', ' ').slice(1)}
                           </span>
                           {bill.auto_pay && (
-                            <span className="inline-flex px-2 py-1 font-semibold bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded">
+                            <span className="inline-flex px-2 py-1 font-semibold bg-green-900/30 text-green-300 rounded">
                               Auto-pay
                             </span>
                           )}
                         </div>
                       </td>
                       
-                      <td className="p-4 border-l border-slate-200 dark:border-slate-600">
+                      <td className="p-4 border-l border-white/10">
                         <div className="flex items-center gap-1">
                           <Dialog open={showEditForm} onOpenChange={setShowEditForm}>
                             <DialogTrigger asChild>
                               <button 
                                 onClick={() => handleEditBill(bill)}
-                                className="p-2 text-slate-400 hover:text-blue-600 transition-colors rounded-lg hover:bg-blue-50"
+                                className="p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-500/10"
                               >
                                 <Edit className="w-4 h-4" />
                               </button>
@@ -876,7 +905,7 @@ const Bills = () => {
                           </Dialog>
                           <button 
                             onClick={() => handleDeleteBill(bill.id)}
-                            className="p-2 text-slate-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50"
+                            className="p-2 text-slate-400 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -902,8 +931,8 @@ const Bills = () => {
       </Tabs>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="bg-red-500/10 border border-red-700/50 rounded-lg p-4">
+          <p className="text-red-400">{error}</p>
         </div>
       )}
       </div>

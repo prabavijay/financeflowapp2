@@ -52,9 +52,9 @@ const FILE_TYPE_ICONS = {
 };
 
 const ACCESS_LEVELS = [
-  { value: 'private', label: 'Private', icon: Lock, color: 'text-red-600' },
-  { value: 'shared', label: 'Shared', icon: Share2, color: 'text-blue-600' },
-  { value: 'family', label: 'Family', icon: User, color: 'text-green-600' }
+  { value: 'private', label: 'Private', icon: Lock, color: 'text-red-400' },
+  { value: 'shared', label: 'Shared', icon: Share2, color: 'text-blue-400' },
+  { value: 'family', label: 'Family', icon: User, color: 'text-green-400' }
 ];
 
 export default function DocumentVault() {
@@ -106,8 +106,8 @@ export default function DocumentVault() {
         const documentsResult = await apiClient.getDocuments();
         documentsData = documentsResult.data || documentsResult || [];
       } catch (error) {
-        console.warn('Documents API not available, using sample data');
-        documentsData = getSampleDocuments();
+        console.warn('Documents API not available');
+        documentsData = [];
       }
       
       // Load categories
@@ -116,8 +116,8 @@ export default function DocumentVault() {
         const categoriesResult = await apiClient.getDocumentCategories();
         categoriesData = categoriesResult.data || categoriesResult || [];
       } catch (error) {
-        console.warn('Categories API not available, using sample data');
-        categoriesData = getSampleCategories();
+        console.warn('Categories API not available');
+        categoriesData = [];
       }
       
       setDocuments(documentsData);
@@ -127,75 +127,12 @@ export default function DocumentVault() {
       console.error('Error loading data:', error);
       toast.error('Failed to load document data');
       
-      // Set sample data as fallback
-      setDocuments(getSampleDocuments());
-      setCategories(getSampleCategories());
+      setDocuments([]);
+      setCategories([]);
     } finally {
       setLoading(false);
     }
   };
-
-  const getSampleDocuments = () => [
-    {
-      id: '1',
-      title: 'Tax Return 2023',
-      description: 'Federal tax return for 2023',
-      original_filename: 'tax_return_2023.pdf',
-      file_size: 2456789,
-      mime_type: 'application/pdf',
-      category_id: 'tax',
-      document_date: '2024-04-15',
-      amount: null,
-      access_level: 'private',
-      is_encrypted: true,
-      uploaded_at: '2024-01-15T10:30:00Z',
-      tags: ['tax', '2023', 'federal'],
-      has_been_processed: true,
-      ocr_confidence: 0.95
-    },
-    {
-      id: '2',
-      title: 'Bank Statement - December 2023',
-      description: 'Chase checking account statement',
-      original_filename: 'chase_statement_dec2023.pdf',
-      file_size: 1234567,
-      mime_type: 'application/pdf',
-      category_id: 'banking',
-      document_date: '2023-12-31',
-      amount: null,
-      access_level: 'private',
-      is_encrypted: true,
-      uploaded_at: '2024-01-10T14:20:00Z',
-      tags: ['banking', 'statement', 'chase'],
-      has_been_processed: true,
-      ocr_confidence: 0.88
-    },
-    {
-      id: '3',
-      title: 'Home Insurance Policy',
-      description: 'Annual home insurance policy document',
-      original_filename: 'home_insurance_2024.pdf',
-      file_size: 3456789,
-      mime_type: 'application/pdf',
-      category_id: 'insurance',
-      document_date: '2024-01-01',
-      amount: 1200.00,
-      access_level: 'family',
-      is_encrypted: true,
-      uploaded_at: '2024-01-05T09:15:00Z',
-      tags: ['insurance', 'home', 'policy'],
-      has_been_processed: true,
-      ocr_confidence: 0.92
-    }
-  ];
-
-  const getSampleCategories = () => [
-    { id: 'tax', name: 'Tax Documents', icon: 'file-text', color: '#e74c3c', description: 'Tax returns, W-2s, 1099s' },
-    { id: 'banking', name: 'Banking', icon: 'building-2', color: '#3498db', description: 'Bank statements, loan documents' },
-    { id: 'insurance', name: 'Insurance', icon: 'shield', color: '#2ecc71', description: 'Policy documents, claims' },
-    { id: 'investment', name: 'Investment', icon: 'trending-up', color: '#9b59b6', description: 'Brokerage statements' },
-    { id: 'receipts', name: 'Receipts', icon: 'receipt', color: '#95a5a6', description: 'Purchase receipts, warranties' }
-  ];
 
   const filterDocuments = useCallback(() => {
     let filtered = [...documents];
@@ -387,7 +324,7 @@ export default function DocumentVault() {
     return (
       <div className="p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
         </div>
       </div>
     );
@@ -398,8 +335,8 @@ export default function DocumentVault() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Document Vault</h1>
-          <p className="text-gray-600">Secure storage for your financial documents</p>
+          <h1 className="text-3xl font-bold text-white">Document Vault</h1>
+          <p className="text-slate-400">Secure storage for your financial documents</p>
         </div>
         
         <div className="flex items-center gap-3">
@@ -436,7 +373,7 @@ export default function DocumentVault() {
                     onChange={(e) => setUploadForm({...uploadForm, files: e.target.files})}
                     required
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-slate-400">
                     Supported formats: PDF, Images, Word documents, Text files (Max 50MB each)
                   </p>
                 </div>
@@ -645,8 +582,8 @@ export default function DocumentVault() {
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="p-2 bg-gray-100 rounded-lg">
-                              <FileIcon className="h-6 w-6 text-gray-600" />
+                            <div className="p-2 bg-white/10 rounded-lg">
+                              <FileIcon className="h-6 w-6 text-slate-400" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <CardTitle className="text-sm font-medium truncate">
@@ -684,7 +621,7 @@ export default function DocumentVault() {
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleDocumentAction('delete', document.id)}
-                                className="text-red-600"
+                                className="text-red-400"
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
@@ -703,17 +640,17 @@ export default function DocumentVault() {
                         </div>
                         
                         {document.description && (
-                          <p className="text-xs text-gray-600 line-clamp-2">
+                          <p className="text-xs text-slate-400 line-clamp-2">
                             {document.description}
                           </p>
                         )}
                         
-                        <div className="flex items-center justify-between text-xs text-gray-500">
+                        <div className="flex items-center justify-between text-xs text-slate-400">
                           <span>
                             {new Date(document.uploaded_at).toLocaleDateString()}
                           </span>
                           {document.is_encrypted && (
-                            <Shield className="h-3 w-3 text-green-600" />
+                            <Shield className="h-3 w-3 text-green-400" />
                           )}
                         </div>
                         
@@ -741,8 +678,8 @@ export default function DocumentVault() {
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4 flex-1 min-w-0">
-                            <div className="p-2 bg-gray-100 rounded-lg">
-                              <FileIcon className="h-5 w-5 text-gray-600" />
+                            <div className="p-2 bg-white/10 rounded-lg">
+                              <FileIcon className="h-5 w-5 text-slate-400" />
                             </div>
                             
                             <div className="flex-1 min-w-0">
@@ -753,11 +690,11 @@ export default function DocumentVault() {
                                 </Badge>
                                 <accessInfo.icon className={`h-3 w-3 ${accessInfo.color}`} />
                                 {document.is_encrypted && (
-                                  <Shield className="h-3 w-3 text-green-600" />
+                                  <Shield className="h-3 w-3 text-green-400" />
                                 )}
                               </div>
                               
-                              <div className="flex items-center gap-4 text-sm text-gray-500">
+                              <div className="flex items-center gap-4 text-sm text-slate-400">
                                 <span>{formatFileSize(document.file_size)}</span>
                                 <span>{new Date(document.uploaded_at).toLocaleDateString()}</span>
                                 {document.document_date && (
@@ -802,7 +739,7 @@ export default function DocumentVault() {
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                   onClick={() => handleDocumentAction('delete', document.id)}
-                                  className="text-red-600"
+                                  className="text-red-400"
                                 >
                                   <Trash2 className="h-4 w-4 mr-2" />
                                   Delete
@@ -821,8 +758,8 @@ export default function DocumentVault() {
             <Card>
               <CardContent className="text-center py-8">
                 <FolderOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No documents found</h3>
-                <p className="text-gray-600 mb-4">
+                <h3 className="text-lg font-medium text-white mb-2">No documents found</h3>
+                <p className="text-slate-400 mb-4">
                   {searchQuery || selectedCategory !== 'all' 
                     ? 'Try adjusting your search or filters.' 
                     : 'Upload your first document to get started.'
@@ -858,7 +795,7 @@ export default function DocumentVault() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-slate-400">
                       {documents.filter(d => d.category_id === category.id).length} documents
                     </span>
                     <Button variant="outline" size="sm">
@@ -878,10 +815,10 @@ export default function DocumentVault() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Documents</p>
+                    <p className="text-sm font-medium text-slate-400">Total Documents</p>
                     <p className="text-2xl font-bold">{documents.length}</p>
                   </div>
-                  <File className="h-8 w-8 text-blue-600" />
+                  <File className="h-8 w-8 text-blue-400" />
                 </div>
               </CardContent>
             </Card>
@@ -890,12 +827,12 @@ export default function DocumentVault() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Storage</p>
+                    <p className="text-sm font-medium text-slate-400">Total Storage</p>
                     <p className="text-2xl font-bold">
                       {formatFileSize(documents.reduce((sum, doc) => sum + doc.file_size, 0))}
                     </p>
                   </div>
-                  <Archive className="h-8 w-8 text-green-600" />
+                  <Archive className="h-8 w-8 text-green-400" />
                 </div>
               </CardContent>
             </Card>
@@ -904,12 +841,12 @@ export default function DocumentVault() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Encrypted</p>
+                    <p className="text-sm font-medium text-slate-400">Encrypted</p>
                     <p className="text-2xl font-bold">
                       {documents.filter(d => d.is_encrypted).length}
                     </p>
                   </div>
-                  <Shield className="h-8 w-8 text-red-600" />
+                  <Shield className="h-8 w-8 text-red-400" />
                 </div>
               </CardContent>
             </Card>
@@ -918,12 +855,12 @@ export default function DocumentVault() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Processed</p>
+                    <p className="text-sm font-medium text-slate-400">Processed</p>
                     <p className="text-2xl font-bold">
                       {documents.filter(d => d.has_been_processed).length}
                     </p>
                   </div>
-                  <CheckCircle className="h-8 w-8 text-purple-600" />
+                  <CheckCircle className="h-8 w-8 text-purple-400" />
                 </div>
               </CardContent>
             </Card>
@@ -943,10 +880,10 @@ export default function DocumentVault() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Auto-encrypt uploads</p>
-                  <p className="text-sm text-gray-600">Automatically encrypt all uploaded documents</p>
+                  <p className="text-sm text-slate-400">Automatically encrypt all uploaded documents</p>
                 </div>
                 <Button variant="outline" size="sm">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-green-400" />
                   Enabled
                 </Button>
               </div>
@@ -954,7 +891,7 @@ export default function DocumentVault() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Document retention</p>
-                  <p className="text-sm text-gray-600">Automatically delete documents after retention period</p>
+                  <p className="text-sm text-slate-400">Automatically delete documents after retention period</p>
                 </div>
                 <Button variant="outline" size="sm">
                   Configure
@@ -964,10 +901,10 @@ export default function DocumentVault() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Access logging</p>
-                  <p className="text-sm text-gray-600">Log all document access and downloads</p>
+                  <p className="text-sm text-slate-400">Log all document access and downloads</p>
                 </div>
                 <Button variant="outline" size="sm">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-green-400" />
                   Enabled
                 </Button>
               </div>

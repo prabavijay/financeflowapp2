@@ -186,19 +186,19 @@ const Insurance = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active': return 'text-emerald-600 bg-emerald-100'
-      case 'expired': return 'text-red-600 bg-red-100'
-      case 'cancelled': return 'text-gray-600 bg-gray-100'
-      case 'pending': return 'text-yellow-600 bg-yellow-100'
-      default: return 'text-slate-600 dark:text-slate-300 bg-slate-100'
+      case 'active': return 'text-cyan-400 bg-cyan-500/10'
+      case 'expired': return 'text-red-400 bg-red-500/10'
+      case 'cancelled': return 'text-slate-400 bg-white/10'
+      case 'pending': return 'text-yellow-400 bg-yellow-500/10'
+      default: return 'text-slate-400 bg-white/10'
     }
   }
 
   const getExpirationStatusColor = (days) => {
-    if (days < 0) return 'text-red-600 bg-red-100'
-    if (days <= 30) return 'text-orange-600 bg-orange-100'
-    if (days <= 90) return 'text-yellow-600 bg-yellow-100'
-    return 'text-emerald-600 bg-emerald-100'
+    if (days < 0) return 'text-red-400 bg-red-500/10'
+    if (days <= 30) return 'text-orange-400 bg-orange-500/10'
+    if (days <= 90) return 'text-yellow-400 bg-yellow-500/10'
+    return 'text-cyan-400 bg-cyan-500/10'
   }
 
   const getExpirationStatus = (days) => {
@@ -212,20 +212,20 @@ const Insurance = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-300">Loading insurance data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading insurance data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6 space-y-6">
+    <div className="min-h-screen bg-transparent p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3">Insurance Policies</h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg">Comprehensive coverage management and policy tracking with expiration alerts</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">Insurance Policies</h1>
+          <p className="text-slate-400 text-lg">Comprehensive coverage management and policy tracking with expiration alerts</p>
         </div>
         <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
           <DialogTrigger asChild>
@@ -395,11 +395,11 @@ const Insurance = () => {
 
       {/* Error Display */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
-          <button 
+        <div className="glass-card border-t-2 border-t-red-400 p-4">
+          <p className="text-red-400">{error}</p>
+          <button
             onClick={loadInsuranceData}
-            className="mt-2 px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200"
+            className="mt-2 px-3 py-1 bg-red-500/20 text-red-400 rounded text-sm hover:bg-red-500/30 transition-colors"
           >
             Retry
           </button>
@@ -409,66 +409,74 @@ const Insurance = () => {
       {/* Analytics Summary Cards */}
       {analytics && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 backdrop-blur-sm rounded-xl shadow-lg border border-blue-200/50 dark:border-blue-700/50 p-6">
+          <div className="glass-card glass-card-hover p-6 border-t-2 border-t-blue-400">
             <div className="flex items-center gap-3 mb-2">
-              <Shield className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              <span className="text-sm font-medium text-blue-600 dark:text-blue-400">Total Policies</span>
+              <div className="p-2 rounded-xl bg-blue-500/10">
+                <Shield className="w-6 h-6 text-blue-400" />
+              </div>
+              <span className="text-sm font-medium text-blue-400">Total Policies</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900 dark:text-white">{analytics.summary?.total_policies || 0}</p>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">Active coverage</p>
+            <p className="text-3xl font-bold text-white">{analytics.summary?.total_policies || 0}</p>
+            <p className="text-sm text-slate-400 mt-1">Active coverage</p>
           </div>
 
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 backdrop-blur-sm rounded-xl shadow-lg border border-green-200/50 dark:border-green-700/50 p-6">
+          <div className="glass-card glass-card-hover p-6 border-t-2 border-t-green-400">
             <div className="flex items-center gap-3 mb-2">
-              <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
-              <span className="text-sm font-medium text-green-600 dark:text-green-400">Total Coverage</span>
+              <div className="p-2 rounded-xl bg-green-500/10">
+                <DollarSign className="w-6 h-6 text-green-400" />
+              </div>
+              <span className="text-sm font-medium text-green-400">Total Coverage</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900 dark:text-white">{formatCurrency(analytics.summary?.total_coverage || 0)}</p>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">Protection amount</p>
+            <p className="text-3xl font-bold text-white">{formatCurrency(analytics.summary?.total_coverage || 0)}</p>
+            <p className="text-sm text-slate-400 mt-1">Protection amount</p>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 backdrop-blur-sm rounded-xl shadow-lg border border-orange-200/50 dark:border-orange-700/50 p-6">
+          <div className="glass-card glass-card-hover p-6 border-t-2 border-t-amber-400">
             <div className="flex items-center gap-3 mb-2">
-              <TrendingUp className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-              <span className="text-sm font-medium text-orange-600 dark:text-orange-400">Annual Premiums</span>
+              <div className="p-2 rounded-xl bg-amber-500/10">
+                <TrendingUp className="w-6 h-6 text-amber-400" />
+              </div>
+              <span className="text-sm font-medium text-amber-400">Annual Premiums</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900 dark:text-white">{formatCurrency(analytics.summary?.total_annual_premiums || 0)}</p>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">Total yearly cost</p>
+            <p className="text-3xl font-bold text-white">{formatCurrency(analytics.summary?.total_annual_premiums || 0)}</p>
+            <p className="text-sm text-slate-400 mt-1">Total yearly cost</p>
           </div>
 
-          <div className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 backdrop-blur-sm rounded-xl shadow-lg border border-red-200/50 dark:border-red-700/50 p-6">
+          <div className="glass-card glass-card-hover p-6 border-t-2 border-t-red-400">
             <div className="flex items-center gap-3 mb-2">
-              <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
-              <span className="text-sm font-medium text-red-600 dark:text-red-400">Expiring Soon</span>
+              <div className="p-2 rounded-xl bg-red-500/10">
+                <AlertTriangle className="w-6 h-6 text-red-400" />
+              </div>
+              <span className="text-sm font-medium text-red-400">Expiring Soon</span>
             </div>
-            <p className="text-3xl font-bold text-slate-900 dark:text-white">{analytics.summary?.expiring_soon || 0}</p>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">Next 30 days</p>
+            <p className="text-3xl font-bold text-white">{analytics.summary?.expiring_soon || 0}</p>
+            <p className="text-sm text-slate-400 mt-1">Next 30 days</p>
           </div>
         </div>
       )}
 
       {/* Expiring Policies Alert */}
       {expiringPolicies.length > 0 && (
-        <div className="bg-orange-50 dark:bg-orange-900/20 backdrop-blur-sm border border-orange-200/50 dark:border-orange-700/50 rounded-xl shadow-lg p-6">
+        <div className="glass-card border-t-2 border-t-amber-400 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Clock className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-            <h3 className="text-lg font-semibold text-orange-800 dark:text-orange-200">Policies Expiring Soon</h3>
+            <Clock className="w-6 h-6 text-orange-400" />
+            <h3 className="text-lg font-semibold text-orange-200">Policies Expiring Soon</h3>
           </div>
           <div className="space-y-3">
             {expiringPolicies.slice(0, 3).map((policy) => (
-              <div key={policy.id} className="flex items-center justify-between bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-lg shadow-md border border-slate-200/50 dark:border-slate-700/50 p-3">
+              <div key={policy.id} className="flex items-center justify-between glass-card backdrop-blur-lg rounded-lg shadow-md border border-white/10 p-3">
                 <div className="flex items-center gap-3">
                   {getTypeIcon(policy.type)}
                   <div>
-                    <div className="font-medium text-slate-900 dark:text-white">{policy.name}</div>
-                    <div className="text-sm text-slate-600 dark:text-slate-300">{policy.provider}</div>
+                    <div className="font-medium text-white">{policy.name}</div>
+                    <div className="text-sm text-slate-400">{policy.provider}</div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-semibold text-orange-600">
+                  <div className="font-semibold text-orange-400">
                     Expires {formatDate(policy.expiration_date)}
                   </div>
-                  <div className="text-sm text-slate-600 dark:text-slate-300">
+                  <div className="text-sm text-slate-400">
                     {policy.days_until_expiration} days remaining
                   </div>
                 </div>
@@ -479,7 +487,7 @@ const Insurance = () => {
       )}
 
       {/* Filter Tabs */}
-      <div className="flex space-x-1 bg-slate-100 dark:bg-slate-800/50 backdrop-blur-sm rounded-lg p-1 overflow-x-auto border border-slate-200/50 dark:border-slate-700/50">
+      <div className="flex space-x-1 bg-white/5 rounded-lg p-1 overflow-x-auto">
         {policyTypes.map((type) => {
           const Icon = type.icon
           return (
@@ -488,8 +496,8 @@ const Insurance = () => {
               onClick={() => setSelectedType(type.value)}
               className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                 selectedType === type.value
-                  ? 'bg-white/90 dark:bg-slate-700/80 text-emerald-600 dark:text-emerald-400 shadow-md border border-emerald-200/50 dark:border-emerald-700/50'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-emerald-500 hover:bg-white/50 dark:hover:bg-slate-700/50'
+                  ? 'bg-cyan-500/20 text-cyan-400 shadow-sm'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -500,79 +508,79 @@ const Insurance = () => {
       </div>
 
       {/* Policies Table */}
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
-        <div className="p-6 border-b border-slate-200/50 dark:border-slate-700/50">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+      <div className="glass-card overflow-hidden">
+        <div className="p-6 border-b border-white/10">
+          <h2 className="text-xl font-semibold text-white">
             {selectedType === 'all' ? 'All Insurance Policies' : policyTypes.find(t => t.value === selectedType)?.label}
           </h2>
-          <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">Policy details, coverage, and renewal information</p>
+          <p className="text-slate-400 text-sm mt-1">Policy details, coverage, and renewal information</p>
         </div>
 
         {policies.length === 0 ? (
           <div className="text-center py-12">
             <Shield className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">No Insurance Policies Found</h3>
-            <p className="text-slate-600 dark:text-slate-300">Add your first insurance policy to get started with coverage tracking.</p>
+            <h3 className="text-lg font-semibold text-white mb-2">No Insurance Policies Found</h3>
+            <p className="text-slate-400">Add your first insurance policy to get started with coverage tracking.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-slate-50/80 dark:bg-slate-700/50 backdrop-blur-sm border-b border-slate-200/50 dark:border-slate-600/50">
+              <thead className="bg-[rgba(35,52,78,0.5)] backdrop-blur-sm border-b border-white/10">
                 <tr>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Policy</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Provider</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Coverage</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Premium</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Expiration</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Status</th>
-                  <th className="text-left p-4 font-semibold text-slate-900 dark:text-white">Actions</th>
+                  <th className="text-left p-4 font-semibold text-white">Policy</th>
+                  <th className="text-left p-4 font-semibold text-white">Provider</th>
+                  <th className="text-left p-4 font-semibold text-white">Coverage</th>
+                  <th className="text-left p-4 font-semibold text-white">Premium</th>
+                  <th className="text-left p-4 font-semibold text-white">Expiration</th>
+                  <th className="text-left p-4 font-semibold text-white">Status</th>
+                  <th className="text-left p-4 font-semibold text-white">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {policies.map((policy) => (
-                  <tr key={policy.id} className="border-b border-slate-100/50 dark:border-slate-700/50 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                  <tr key={policy.id} className="border-b border-white/10 hover:bg-white/5 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         {getTypeIcon(policy.type)}
                         <div>
-                          <div className="font-semibold text-slate-900 dark:text-white">{policy.name}</div>
-                          <div className="text-sm text-slate-600 dark:text-slate-300 capitalize">{policy.type.replace('_', ' ')}</div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400">#{policy.policy_number}</div>
+                          <div className="font-semibold text-white">{policy.name}</div>
+                          <div className="text-sm text-slate-400 capitalize">{policy.type.replace('_', ' ')}</div>
+                          <div className="text-xs text-slate-400">#{policy.policy_number}</div>
                         </div>
                       </div>
                     </td>
                     
                     <td className="p-4">
-                      <div className="font-medium text-slate-900 dark:text-white">{policy.provider}</div>
+                      <div className="font-medium text-white">{policy.provider}</div>
                       {policy.agent_name && (
-                        <div className="text-sm text-slate-600 dark:text-slate-300">Agent: {policy.agent_name}</div>
+                        <div className="text-sm text-slate-400">Agent: {policy.agent_name}</div>
                       )}
                     </td>
                     
                     <td className="p-4">
-                      <div className="font-bold text-green-600">{formatCurrency(policy.coverage_amount)}</div>
+                      <div className="font-bold text-green-400">{formatCurrency(policy.coverage_amount)}</div>
                       {policy.deductible && (
-                        <div className="text-sm text-slate-600 dark:text-slate-300">
+                        <div className="text-sm text-slate-400">
                           Deductible: {formatCurrency(policy.deductible)}
                         </div>
                       )}
                       {policy.coverage_type && (
-                        <div className="text-xs text-slate-500 dark:text-slate-400">{policy.coverage_type}</div>
+                        <div className="text-xs text-slate-400">{policy.coverage_type}</div>
                       )}
                     </td>
                     
                     <td className="p-4">
-                      <div className="font-semibold text-slate-900 dark:text-white">{formatCurrency(policy.premium_amount)}</div>
-                      <div className="text-sm text-slate-600 dark:text-slate-300 capitalize">{policy.premium_frequency}</div>
+                      <div className="font-semibold text-white">{formatCurrency(policy.premium_amount)}</div>
+                      <div className="text-sm text-slate-400 capitalize">{policy.premium_frequency}</div>
                       {policy.annual_premium && (
-                        <div className="text-xs text-slate-500 dark:text-slate-400">
+                        <div className="text-xs text-slate-400">
                           {formatCurrency(policy.annual_premium)}/year
                         </div>
                       )}
                     </td>
                     
                     <td className="p-4">
-                      <div className="font-semibold text-slate-900 dark:text-white">{formatDate(policy.expiration_date)}</div>
+                      <div className="font-semibold text-white">{formatDate(policy.expiration_date)}</div>
                       {policy.days_until_expiration !== undefined && (
                         <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getExpirationStatusColor(policy.days_until_expiration)}`}>
                           {getExpirationStatus(policy.days_until_expiration)}
@@ -585,7 +593,7 @@ const Insurance = () => {
                         {policy.status}
                       </span>
                       {policy.auto_renew && (
-                        <div className="text-xs text-green-600 mt-1">Auto-renew</div>
+                        <div className="text-xs text-green-400 mt-1">Auto-renew</div>
                       )}
                     </td>
                     
@@ -596,7 +604,7 @@ const Insurance = () => {
                         </Button>
                         <button 
                           onClick={() => handleDeletePolicy(policy.id)}
-                          className="p-1 text-slate-400 hover:text-red-600"
+                          className="p-1 text-slate-400 hover:text-red-400"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

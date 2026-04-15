@@ -261,7 +261,7 @@ export default function FamilyDashboard() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading family dashboard...</p>
+          <p className="mt-4 text-slate-400">Loading family dashboard...</p>
         </div>
       </div>
     );
@@ -270,13 +270,13 @@ export default function FamilyDashboard() {
   // If no family group exists, show setup
   if (!familyGroup) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div className="min-h-screen bg-transparent">
         <div className="p-8 space-y-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
               Family Financial Dashboard
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 text-lg max-w-3xl mx-auto mb-8">
+            <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
               Manage your family's finances together with secure sharing and permission controls
             </p>
           </div>
@@ -359,15 +359,15 @@ export default function FamilyDashboard() {
   const totals = calculateFamilyTotals();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-transparent">
       <div className="p-8 space-y-8">
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
               {familyGroup.name}
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 mt-2">
+            <p className="text-slate-400 mt-2">
               {familyGroup.description || 'Family Financial Dashboard'}
             </p>
           </div>
@@ -407,72 +407,72 @@ export default function FamilyDashboard() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Family Income</p>
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                <p className="text-sm font-medium text-slate-400">Family Income</p>
+                <p className="text-2xl font-bold text-green-400">
                   ${totals.income.toLocaleString()}
                 </p>
               </div>
-              <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
-                <TrendingUp className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <div className="p-3 bg-green-900/30 rounded-xl">
+                <TrendingUp className="w-8 h-8 text-green-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Family Expenses</p>
-                <p className="text-2xl font-bold text-red-600 dark:text-red-400">
+                <p className="text-sm font-medium text-slate-400">Family Expenses</p>
+                <p className="text-2xl font-bold text-red-400">
                   ${totals.expenses.toLocaleString()}
                 </p>
               </div>
-              <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-xl">
-                <TrendingDown className="w-8 h-8 text-red-600 dark:text-red-400" />
+              <div className="p-3 bg-red-900/30 rounded-xl">
+                <TrendingDown className="w-8 h-8 text-red-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Total Assets</p>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <p className="text-sm font-medium text-slate-400">Total Assets</p>
+                <p className="text-2xl font-bold text-blue-400">
                   ${totals.assets.toLocaleString()}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-                <BarChart3 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              <div className="p-3 bg-blue-900/30 rounded-xl">
+                <BarChart3 className="w-8 h-8 text-blue-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Total Debts</p>
-                <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                <p className="text-sm font-medium text-slate-400">Total Debts</p>
+                <p className="text-2xl font-bold text-orange-400">
                   ${totals.debts.toLocaleString()}
                 </p>
               </div>
-              <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-xl">
-                <AlertTriangle className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              <div className="p-3 bg-orange-900/30 rounded-xl">
+                <AlertTriangle className="w-8 h-8 text-orange-400" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-2xl transition-all duration-300">
+          <div className="glass-card backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 p-6 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Net Worth</p>
-                <p className={`text-2xl font-bold ${totals.netWorth >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                <p className="text-sm font-medium text-slate-400">Net Worth</p>
+                <p className={`text-2xl font-bold ${totals.netWorth >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                   ${totals.netWorth.toLocaleString()}
                 </p>
               </div>
-              <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl">
-                <DollarSign className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              <div className="p-3 bg-purple-900/30 rounded-xl">
+                <DollarSign className="w-8 h-8 text-purple-400" />
               </div>
             </div>
           </div>
@@ -480,14 +480,14 @@ export default function FamilyDashboard() {
 
         {/* Notifications */}
         {notifications.length > 0 && (
-          <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-lg rounded-2xl shadow-xl border border-blue-200/50 dark:border-blue-700/50 p-6">
+          <div className="bg-blue-900/20 backdrop-blur-lg rounded-2xl shadow-xl border border-blue-700/50 p-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
-                <Bell className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <div className="p-2 bg-blue-900/40 rounded-lg">
+                <Bell className="h-4 w-4 text-blue-400" />
               </div>
-              <div className="text-blue-800 dark:text-blue-200">
+              <div className="text-blue-200">
                 You have {notifications.length} family notification(s). 
-                <button className="ml-1 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline">View all</button>
+                <button className="ml-1 text-blue-400 hover:text-blue-200 underline">View all</button>
               </div>
             </div>
           </div>
@@ -536,7 +536,7 @@ export default function FamilyDashboard() {
                   {familyMembers.slice(0, 4).map((member, index) => {
                     const permissionConfig = getPermissionLevel(member.permission_level);
                     return (
-                      <div key={index} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                      <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                         <div className={`p-2 rounded-full ${permissionConfig.color}`}>
                           <permissionConfig.icon className="w-4 h-4 text-white" />
                         </div>
@@ -589,21 +589,21 @@ export default function FamilyDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   {/* Mock activity data */}
-                  <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <div className="flex-1">
                       <p className="font-medium text-sm">John added $500 to Emergency Fund</p>
                       <p className="text-xs text-slate-500">2 hours ago</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <div className="flex-1">
                       <p className="font-medium text-sm">Sarah updated grocery budget</p>
                       <p className="text-xs text-slate-500">1 day ago</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                     <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                     <div className="flex-1">
                       <p className="font-medium text-sm">New family goal created: Vacation Fund</p>
@@ -638,7 +638,7 @@ export default function FamilyDashboard() {
                             <permissionConfig.icon className="w-6 h-6 text-white" />
                           </div>
                           <div>
-                            <h3 className="font-semibold text-slate-900">{member.name}</h3>
+                            <h3 className="font-semibold text-white">{member.name}</h3>
                             <p className="text-sm text-slate-500">{member.relationship}</p>
                           </div>
                         </div>
@@ -661,7 +661,7 @@ export default function FamilyDashboard() {
                               <MessageCircle className="w-4 h-4 mr-2" />
                               Send Message
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">
+                            <DropdownMenuItem className="text-red-400">
                               <Trash2 className="w-4 h-4 mr-2" />
                               Remove Member
                             </DropdownMenuItem>
@@ -669,7 +669,7 @@ export default function FamilyDashboard() {
                         </DropdownMenu>
                       </div>
                       
-                      <div className="space-y-2 text-sm text-slate-600 mb-4">
+                      <div className="space-y-2 text-sm text-slate-400 mb-4">
                         <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
                           <span>{member.email}</span>
@@ -698,8 +698,8 @@ export default function FamilyDashboard() {
                       </div>
                       
                       {member.spending_limit && (
-                        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                          <p className="text-sm text-blue-800">
+                        <div className="mt-4 p-3 bg-blue-500/10 rounded-lg">
+                          <p className="text-sm text-blue-400">
                             Spending Limit: ${member.spending_limit.toLocaleString()}
                           </p>
                         </div>
@@ -782,7 +782,7 @@ export default function FamilyDashboard() {
                       <Crown className="w-4 h-4 text-purple-500" />
                       Administrator Access
                     </h4>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-400">
                       Administrators have full access to all family financial data and can manage member permissions.
                     </p>
                   </div>
@@ -791,7 +791,7 @@ export default function FamilyDashboard() {
                       <Shield className="w-4 h-4 text-blue-500" />
                       Manager Access
                     </h4>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-400">
                       Managers can view and edit most financial data but cannot access sensitive information without explicit permission.
                     </p>
                   </div>
@@ -800,7 +800,7 @@ export default function FamilyDashboard() {
                       <Eye className="w-4 h-4 text-green-500" />
                       Viewer Access
                     </h4>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-400">
                       Viewers can only see financial data that has been specifically shared with them.
                     </p>
                   </div>
@@ -809,7 +809,7 @@ export default function FamilyDashboard() {
                       <Baby className="w-4 h-4 text-orange-500" />
                       Child Access
                     </h4>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-slate-400">
                       Children have limited access to age-appropriate financial information and educational content.
                     </p>
                   </div>
@@ -834,8 +834,8 @@ export default function FamilyDashboard() {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-100 rounded-lg">
-                        <GraduationCap className="w-6 h-6 text-blue-600" />
+                      <div className="p-2 bg-blue-500/10 rounded-lg">
+                        <GraduationCap className="w-6 h-6 text-blue-400" />
                       </div>
                       <div>
                         <h3 className="font-semibold">College Fund</h3>
@@ -863,8 +863,8 @@ export default function FamilyDashboard() {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-green-100 rounded-lg">
-                        <Heart className="w-6 h-6 text-green-600" />
+                      <div className="p-2 bg-green-500/10 rounded-lg">
+                        <Heart className="w-6 h-6 text-green-400" />
                       </div>
                       <div>
                         <h3 className="font-semibold">Emergency Fund</h3>

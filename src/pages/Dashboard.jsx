@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { apiClient } from '../api/client'
-import { 
-  DollarSign, 
-  TrendingUp, 
-  TrendingDown, 
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
   PiggyBank,
   CreditCard,
   Building2,
-  AlertCircle
+  AlertCircle,
+  BarChart3,
+  Wallet
 } from 'lucide-react'
 import {
   ResponsiveContainer,
@@ -31,8 +33,8 @@ const Dashboard = () => {
     error: null,
     backendStatus: null
   })
+  const [summaryData, setSummaryData] = useState(null)
 
-  // Simple navigation function for Next.js
   const handleNavigation = (path) => {
     if (typeof window !== 'undefined') {
       window.location.href = path
@@ -45,13 +47,22 @@ const Dashboard = () => {
 
   const loadDashboardData = async () => {
     try {
-      // Test backend connection
       const status = await apiClient.status()
       setDashboardData(prev => ({
         ...prev,
         backendStatus: status,
         loading: false
       }))
+
+      // Load summary data from API
+      try {
+        const summary = await apiClient.getDashboardSummary()
+        if (summary && summary.success) {
+          setSummaryData(summary.data)
+        }
+      } catch (e) {
+        console.error('Error loading dashboard summary:', e)
+      }
     } catch (error) {
       setDashboardData(prev => ({
         ...prev,
@@ -65,8 +76,8 @@ const Dashboard = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading dashboard...</p>
         </div>
       </div>
     )
@@ -74,18 +85,18 @@ const Dashboard = () => {
 
   if (dashboardData.error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+      <div className="glass-card border-t-2 border-t-red-400 p-6">
         <div className="flex items-center gap-3">
-          <AlertCircle className="w-6 h-6 text-red-600" />
+          <AlertCircle className="w-6 h-6 text-red-400" />
           <div>
-            <h3 className="font-semibold text-red-800">Backend Connection Error</h3>
-            <p className="text-red-700">{dashboardData.error}</p>
-            <p className="text-sm text-red-600 mt-2">
+            <h3 className="font-semibold text-white">Backend Connection Error</h3>
+            <p className="text-slate-400">{dashboardData.error}</p>
+            <p className="text-sm text-slate-500 mt-2">
               Make sure the backend server is running on port 3001
             </p>
-            <button 
+            <button
               onClick={loadDashboardData}
-              className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              className="mt-3 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors shadow-glow-cyan"
             >
               Retry Connection
             </button>
@@ -95,273 +106,336 @@ const Dashboard = () => {
     )
   }
 
-  // Sample data (will be replaced with real data from backend)
-  const financialMetrics = {
-    monthlyIncome: 10066,
-    monthlyExpenses: 7277,
-    netWorth: 2036424,
-    savingsRate: -3,
-    totalDebt: 60924,
-    totalAssets: 150000,
-    creditUtilization: 68
-  }
+  const metrics = summaryData?.metrics || {}
+  const monthlyTrendData = summaryData?.monthlyTrend || []
+  const expenseBreakdownData = summaryData?.expenseBreakdown || []
+  const assetAllocationData = summaryData?.assetAllocation || []
 
-  // Chart data
-  const monthlyTrendData = [
-    { month: 'Jan', income: 9500, expenses: 7200, savings: 2300 },
-    { month: 'Feb', income: 9800, expenses: 7100, savings: 2700 },
-    { month: 'Mar', income: 10200, expenses: 7300, savings: 2900 },
-    { month: 'Apr', income: 9900, expenses: 7500, savings: 2400 },
-    { month: 'May', income: 10400, expenses: 7200, savings: 3200 },
-    { month: 'Jun', income: 10066, expenses: 7277, savings: 2789 }
-  ]
-
-  const expenseBreakdownData = [
-    { name: 'Housing', value: 2500, color: '#8B5CF6' },
-    { name: 'Food', value: 1200, color: '#06B6D4' },
-    { name: 'Transportation', value: 800, color: '#84CC16' },
-    { name: 'Utilities', value: 400, color: '#F59E0B' },
-    { name: 'Entertainment', value: 600, color: '#EF4444' },
-    { name: 'Healthcare', value: 500, color: '#10B981' },
-    { name: 'Other', value: 1277, color: '#6B7280' }
-  ]
-
-  const assetAllocationData = [
-    { name: 'Real Estate', value: 85000, color: '#8B5CF6' },
-    { name: 'Investments', value: 45000, color: '#06B6D4' },
-    { name: 'Cash & Savings', value: 15000, color: '#84CC16' },
-    { name: 'Retirement', value: 5000, color: '#F59E0B' }
-  ]
-
-  const MetricCard = ({ title, value, icon: Icon, trend, color = "blue" }) => (
-    <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className={`text-xs font-medium text-${color}-700 dark:text-${color}-300`}>{title}</p>
-          <p className={`text-2xl font-bold text-slate-900 dark:text-white mt-1`}>
-            {typeof value === 'number' ? 
-              (value >= 1000 ? `$${(value/1000).toFixed(0)}k` : `$${value}`) 
-              : value
-            }
-          </p>
-          {trend && (
-            <p className={`text-xs ${trend > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'} mt-1 font-medium`}>
-              {trend > 0 ? '↗' : '↘'} {Math.abs(trend)}%
-            </p>
-          )}
-        </div>
-        <div className={`p-3 bg-${color}-100 dark:bg-${color}-900/30 rounded-lg`}>
-          <Icon className={`w-6 h-6 text-${color}-600 dark:text-${color}-400`} />
-        </div>
-      </div>
-    </div>
+  const hasData = summaryData && (
+    metrics.monthlyIncome > 0 ||
+    metrics.monthlyExpenses > 0 ||
+    metrics.totalAssets > 0 ||
+    monthlyTrendData.length > 0
   )
 
+  const accentStyles = {
+    cyan: { border: 'border-t-cyan-400', text: 'text-cyan-400', bg: 'bg-cyan-500/10' },
+    coral: { border: 'border-t-red-400', text: 'text-red-400', bg: 'bg-red-500/10' },
+    amber: { border: 'border-t-amber-400', text: 'text-amber-400', bg: 'bg-amber-500/10' },
+    green: { border: 'border-t-green-400', text: 'text-green-400', bg: 'bg-green-500/10' },
+    purple: { border: 'border-t-purple-400', text: 'text-purple-400', bg: 'bg-purple-500/10' },
+    slate: { border: 'border-t-slate-400', text: 'text-slate-400', bg: 'bg-slate-500/10' },
+    blue: { border: 'border-t-blue-400', text: 'text-blue-400', bg: 'bg-blue-500/10' },
+  }
+
+  const MetricCard = ({ title, value, icon: Icon, trend, color = "cyan" }) => {
+    const accent = accentStyles[color] || accentStyles.cyan
+    return (
+      <div className={`glass-card glass-card-hover p-6 border-t-2 ${accent.border}`}>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">{title}</p>
+            <p className="text-2xl font-bold text-white mt-2">
+              {typeof value === 'number'
+                ? (value >= 1000 ? `$${(value/1000).toFixed(0)}k` : `$${value}`)
+                : value
+              }
+            </p>
+            {trend !== undefined && trend !== null && (
+              <p className={`text-xs mt-1 font-medium ${trend > 0 ? 'text-green-400' : trend < 0 ? 'text-red-400' : 'text-slate-400'}`}>
+                {trend > 0 ? '+' : ''}{Math.abs(trend)}% {trend > 0 ? '↗' : trend < 0 ? '↘' : ''}
+              </p>
+            )}
+          </div>
+          <div className={`p-3 rounded-xl ${accent.bg}`}>
+            <Icon className={`w-6 h-6 ${accent.text}`} />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const darkTooltipStyle = {
+    backgroundColor: 'rgba(30, 41, 59, 0.95)',
+    border: '1px solid rgba(100, 150, 255, 0.15)',
+    borderRadius: '12px',
+    color: '#f8fafc',
+    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.4)',
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      <div className="p-6 space-y-4">
+    <div className="min-h-screen bg-transparent">
+      <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="text-left">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
               Financial Dashboard
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 text-base">
+            <p className="text-slate-400 text-base">
               Get a comprehensive overview of your financial health and track your progress towards your goals
             </p>
           </div>
-          <div className="bg-gradient-to-r from-emerald-100 to-emerald-200 dark:from-emerald-900/30 dark:to-emerald-800/30 backdrop-blur-lg rounded-xl px-4 py-2 border border-emerald-200/50 dark:border-emerald-700/50">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-              <span className="text-xs font-medium text-emerald-800 dark:text-emerald-300">
-                Backend Connected ({dashboardData.backendStatus?.environment})
-              </span>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgba(34,197,94,0.08)] border border-[rgba(34,197,94,0.2)]">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-xs font-medium text-green-400">
+              Backend Connected ({dashboardData.backendStatus?.environment})
+            </span>
+          </div>
+        </div>
+
+        {!hasData ? (
+          /* Empty State - New User Welcome */
+          <div className="space-y-6">
+            <div className="glass-card p-12 text-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <Wallet className="w-10 h-10 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-3">Welcome to FinanceFlow</h2>
+              <p className="text-slate-400 max-w-lg mx-auto mb-8">
+                Start managing your finances by adding your income, expenses, bills, and assets.
+                Your dashboard will come to life with charts and insights as you add data.
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+                <button
+                  onClick={() => handleNavigation('/income')}
+                  className="flex flex-col items-center gap-3 p-6 glass-card hover:border-cyan-500/30 hover:shadow-glow-cyan rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <TrendingUp className="w-8 h-8 text-cyan-400" />
+                  <span className="text-sm font-medium text-slate-300">Add Income</span>
+                </button>
+                <button
+                  onClick={() => handleNavigation('/expenses')}
+                  className="flex flex-col items-center gap-3 p-6 glass-card hover:border-red-500/30 hover:shadow-[0_0_20px_rgba(249,112,102,0.15)] rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <TrendingDown className="w-8 h-8 text-red-400" />
+                  <span className="text-sm font-medium text-slate-300">Add Expense</span>
+                </button>
+                <button
+                  onClick={() => handleNavigation('/bills')}
+                  className="flex flex-col items-center gap-3 p-6 glass-card hover:border-purple-500/30 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <CreditCard className="w-8 h-8 text-purple-400" />
+                  <span className="text-sm font-medium text-slate-300">Add Bill</span>
+                </button>
+                <button
+                  onClick={() => handleNavigation('/assets')}
+                  className="flex flex-col items-center gap-3 p-6 glass-card hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <Building2 className="w-8 h-8 text-amber-400" />
+                  <span className="text-sm font-medium text-slate-300">Add Asset</span>
+                </button>
+              </div>
+            </div>
+
+            {/* System Status */}
+            <div className="glass-card p-6">
+              <h3 className="font-semibold text-white mb-3">System Status</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-slate-400">Database:</span>
+                  <span className="ml-2 text-white font-semibold">
+                    {dashboardData.backendStatus?.features?.database || 'PostgreSQL 17'}
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium text-slate-400">Authentication:</span>
+                  <span className="ml-2 text-white font-semibold">
+                    {dashboardData.backendStatus?.features?.authentication || 'JWT'}
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium text-slate-400">Entities:</span>
+                  <span className="ml-2 text-white font-semibold">
+                    {dashboardData.backendStatus?.features?.entities?.length || 10} Available
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Financial Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          <MetricCard
-          title="Monthly Income"
-          value={financialMetrics.monthlyIncome}
-          icon={TrendingUp}
-          trend={5}
-          color="emerald"
-        />
-        <MetricCard
-          title="Monthly Expenses"
-          value={financialMetrics.monthlyExpenses}
-          icon={TrendingDown}
-          trend={-2}
-          color="slate"
-        />
-        <MetricCard
-          title="Net Worth"
-          value={financialMetrics.netWorth}
-          icon={PiggyBank}
-          trend={8}
-          color="blue"
-        />
-        <MetricCard
-          title="Savings Rate"
-          value={`${financialMetrics.savingsRate}%`}
-          icon={DollarSign}
-          trend={financialMetrics.savingsRate}
-          color={financialMetrics.savingsRate >= 0 ? "emerald" : "slate"}
-        />
-      </div>
-
-      {/* Secondary Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <MetricCard
-          title="Total Debt"
-          value={financialMetrics.totalDebt}
-          icon={CreditCard}
-          color="slate"
-        />
-        <MetricCard
-          title="Total Assets"
-          value={financialMetrics.totalAssets}
-          icon={Building2}
-          color="purple"
-        />
-        <MetricCard
-          title="Credit Utilization"
-          value={`${financialMetrics.creditUtilization}%`}
-          icon={CreditCard}
-          color={financialMetrics.creditUtilization > 30 ? "slate" : "teal"}
-        />
-      </div>
-
-      {/* Backend Status Info */}
-      <div className="bg-gradient-to-r from-slate-50 to-slate-100 border border-slate-200 rounded-xl p-6 shadow-sm">
-        <h3 className="font-semibold text-slate-900 mb-3">System Status</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <span className="font-medium text-slate-600">Database:</span>
-            <span className="ml-2 text-slate-900 font-semibold">
-              {dashboardData.backendStatus?.features?.database || 'PostgreSQL 17'}
-            </span>
-          </div>
-          <div>
-            <span className="font-medium text-slate-600">Authentication:</span>
-            <span className="ml-2 text-slate-900 font-semibold">
-              {dashboardData.backendStatus?.features?.authentication || 'JWT'}
-            </span>
-          </div>
-          <div>
-            <span className="font-medium text-slate-600">Entities:</span>
-            <span className="ml-2 text-slate-900 font-semibold">
-              {dashboardData.backendStatus?.features?.entities?.length || 10} Available
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Monthly Trend Chart */}
-        <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
-          <h3 className="font-semibold text-slate-900 dark:text-white mb-6 text-lg">Monthly Financial Trend</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={monthlyTrendData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="month" stroke="#64748b" />
-              <YAxis stroke="#64748b" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#fff', 
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '8px'
-                }}
+        ) : (
+          /* Data-rich Dashboard */
+          <>
+            {/* Financial Metrics Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <MetricCard
+                title="Monthly Income"
+                value={metrics.monthlyIncome || 0}
+                icon={TrendingUp}
+                color="green"
               />
-              <Legend />
-              <Line type="monotone" dataKey="income" stroke="#10b981" strokeWidth={3} name="Income" />
-              <Line type="monotone" dataKey="expenses" stroke="#ef4444" strokeWidth={3} name="Expenses" />
-              <Line type="monotone" dataKey="savings" stroke="#3b82f6" strokeWidth={3} name="Savings" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+              <MetricCard
+                title="Monthly Expenses"
+                value={metrics.monthlyExpenses || 0}
+                icon={TrendingDown}
+                color="coral"
+              />
+              <MetricCard
+                title="Net Worth"
+                value={metrics.netWorth || 0}
+                icon={PiggyBank}
+                color="cyan"
+              />
+              <MetricCard
+                title="Savings Rate"
+                value={metrics.savingsRate != null ? `${metrics.savingsRate}%` : '$0'}
+                icon={DollarSign}
+                color={metrics.savingsRate >= 0 ? "green" : "amber"}
+              />
+            </div>
 
-        {/* Expense Breakdown Chart */}
-        <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
-          <h3 className="font-semibold text-slate-900 dark:text-white mb-6 text-lg">Expense Breakdown</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={expenseBreakdownData}
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {expenseBreakdownData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip formatter={(value) => [`$${value}`, 'Amount']} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+            {/* Secondary Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <MetricCard
+                title="Total Debt"
+                value={metrics.totalDebt || 0}
+                icon={CreditCard}
+                color="coral"
+              />
+              <MetricCard
+                title="Total Assets"
+                value={metrics.totalAssets || 0}
+                icon={Building2}
+                color="purple"
+              />
+              <MetricCard
+                title="Credit Utilization"
+                value={metrics.creditUtilization != null ? `${metrics.creditUtilization}%` : '0%'}
+                icon={BarChart3}
+                color={metrics.creditUtilization > 30 ? "amber" : "green"}
+              />
+            </div>
 
-      {/* Asset Allocation Chart */}
-      <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
-        <h3 className="font-semibold text-slate-900 dark:text-white mb-6 text-lg">Asset Allocation</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={assetAllocationData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-            <XAxis dataKey="name" stroke="#64748b" />
-            <YAxis stroke="#64748b" />
-            <Tooltip 
-              formatter={(value) => [`$${value.toLocaleString()}`, 'Value']}
-              contentStyle={{ 
-                backgroundColor: '#fff', 
-                border: '1px solid #e2e8f0',
-                borderRadius: '8px'
-              }}
-            />
-            <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+            {/* System Status */}
+            <div className="glass-card p-6">
+              <h3 className="font-semibold text-white mb-3">System Status</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-slate-400">Database:</span>
+                  <span className="ml-2 text-white font-semibold">
+                    {dashboardData.backendStatus?.features?.database || 'PostgreSQL 17'}
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium text-slate-400">Authentication:</span>
+                  <span className="ml-2 text-white font-semibold">
+                    {dashboardData.backendStatus?.features?.authentication || 'JWT'}
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium text-slate-400">Entities:</span>
+                  <span className="ml-2 text-white font-semibold">
+                    {dashboardData.backendStatus?.features?.entities?.length || 10} Available
+                  </span>
+                </div>
+              </div>
+            </div>
 
-      {/* Quick Actions */}
-      <div className="bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/80 dark:to-slate-900/80 backdrop-blur-lg rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 hover:shadow-2xl transition-all duration-300">
-        <h3 className="font-semibold text-slate-900 dark:text-white mb-6 text-lg">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <button 
-            onClick={() => handleNavigation('/income')}
-            className="flex flex-col items-center gap-3 p-6 bg-gradient-to-br from-emerald-100/80 to-emerald-200/80 dark:from-emerald-900/30 dark:to-emerald-800/30 hover:from-emerald-200/90 hover:to-emerald-300/90 dark:hover:from-emerald-800/40 dark:hover:to-emerald-700/40 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-700/50"
-          >
-            <TrendingUp className="w-8 h-8 text-emerald-700 dark:text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-800 dark:text-emerald-200">Add Income</span>
-          </button>
-          <button 
-            onClick={() => handleNavigation('/expenses')}
-            className="flex flex-col items-center gap-3 p-6 bg-gradient-to-br from-slate-100/80 to-slate-200/80 dark:from-slate-800/30 dark:to-slate-700/30 hover:from-slate-200/90 hover:to-slate-300/90 dark:hover:from-slate-700/40 dark:hover:to-slate-600/40 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
-          >
-            <TrendingDown className="w-8 h-8 text-slate-700 dark:text-slate-300" />
-            <span className="text-sm font-medium text-slate-800 dark:text-slate-200">Add Expense</span>
-          </button>
-          <button 
-            onClick={() => handleNavigation('/bills')}
-            className="flex flex-col items-center gap-3 p-6 bg-gradient-to-br from-blue-100/80 to-blue-200/80 dark:from-blue-900/30 dark:to-blue-800/30 hover:from-blue-200/90 hover:to-blue-300/90 dark:hover:from-blue-800/40 dark:hover:to-blue-700/40 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-sm border border-blue-200/50 dark:border-blue-700/50"
-          >
-            <CreditCard className="w-8 h-8 text-blue-700 dark:text-blue-300" />
-            <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Pay Bill</span>
-          </button>
-          <button 
-            onClick={() => handleNavigation('/budget')}
-            className="flex flex-col items-center gap-3 p-6 bg-gradient-to-br from-teal-100/80 to-teal-200/80 dark:from-teal-900/30 dark:to-teal-800/30 hover:from-teal-200/90 hover:to-teal-300/90 dark:hover:from-teal-800/40 dark:hover:to-teal-700/40 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-sm border border-teal-200/50 dark:border-teal-700/50"
-          >
-            <PiggyBank className="w-8 h-8 text-teal-700 dark:text-teal-300" />
-            <span className="text-sm font-medium text-teal-800 dark:text-teal-200">View Budget</span>
-          </button>
-        </div>
-      </div>
+            {/* Charts Section */}
+            {monthlyTrendData.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="glass-card glass-card-hover p-8">
+                  <h3 className="font-semibold text-white mb-6 text-lg">Monthly Financial Trend</h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={monthlyTrendData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,150,255,0.06)" />
+                      <XAxis dataKey="month" stroke="#334155" tick={{fill: '#94a3b8', fontSize: 12}} />
+                      <YAxis stroke="#334155" tick={{fill: '#94a3b8', fontSize: 12}} />
+                      <Tooltip contentStyle={darkTooltipStyle} />
+                      <Legend wrapperStyle={{color: '#94a3b8'}} />
+                      <Line type="monotone" dataKey="income" stroke="#00d4ff" strokeWidth={3} name="Income" dot={{fill: '#00d4ff', r: 4}} />
+                      <Line type="monotone" dataKey="expenses" stroke="#f97066" strokeWidth={3} name="Expenses" dot={{fill: '#f97066', r: 4}} />
+                      <Line type="monotone" dataKey="savings" stroke="#a855f7" strokeWidth={3} name="Savings" dot={{fill: '#a855f7', r: 4}} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {expenseBreakdownData.length > 0 && (
+                  <div className="glass-card glass-card-hover p-8">
+                    <h3 className="font-semibold text-white mb-6 text-lg">Expense Breakdown</h3>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={expenseBreakdownData}
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={100}
+                          innerRadius={60}
+                          dataKey="value"
+                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                          stroke="rgba(30, 41, 59, 0.8)"
+                          strokeWidth={2}
+                        >
+                          {expenseBreakdownData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          formatter={(value) => [`$${value}`, 'Amount']}
+                          contentStyle={darkTooltipStyle}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Asset Allocation Chart */}
+            {assetAllocationData.length > 0 && (
+              <div className="glass-card glass-card-hover p-8">
+                <h3 className="font-semibold text-white mb-6 text-lg">Asset Allocation</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={assetAllocationData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,150,255,0.06)" />
+                    <XAxis dataKey="name" stroke="#334155" tick={{fill: '#94a3b8', fontSize: 12}} />
+                    <YAxis stroke="#334155" tick={{fill: '#94a3b8', fontSize: 12}} />
+                    <Tooltip
+                      formatter={(value) => [`$${value.toLocaleString()}`, 'Value']}
+                      contentStyle={darkTooltipStyle}
+                    />
+                    <Bar dataKey="value" fill="#00d4ff" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+
+            {/* Quick Actions */}
+            <div className="glass-card glass-card-hover p-8">
+              <h3 className="font-semibold text-white mb-6 text-lg">Quick Actions</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <button
+                  onClick={() => handleNavigation('/income')}
+                  className="flex flex-col items-center gap-3 p-6 glass-card hover:border-cyan-500/30 hover:shadow-glow-cyan rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <TrendingUp className="w-8 h-8 text-cyan-400" />
+                  <span className="text-sm font-medium text-slate-300">Add Income</span>
+                </button>
+                <button
+                  onClick={() => handleNavigation('/expenses')}
+                  className="flex flex-col items-center gap-3 p-6 glass-card hover:border-red-500/30 hover:shadow-[0_0_20px_rgba(249,112,102,0.15)] rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <TrendingDown className="w-8 h-8 text-red-400" />
+                  <span className="text-sm font-medium text-slate-300">Add Expense</span>
+                </button>
+                <button
+                  onClick={() => handleNavigation('/bills')}
+                  className="flex flex-col items-center gap-3 p-6 glass-card hover:border-purple-500/30 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <CreditCard className="w-8 h-8 text-purple-400" />
+                  <span className="text-sm font-medium text-slate-300">Pay Bill</span>
+                </button>
+                <button
+                  onClick={() => handleNavigation('/budget')}
+                  className="flex flex-col items-center gap-3 p-6 glass-card hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] rounded-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <PiggyBank className="w-8 h-8 text-amber-400" />
+                  <span className="text-sm font-medium text-slate-300">View Budget</span>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
